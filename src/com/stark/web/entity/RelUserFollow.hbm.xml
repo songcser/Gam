@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2014-10-29 16:53:51 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.stark.web.entity.RelUserFollow" table="RelUserFollow">
+        <id name="id" type="int">
+            <column name="Id" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="user" class="com.stark.web.entity.UserInfo" fetch="join" cascade="delete" >
+            <column name="UserId" unique-key="multicolumn_unique_key_name"  not-null="true" />
+        </many-to-one>
+        <many-to-one name="follow" class="com.stark.web.entity.UserInfo" fetch="join" cascade="delete">
+            <column name="FollowId" unique-key="multicolumn_unique_key_name"  not-null="true"/>
+        </many-to-one>
+        <property name="date" type="java.util.Date">
+            <column name="Date" />
+        </property>
+         <property name="status" type="int" generated="never">
+            <column name="Status" not-null="true" default="0"/>
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,22 @@
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+        <mapping resource="com/stark/web/entity/UserInfo.hbm.xml"/>
+        <mapping resource="com/stark/web/entity/ArticleInfo.hbm.xml"/>
+        <mapping resource="com/stark/web/entity/CommentInfo.hbm.xml"/>
+        <mapping resource="com/stark/web/entity/NoticeInfo.hbm.xml"/>
+       <!-- <mapping resource="com/stark/web/entity/PetInfo.hbm.xml"/> -->
+       <!-- <mapping resource="com/stark/web/entity/TagInfo.hbm.xml"/> -->
+      <!--  <mapping resource="com/stark/web/entity/RelUserFriend.hbm.xml"/> -->
+        <mapping resource="com/stark/web/entity/RelUserFollow.hbm.xml"/> 
+      <!--  <mapping resource="com/stark/web/entity/RelArticleForward.hbm.xml"/> -->
+      <!--   <mapping resource="com/stark/web/entity/ArticlePublishTimeLine.hbm.xml"/>  -->
+         <mapping resource="com/stark/web/entity/ActivityInfo.hbm.xml"/>
+	<!--	<mapping resource="com/stark/web/entity/FileInfo.hbm.xml"/>    -->
+	    <mapping resource="com/stark/web/entity/ChartletInfo.hbm.xml"/>    
+         <mapping resource="com/stark/web/entity/RelChartletPicture.hbm.xml"/>   
+    </session-factory>
+</hibernate-configuration>

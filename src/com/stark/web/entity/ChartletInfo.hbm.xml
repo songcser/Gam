@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2014-12-14 10:08:47 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping package="com.stark.web.entity">
+    <class name="ChartletInfo" table="ChartletInfo">
+        <id name="chartletId" type="int">
+            <column name="ChartletId" />
+            <generator class="identity" />
+        </id>
+        <property name="type" type="int">
+            <column name="Type"  not-null="true" default="0"/>
+        </property>
+        <property name="title" type="java.lang.String">
+            <column name="Title"  not-null="true" default="''"/>
+        </property>
+        <property name="status" type="int">
+            <column name="Status"  not-null="true" default="0"/>
+        </property>
+        <set name="picSet" table="RelChartletPicture" inverse="false" lazy="true" order-by="Id desc" cascade="all">
+            <key>
+                <column name="ChartletId" />
+            </key>
+            <one-to-many class="RelChartletPicture" />
+        </set>
+        <!--
+        <set name="picSet" table="CHARTLETINFO" inverse="false" lazy="true">
+            <key>
+                <column name="CHARTLETID" />
+            </key>
+            <element type="java.lang.String">
+                <column name="PICSET" />
+            </element>
+        </set>
+        -->
+    </class>
+</hibernate-mapping>

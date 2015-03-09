@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd" [
+<!ENTITY contextInclude SYSTEM "org/springframework/web/context/WEB-INF/contextInclude.xml">
+]>
+
+<beans>
+	
+	 <import resource="classpath*:config/spring/spring-user.xml"/> 
+	 <import resource="classpath*:config/spring/spring-article.xml"/> 
+	 <import resource="classpath*:config/spring/spring-comment.xml"/> 
+	 <import resource="classpath*:config/spring/spring-notice.xml"/> 
+	 <import resource="classpath*:config/spring/spring-pet.xml"/> 
+	 <import resource="classpath*:config/spring/spring-tag.xml"/> 
+	  <import resource="classpath*:config/spring/spring-activity.xml"/> 
+	  <!--
+	  <import resource="classpath*:config/spring/spring-redis.xml"/>
+	  -->
+</beans>

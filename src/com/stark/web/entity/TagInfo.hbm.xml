@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2014-10-30 16:08:11 by Hibernate Tools 3.4.0.CR1 -->
+
+<hibernate-mapping package="com.stark.web.entity">
+    <class name="TagInfo" table="TagInfo">
+        <id name="tagId" type="int">
+            <column name="Id" />
+            <generator class="identity" />
+        </id>
+       
+        <property name="content" type="java.lang.String">
+            <column name="CONTENT" />
+        </property>
+        <property name="useCount" type="int">
+            <column name="USECOUNT" />
+        </property>
+        <property name="status" type="int" >
+            <column name="STATUS" default="0"/>
+        </property>
+        <property name="picture" type="java.lang.String">
+            <column name="PICTURE" />
+        </property>
+        <set name="articles" table="RELARTICLETAG" inverse="false" lazy="true" cascade="delete">
+            <key>
+                <column name="TAGID" unique-key="multicolumn_unique_key_name"/>
+            </key>
+            <many-to-many class="ArticleInfo" column="ARTICLEID"/>
+        </set>
+       
+    </class>
+</hibernate-mapping>

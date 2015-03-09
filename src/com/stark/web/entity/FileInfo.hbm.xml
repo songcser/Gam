@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2014-12-12 10:08:33 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping package="com.stark.web.entity">
+    <class name="FileInfo" table="FileInfo">
+        <id name="fileId" type="int">
+            <column name="FileId" />
+            <generator class="assigned" />
+        </id>
+        <property name="width" type="int" generated="never">
+            <column name="Width" />
+        </property>
+        <property name="name" type="java.lang.String">
+            <column name="Name" />
+        </property>
+        <property name="path" type="java.lang.String">
+            <column name="Path" />
+        </property>
+        <property name="height" type="int">
+            <column name="Height" />
+        </property>
+        <property name="size" type="int">
+            <column name="Size" />
+        </property>
+        <property name="status" type="int">
+            <column name="Status" />
+        </property>
+        <!--
+        <set cascade="delete" inverse="true" lazy="true" name="chartlets" sort="unsorted" table="RelChartletPicture">
+		   <key>
+		    <column name="FileId" unique-key="multicolumn_unique_key_name"/>
+		   </key>
+	   	  <many-to-many class="ChartletInfo" column="ChartletId" />
+	  </set>
+        -->
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,53 @@
+package com.stark.web.dao;
+
+import java.util.List;
+
+import com.stark.web.entity.ActivityInfo;
+import com.stark.web.entity.EnumBase.ActivityStatus;
+
+public interface IActivityDAO {
+
+	public int addActivity(ActivityInfo activity);
+
+	public ActivityInfo getActivity(int activityId);
+
+	public ActivityInfo getAllStartUpActivity(ActivityStatus status);
+
+	public List<ActivityInfo> getActivityByStatus(ActivityStatus status);
+
+	public boolean addBannerPic(int activityId, String fileName);
+
+	List<ActivityInfo> getOnLineActivity();
+
+	public List<ActivityInfo> getActivityByType(int type, int size);
+
+	public boolean addContentPic(int activityId, String fileName);
+
+	public boolean delete(int activityId);
+
+	public boolean setActivityStatus(int activityId, int status);
+
+	public List<ActivityInfo> getAllActivity();
+
+	public void addRedisActivity(ActivityInfo activity);
+
+	public void addRedisBannerList(int activityId);
+
+	public void addRedisTopList(int activityId);
+
+	public List<ActivityInfo> getRedisActivityList(String key);
+
+	public void addRedisContentPic(int activityId, String fileName);
+
+	public void addRedisBannerPic(int activityId, String fileName);
+
+	public ActivityInfo getRedisActivity(int activityId);
+
+	public void addRedisAllActivity(int activityId);
+
+	public void removeRedisAllActivity(int activityId);
+
+	public void removeRedisBannerList(int activityId);
+
+	public void removeRedisTopList(int activityId);
+}

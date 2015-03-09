@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2014-10-31 19:36:47 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.stark.web.entity.NoticeInfo" table="NoticeInfo">
+        <id name="noticeId" type="int">
+            <column name="Id" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="user" class="com.stark.web.entity.UserInfo" fetch="join" cascade="delete">
+            <column name="UserId" not-null="true"/>
+        </many-to-one>
+        <many-to-one name="sender" class="com.stark.web.entity.UserInfo" fetch="join" >
+            <column name="SenderId" not-null="true"/>
+        </many-to-one>
+        <many-to-one name="article" class="com.stark.web.entity.ArticleInfo" fetch="join" cascade="delete">
+            <column name="ArticleId" />
+        </many-to-one>
+        <property name="content" type="java.lang.String">
+            <column name="Content"  not-null="true" default="''"/>
+        </property>
+        <property name="date" type="java.util.Date">
+            <column name="Date"  not-null="true"/>
+        </property>
+        <property name="type" type="int">
+            <column name="Type" not-null="true" default="0"/>
+        </property>
+        <property name="status" type="int">
+            <column name="Status" not-null="true" default="0"/>
+        </property>
+    </class>
+</hibernate-mapping>

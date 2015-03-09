@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2014-10-31 17:08:57 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping package="com.stark.web.entity">
+    <class name="ActivityInfo" table="ActivityInfo">
+        <id name="activityId" type="int">
+            <column name="Id" />
+            <generator class="identity" />
+        </id>
+        <property name="subject" type="java.lang.String">
+            <column name="Subject" not-null="true" default="''"/>
+        </property>
+        <many-to-one name="user" class="com.stark.web.entity.UserInfo" fetch="join" cascade="delete">
+            <column name="UserId" />
+        </many-to-one>
+        <!--
+        <many-to-one name="article" class="com.stark.web.entity.ArticleInfo" fetch="join" cascade="delete">
+            <column name="ArticleId" />
+        </many-to-one>
+        -->
+        <property name="bannerPic" type="java.lang.String">
+            <column name="BannerPic"  not-null="true"/>
+        </property>
+        <property name="contentPic" type="java.lang.String">
+            <column name="ContentPic"  not-null="true"/>
+        </property>
+        <property name="offDate" type="java.util.Date">
+            <column name="OffDate" />
+        </property>
+        <property name="status" type="int">
+            <column name="Status" default="0" not-null="true"/>
+        </property>
+        <property name="type" type="int">
+            <column name="Type" default="0" not-null="true"/>
+        </property>
+        <!--
+        <set name="articles" table="RelArticleActivity" inverse="false" lazy="true" cascade="delete">
+            <key>
+                <column name="ActivityId" unique-key="multicolumn_unique_key_name"/>
+            </key>
+            <many-to-many class="ActivityInfo" column="ArticleId"/>
+        </set>
+        -->
+    </class>
+</hibernate-mapping>

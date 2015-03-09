@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd" [  
+<!ENTITY contextInclude SYSTEM "org/springframework/web/context/WEB-INF/contextInclude.xml">  
+]>  
+  
+<beans>  
+    
+     <bean id="redisDao" class="com.stark.web.dao.ShareRedisDAO">
+        <!-- <property name="redisTemplate" ref="redisTemplate" /> -->
+    </bean>
+    
+    <bean id="articleDao" class="com.stark.web.dao.ArticleDAO">
+        <property name="sessionFactory" ref="sessionFactory"></property>
+        <property name="redisDao" ref="redisDao"></property>
+    </bean>
+    
+    <bean id="articleManagerBase" class="com.stark.web.service.ArticleManager">
+        <property name="articleDao" ref="articleDao"></property>
+       
+    </bean>
+    
+    <bean id="articleManager" parent="transactionBese">
+        <property name="target" ref="articleManagerBase"></property>
+    </bean>
+   
+</beans>  
