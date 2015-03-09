@@ -15,6 +15,7 @@ import com.stark.web.entity.RelUserFollow;
 import com.stark.web.entity.RelUserFriend;
 import com.stark.web.entity.UserInfo;
 import com.stark.web.entity.EnumBase.UserRole;
+import com.stark.web.hunter.FileManager;
 import com.stark.web.dao.IUserDAO;
 
 public class UserManager implements IUserManager{

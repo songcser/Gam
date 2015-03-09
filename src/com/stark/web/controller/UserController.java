@@ -42,7 +42,7 @@ import com.stark.web.entity.RelUserFollow;
 import com.stark.web.entity.RelUserFriend;
 import com.stark.web.entity.UserGroup;
 import com.stark.web.entity.UserInfo;
-import com.stark.web.service.FileManager;
+import com.stark.web.hunter.FileManager;
 import com.stark.web.service.IActivityManager;
 import com.stark.web.service.IArticleManager;
 import com.stark.web.service.INoticeManager;
@@ -325,7 +325,7 @@ public class UserController {
 				if (file != null) {
 
 					String fileName = file.getOriginalFilename();
-					if (fileName == "")
+					if (fileName.equals(""))
 						continue;
 					// System.out.println("File Name:"+file.getOriginalFilename());
 
@@ -388,11 +388,11 @@ public class UserController {
 				if (file != null) {
 
 					String fileName = file.getOriginalFilename();
-					if (fileName == "")
+					if (fileName.equals(""))
 						continue;
 					// System.out.println("File Name:"+file.getOriginalFilename());
 					String nameStr = file.getName();
-					if (nameStr == "")
+					if (nameStr.equals(""))
 						continue;
 					// System.out.println(path);
 					try {
@@ -779,7 +779,7 @@ public class UserController {
 	public Map<String, Object> updateUser(UserInfo uInfo) {
 		System.out.println("==> /user/updateUser?" + uInfo);
 		UserInfo user = userManager.getUser(uInfo.getUserId());
-		if (uInfo.getName() != null && uInfo.getName() != "") {
+		if (uInfo.getName() != null &&!uInfo.getName().equals("")) {
 			user.setName(uInfo.getName());
 		}
 		user.setSex(uInfo.getSex());
@@ -941,7 +941,7 @@ public class UserController {
 				if (file != null) {
 
 					String fileName = file.getOriginalFilename();
-					if (fileName == "")
+					if (fileName.equals(""))
 						continue;
 					try {
 						String path = "";
@@ -1005,11 +1005,11 @@ public class UserController {
 				if (file != null) {
 
 					String fileName = file.getOriginalFilename();
-					if (fileName == "")
+					if (fileName.equals(""))
 						continue;
 					// System.out.println("File Name:"+file.getOriginalFilename());
 					String nameStr = file.getName();
-					if (nameStr == "")
+					if (nameStr.equals(""))
 						continue;
 					// System.out.println(path);
 					try {
@@ -1301,7 +1301,7 @@ public class UserController {
 				MultipartFile file = multiRequest.getFile((String) iter.next());
 				if (file != null) {
 					String fileName = file.getOriginalFilename();
-					if (fileName == "")
+					if (fileName.equals(""))
 						continue;
 					// System.out.println("File Name:"+file.getOriginalFilename());
 					String path = FileManager.getUserPicturePath(userId, fileName);
@@ -1342,7 +1342,7 @@ public class UserController {
 				MultipartFile file = multiRequest.getFile((String) iter.next());
 				if (file != null) {
 					String fileName = file.getOriginalFilename();
-					if (fileName == "")
+					if (fileName.equals(""))
 						continue;
 					// System.out.println("File Name:"+file.getOriginalFilename());
 					String path = FileManager.getUserPicturePath(userId, fileName);

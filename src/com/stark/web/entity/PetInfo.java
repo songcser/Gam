@@ -2,7 +2,7 @@ package com.stark.web.entity;
 
 import java.util.Date;
 
-import com.stark.web.service.FileManager;
+import com.stark.web.hunter.FileManager;
 
 public class PetInfo {
 	

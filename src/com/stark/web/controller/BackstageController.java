@@ -22,7 +22,7 @@ import com.stark.web.entity.EnumBase.ActivityType;
 import com.stark.web.entity.EnumBase.ArticleType;
 import com.stark.web.entity.UserInfo;
 import com.stark.web.entity.EnumBase.UserRole;
-import com.stark.web.service.FileManager;
+import com.stark.web.hunter.FileManager;
 import com.stark.web.service.IActivityManager;
 import com.stark.web.service.IArticleManager;
 import com.stark.web.service.IUserManager;

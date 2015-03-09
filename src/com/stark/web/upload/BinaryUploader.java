@@ -5,7 +5,7 @@ import com.stark.web.define.AppInfo;
 import com.stark.web.define.BaseState;
 import com.stark.web.define.FileType;
 import com.stark.web.define.State;
-import com.stark.web.service.FileManager;
+import com.stark.web.hunter.FileManager;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;

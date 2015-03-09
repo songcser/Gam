@@ -30,6 +30,7 @@ import com.stark.web.entity.EnumBase.ArticleType;
 import com.stark.web.entity.FileInfo;
 import com.stark.web.entity.RelArticleForward;
 import com.stark.web.entity.RelChartletPicture;
+import com.stark.web.hunter.FileManager;
 
 public class ArticleManager implements IArticleManager {
 

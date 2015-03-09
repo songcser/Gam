@@ -18,7 +18,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import com.stark.web.entity.TagInfo;
-import com.stark.web.service.FileManager;
+import com.stark.web.hunter.FileManager;
 import com.stark.web.service.ITagManager;
 
 @Controller
@@ -57,7 +57,7 @@ public class TagController {
 				
 				if(file != null){
 					String tagId = file.getName();
-					if(tagId==""||file.getOriginalFilename()=="")
+					if(tagId.equals("")||file.getOriginalFilename().equals(""))
 						continue;
 					String fileName = file.getOriginalFilename();
 					System.out.println("File Name:"+file.getOriginalFilename());

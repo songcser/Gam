@@ -26,7 +26,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import com.stark.web.entity.EnumBase;
 import com.stark.web.entity.NoticeInfo;
 import com.stark.web.entity.UserInfo;
-import com.stark.web.service.FileManager;
+import com.stark.web.hunter.FileManager;
 import com.stark.web.service.IArticleManager;
 import com.stark.web.service.INoticeManager;
 import com.stark.web.service.IUserManager;

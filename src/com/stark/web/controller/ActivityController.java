@@ -24,7 +24,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import com.stark.web.entity.ActivityInfo;
 import com.stark.web.entity.CommentInfo;
 import com.stark.web.entity.EnumBase.ActivityStatus;
-import com.stark.web.service.FileManager;
+import com.stark.web.hunter.FileManager;
 import com.stark.web.service.IActivityManager;
 import com.stark.web.service.IArticleManager;
 import com.stark.web.service.ICommentManager;
@@ -123,7 +123,7 @@ public class ActivityController {
 				MultipartFile file = multiRequest.getFile((String)iter.next());
 				if(file != null){
 					String fileName =  file.getOriginalFilename();
-					if(fileName=="")
+					if(fileName.equals(""))
 						continue;
 					String path = "";
 					String name = file.getName();

@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.stark.web.entity.EnumBase.ArticleType;
-import com.stark.web.service.FileManager;
+import com.stark.web.hunter.FileManager;
 
 public class ArticleInfo {
 

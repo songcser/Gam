@@ -1,6 +1,6 @@
 package com.stark.web.entity;
 
-import com.stark.web.service.FileManager;
+import com.stark.web.hunter.FileManager;
 
 public class RelChartletPicture {
 	
