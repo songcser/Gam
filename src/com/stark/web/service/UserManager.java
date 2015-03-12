@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.Resource;
+
 import com.stark.web.entity.EnumBase;
 import com.stark.web.entity.RedisInfo;
 import com.stark.web.entity.RelUserFollow;
@@ -20,10 +22,18 @@ import com.stark.web.dao.IUserDAO;
 
 public class UserManager implements IUserManager{
 
+	
 	private IUserDAO userDao;
+	
+//	private IArticleManager articleManager;
+	
 	
 	public void setUserDao(IUserDAO userDao) {
 		this.userDao = userDao;
+	}
+	
+	public void setArticleManager(IArticleManager articleManager){
+//		this.articleManager = articleManager;
 	}
 
 	@Override
@@ -431,7 +441,6 @@ public class UserManager implements IUserManager{
 	public Map<String, Object> userToMap(UserInfo user){
 		
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("result", "1");
 		
 		map.put("userId", user.getUserId());
 		//map.put("doorplate", user.getDoorplate());
@@ -690,7 +699,42 @@ public class UserManager implements IUserManager{
 
 	@Override
 	public Set<String> getLogoutUser() {
-		// TODO Auto-generated method stub
 		return userDao.getRedisLogoutUser();
+	}
+
+	@Override
+	public Map<String, Object> getMeetList(int userId,int sex,int maxCount) {
+		List<UserInfo> uList = null;
+		Map<String,Object> map = new HashMap<String,Object>();
+		if(sex==2){
+			uList = userDao.getMeetList(maxCount);
+		}
+		else {
+			uList = userDao.getMeetList(sex,maxCount);
+		}
+		if(uList==null){
+			map.put("result", 0);
+			return map;
+		}
+		
+		map = usersToMap(uList,3);
+		map.put("result", 1);
+		return map;
+	}
+
+	private Map<String, Object> usersToMap(List<UserInfo> uList,int picSize) {
+		Map<String,Object> map = new HashMap<String,Object>();
+		List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
+		for(UserInfo user:uList){
+			Map<String,Object> uMap = userToMap(user);
+			if(picSize>0){
+				//List<Map<String,Object>> pics = articleManager.getArticlePicturesByUserId(user.getUserId(), 0, picSize);
+				//uMap.put("articlePics", pics);
+			}
+			
+			list.add(uMap);
+		}
+		map.put("users", list);
+		return map;
 	}
 }

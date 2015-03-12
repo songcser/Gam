@@ -4,6 +4,7 @@
 ]>  
   
 <beans>  
+    
     <bean id="redisDao" class="com.stark.web.dao.ShareRedisDAO">
         <!-- <property name="redisTemplate" ref="redisTemplate" /> -->
     </bean>
@@ -13,6 +14,7 @@
     </bean>
    
     <bean id="userManagerBase" class="com.stark.web.service.UserManager">
+    	<!--<property name="articleManager" ref="articleManager"></property>-->
         <property name="userDao" ref="userDao"></property>
     </bean>
     

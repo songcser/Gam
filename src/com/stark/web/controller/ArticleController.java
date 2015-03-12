@@ -68,6 +68,7 @@ import com.stark.web.service.WordFilter;
 public class ArticleController {
 
 	private static int maxResults = 10;
+	private static int maxResults2 = 20;
 	private static String ourShareUrl = "http://192.168.1.102/StarkPet/article/outsideShare?articleId=";
 	private static int maxPictureResult = 15;
 	// private static final String HTTP_REG =
@@ -158,14 +159,8 @@ public class ArticleController {
 						rename = fileName.substring(0,index);
 						filepix = fileName.substring(index);
 					}
-					
-					
-					if(index>0){
-						
-						//System.out.println("Rename:"+rename);
-					}
-					
-					if(rename.endsWith(".gif")&&i==1){
+					System.out.println(rename);
+					if(rename.endsWith(".gif")&&i==0){
 						i++;
 						String imageFormat = "gif";
 						String gifName = "0suo101lue.gif";
@@ -1355,15 +1350,7 @@ public class ArticleController {
 			map.put("result", 0);
 			return map;
 		}
-		//System.out.println(articleInfos.size());
-		//int userId = 0;
-//		Cookie cookies[]=request.getCookies();
-//		for(Cookie cookie : cookies){
-//			System.out.println("Cookie: "+cookie.getName());
-//			if(cookie.getName().equals("userId")){
-//				userId = Integer.parseInt(cookie.getValue());
-//			}
-//		}
+
 		if(userId>0){
 			List<Map<String, Object>> list = articlesToList(userId, articleInfos);
 			//System.out.println(list.size());
@@ -1411,5 +1398,46 @@ public class ArticleController {
 	@RequestMapping("richText.do")
 	public void richText(){
 		
+	}
+	
+	@RequestMapping("getRecommendList2.0.do")
+	@ResponseBody
+	public Map<String,Object> getRecommendList2(int userId,int page){
+		Map<String,Object> map = new HashMap<String,Object>();
+		map = articleManager.getRecommendList(userId,page,maxResults2);
+		return map;
+	}
+	
+	@RequestMapping("getShowArticleList2.0.do")
+	@ResponseBody
+	public Map<String,Object> getShowArticleList2(int showId,int userId,int page){
+		Map<String,Object> map = articleManager.getShowArticleList(showId,userId,page,maxResults2);
+		return map;
+	}
+	
+	@RequestMapping("getArticleInfo2.0.do")
+	@ResponseBody
+	public Map<String,Object> getArticleInfo2(int articleId,int userId){
+		Map<String,Object> map = articleManager.getArticleInfo(articleId,userId);
+		
+		return map;
+	}
+	
+	@RequestMapping("collectArticle2.0.do")
+	@ResponseBody
+	public Map<String,Object> collectArticle2(int userId,int articleId){
+		boolean result = articleManager.collectArticle(userId,articleId);
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("result", result?1:0);
+		return map;
+	}
+	
+	@RequestMapping("browseArticle2.0.do")
+	@ResponseBody
+	public Map<String,Object> browseArticle2(int articleId){
+		boolean result = articleManager.browseArticle(articleId);
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("result", result?1:0);
+		return map;
 	}
 }

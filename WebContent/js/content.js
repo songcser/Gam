@@ -128,6 +128,7 @@ function previewImage(file, i) {
 		var img = document.getElementById('imghead' + i);
 		
 		img.onload = function() {
+			
 			var rect = clacImgZoomParam(MAXWIDTH, MAXHEIGHT, img.offsetWidth,
 					img.offsetHeight);
 			img.width = rect.width;
@@ -135,7 +136,11 @@ function previewImage(file, i) {
 			img.style.marginLeft = rect.left + 'px';
 			// img.style.marginTop = rect.top + 'px';
 			img.className = "img-border radius padding-small";
-			
+			var fileSize = file.files[0].size;
+			if(fileSize>1024*800){
+				alert("图片大小尽量小于800kb");
+				
+			}
 			file.name+="?"+img.naturalWidth+"&"+img.naturalHeight;
 		}
 		var reader = new FileReader();

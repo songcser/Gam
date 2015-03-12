@@ -43,8 +43,10 @@ public class ArticleInfo {
 	private Set<TagInfo> tags = new HashSet<TagInfo>();
 	private Set<UserInfo> praiseUser = new HashSet<UserInfo>();
 	private Set<String> atUser = new HashSet<String>();
-	private Set<ActivityInfo> activityInfos = new HashSet<ActivityInfo>();
+	private Set<ActivityInfo> activities = new HashSet<ActivityInfo>();
 	private Set<CommentInfo> comments = new HashSet<CommentInfo>();
+	//private Set<UserInfo> collections = new HashSet<UserInfo>();
+	private int browseCount;
 
 	public ArticleInfo(int articleId) {
 		this.articleId = articleId;
@@ -220,14 +222,6 @@ public class ArticleInfo {
 		return picList;
 	}
 
-	public Set<ActivityInfo> getActivityInfos() {
-		return activityInfos;
-	}
-
-	public void setActivityInfos(Set<ActivityInfo> activityInfos) {
-		this.activityInfos = activityInfos;
-	}
-
 	public ActivityInfo getActivity() {
 		return activity;
 	}
@@ -250,6 +244,22 @@ public class ArticleInfo {
 
 	public void setReference(String reference) {
 		this.reference = reference;
+	}
+
+	public int getBrowseCount() {
+		return browseCount;
+	}
+
+	public void setBrowseCount(int browseCount) {
+		this.browseCount = browseCount;
+	}
+
+	public Set<ActivityInfo> getActivities() {
+		return activities;
+	}
+
+	public void setActivities(Set<ActivityInfo> activities) {
+		this.activities = activities;
 	}
 
 	

@@ -201,4 +201,12 @@ public interface IArticleDAO {
 
 	public void addRedisMagazineRList(int articleId);
 
+	public boolean isCollection(int userId, int articleId);
+
+	public List<ArticleInfo> getListByShowId(int showId, int start, int maxResults);
+
+	public boolean collectArticle(int userId, int articleId);
+
+	public boolean browseArticle(int articleId);
+
 }

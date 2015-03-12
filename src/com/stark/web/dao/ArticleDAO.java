@@ -308,10 +308,15 @@ public class ArticleDAO implements IArticleDAO {
 		SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMddHHmmss");
 		//System.out.println(sdf.format(aInfo.getDate()));
 		map.put(ArticleInfo.DATE, sdf.format(aInfo.getDate()));
+		
 		int pCount = getPraiseCount(aInfo.getArticleId());
 		map.put(ArticleInfo.PRAISECOUNT, ""+pCount);
+		aInfo.setPraiseCount(pCount);
+		
 		int cCount = getCommentCount(aInfo.getArticleId());
+		aInfo.setCommentCount(cCount);
 		map.put(ArticleInfo.COMMENTCOUNT, ""+cCount);
+		
 		if(aInfo.getActivity()!=null){
 			map.put(ArticleInfo.ACTIVITYID, aInfo.getActivity().getActivityId()+"");
 		}
@@ -554,6 +559,7 @@ public class ArticleDAO implements IArticleDAO {
 		String hql = "select a from ArticleInfo as a  where a.activity.activityId = ? order by a.date desc";
 		Query query = sessionFactory.getCurrentSession().createQuery(hql);
 		query.setInteger(0, activityId);
+		query.setInteger(0, ArticleType.Delete.getIndex());
 		query.setFirstResult(start);
 		query.setMaxResults(maxResults);
 		return query.list();
@@ -992,5 +998,48 @@ public class ArticleDAO implements IArticleDAO {
 		if(redisDao==null)
 			return ;
 		redisDao.rpush(RedisInfo.ARTICLEMAGAZINELIST, articleId+"");
+	}
+
+	@Override
+	public boolean isCollection(int userId, int articleId) {
+		//String sql = "delete from ChartletInfo as c where c.chartletId=:chartletId";
+		String sql = "select * from RelArticleCollection as rel where rel.UserId=:userId and rel.ArticleId=:articleId";
+		Query query = sessionFactory.getCurrentSession().createSQLQuery(sql);
+		query.setInteger("userId", userId);
+		query.setInteger("articleId", articleId);
+		
+		return query.list().size()>0;
+	}
+
+	@Override
+	public List<ArticleInfo> getListByShowId(int showId, int start, int maxResults) {
+		String hql = "select a from ArticleInfo as a join a.activities as act where act.activityId =: showId";
+		
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		query.setInteger("showId", showId);
+		query.setFirstResult(start);
+		query.setMaxResults(maxResults);
+		
+		return query.list();
+	}
+
+	@Override
+	public boolean collectArticle(int userId, int articleId) {
+		String sql = "insert into RelArticleCollection(UserId,ArticleId) values(?,?)";
+		Query query = sessionFactory.getCurrentSession().createSQLQuery(sql);
+		query.setInteger(0, userId);
+		query.setInteger(1, articleId);
+
+		int result = query.executeUpdate();
+		return result > 0;
+	}
+
+	@Override
+	public boolean browseArticle(int articleId) {
+		String hql = "update ArticleInfo as a set a.browseCount = a.browseCount+1 where a.articleId =: articleId";
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		query.setInteger("articleId", articleId);
+		
+		return query.executeUpdate()>0;
 	}
 }

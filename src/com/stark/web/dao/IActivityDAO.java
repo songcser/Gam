@@ -35,7 +35,7 @@ public interface IActivityDAO {
 
 	public void addRedisTopList(int activityId);
 
-	public List<ActivityInfo> getRedisActivityList(String key);
+	public List<ActivityInfo> getRedisActivityList(String key, int size);
 
 	public void addRedisContentPic(int activityId, String fileName);
 
@@ -50,4 +50,6 @@ public interface IActivityDAO {
 	public void removeRedisBannerList(int activityId);
 
 	public void removeRedisTopList(int activityId);
+
+	public List<ActivityInfo> getActivityByType(List<Integer> types);
 }

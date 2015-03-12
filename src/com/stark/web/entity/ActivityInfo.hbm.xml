@@ -34,13 +34,16 @@
         <property name="type" type="int">
             <column name="Type" default="0" not-null="true"/>
         </property>
-        <!--
-        <set name="articles" table="RelArticleActivity" inverse="false" lazy="true" cascade="delete">
+         <property name="order" type="int">
+            <column name="OrderO" default="0" not-null="true"/>
+        </property>
+        
+        <set name="articles" table="RelActivityArticle" inverse="false" lazy="true" cascade="delete">
             <key>
                 <column name="ActivityId" unique-key="multicolumn_unique_key_name"/>
             </key>
-            <many-to-many class="ActivityInfo" column="ArticleId"/>
+            <many-to-many class="ArticleInfo" column="ArticleId"/>
         </set>
-        -->
+        
     </class>
 </hibernate-mapping>

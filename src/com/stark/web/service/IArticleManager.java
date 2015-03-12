@@ -128,4 +128,16 @@ public interface IArticleManager {
 
 	public boolean deleteChartlet(int chartletId);
 
+	public Map<String, Object> getRecommendList(int userId, int page,int maxResults);
+
+	//public Map<String, Object> articlesToMap(List<ArticleInfo> articles, int userId);
+
+	public Map<String, Object> getShowArticleList(int showId, int userId, int page, int maxResults2);
+
+	public Map<String, Object> getArticleInfo(int articleId, int userId);
+
+	public boolean collectArticle(int userId, int articleId);
+
+	public boolean browseArticle(int articleId);
+
 }

@@ -11,7 +11,7 @@
         <property name="name" type="java.lang.String" >
             <column name="Name" not-null="true"/>
         </property>
-        <property name="password" type="java.lang.String" insert="false" >
+        <property name="password" type="java.lang.String"  >
             <column name="Password" not-null="true" default="''"/>
         </property>
         <!--
@@ -77,6 +77,15 @@
             </key>
             <many-to-many class="ArticleInfo" column="ArticleId" />
         </set>
+        
+          <set name="collectArticles" table="RelArticleCollection" inverse="true" lazy="true" cascade="delete">
+            <key>
+                <column name="UserId" unique-key="multicolumn_unique_key_name"/>
+            </key>
+            <many-to-many class="ArticleInfo" column="ArticleId" />
+        </set>
+        
+        
         
         <set name="childUser" table="RelChildUser" inverse="true" lazy="true" cascade="delete">
         	<key>

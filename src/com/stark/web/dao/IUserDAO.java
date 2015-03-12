@@ -166,4 +166,8 @@ public interface IUserDAO {
 
 	public Set<String> getRedisLogoutUser();
 
+	public List<UserInfo> getMeetList(int maxCount);
+
+	public List<UserInfo> getMeetList(int sex, int maxCount);
+
 }

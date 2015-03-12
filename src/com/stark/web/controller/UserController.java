@@ -77,6 +77,7 @@ public class UserController {
 
 	private static int maxRequestFollowCount = 20;
 	private static int maxPictureResult = 15;
+	private static int maxMeetingCount = 8;
 
 	// private static int maxRequestFriendCount = 20;
 
@@ -463,7 +464,7 @@ public class UserController {
 		}
 
 		map = userManager.userToMap(user);
-
+		map.put("result", 1);
 		List<ArticleInfo> alist = articleManager.getArticleByUserId(userId, 0, maxPictureResult);
 		List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
 		for(ArticleInfo article:alist){
@@ -493,6 +494,7 @@ public class UserController {
 		}
 		// DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		map = userManager.userToMap(user);
+		map.put("result", 1);
 		map.put("password", user.getPassword());
 		map.put("role", user.getRole());
 		// map.put("birthday1", format.format(user.getBirthday()));
@@ -510,7 +512,7 @@ public class UserController {
 		}
 
 		map = userManager.userToMap(user);
-
+		map.put("result", 1);
 		boolean follow = userManager.isFollow(userId, otherId);
 		map.put("followStatus", follow ? 1 : 0);
 
@@ -546,6 +548,7 @@ public class UserController {
 		}
 
 		map = userManager.userToMap(user);
+		map.put("result", 1);
 		return map;
 	}
 	
@@ -721,6 +724,7 @@ public class UserController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		if (user != null) {
 			map = userManager.userToMap(user);
+			map.put("result", 1);
 			/*
 			 * ObjectMapper objectMapper = new ObjectMapper(); try { String json
 			 * = objectMapper.writeValueAsString(user);
@@ -762,6 +766,7 @@ public class UserController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		if (user != null) {
 			map = userManager.userToMap(user);
+			map.put("result", 1);
 			/*
 			 * ObjectMapper objectMapper = new ObjectMapper(); try { String json
 			 * = objectMapper.writeValueAsString(user);
@@ -1057,6 +1062,7 @@ public class UserController {
 			userManager.updateUser(user);
 
 			map = userManager.userToMap(user);
+			map.put("result", 1);
 		} else {
 			map.put("result", "0");
 		}
@@ -1073,6 +1079,7 @@ public class UserController {
 
 		if (user != null) {
 			map = userManager.userToMap(user);
+			map.put("result", "1");
 		} else {
 			map = new HashMap<String, Object>();
 			map.put("result", "0");
@@ -1090,6 +1097,7 @@ public class UserController {
 
 		if (user != null) {
 			map = userManager.userToMap(user);
+			map.put("result", "1");
 		} else {
 			map = new HashMap<String, Object>();
 			map.put("result", "0");
@@ -1384,6 +1392,14 @@ public class UserController {
 		boolean ischild = userManager.isChildUser(userId,childId);
 		Map<String,Object> map = new HashMap<String,Object>();
 		map.put("result", ischild?1:0);
+		return map;
+	}
+	
+	@RequestMapping("getMeetList2.0.do")
+	@ResponseBody
+	public Map<String,Object> getMeetList2(int userId,int sex){
+		Map<String,Object> map = new HashMap<String,Object>();
+		map = userManager.getMeetList(userId,sex,maxMeetingCount);
 		return map;
 	}
 }

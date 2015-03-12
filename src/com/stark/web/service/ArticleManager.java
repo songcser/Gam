@@ -20,8 +20,11 @@ import java.util.regex.Pattern;
 
 import javax.annotation.Resource;
 
+import org.springframework.stereotype.Component;
+
 import com.stark.web.dao.IArticleDAO;
 import com.stark.web.dao.IUserDAO;
+import com.stark.web.entity.ActivityInfo;
 import com.stark.web.entity.ArticleInfo;
 import com.stark.web.entity.ArticlePublishTimeLine;
 import com.stark.web.entity.ChartletInfo;
@@ -30,6 +33,7 @@ import com.stark.web.entity.EnumBase.ArticleType;
 import com.stark.web.entity.FileInfo;
 import com.stark.web.entity.RelArticleForward;
 import com.stark.web.entity.RelChartletPicture;
+import com.stark.web.entity.UserInfo;
 import com.stark.web.hunter.FileManager;
 
 public class ArticleManager implements IArticleManager {
@@ -38,6 +42,9 @@ public class ArticleManager implements IArticleManager {
 	
 	@Resource
 	private IUserDAO userDao;
+	
+	@Resource
+	private IUserManager userManager;
 
 	// 获取img标签正则
 	// private static final String IMGURL_REG = "<img.*src=(.*?)[^>]*?> ";
@@ -50,6 +57,10 @@ public class ArticleManager implements IArticleManager {
 
 	public void setArticleDao(IArticleDAO articleDao) {
 		this.articleDao = articleDao;
+	}
+	
+	public void setUserManager(IUserManager userManager){
+		this.userManager = userManager;
 	}
 	
 	@Override
@@ -702,7 +713,7 @@ public class ArticleManager implements IArticleManager {
 			for(int i=0;i<tlist.size();i++){
 				ArticleInfo article = tlist.get(i);
 				articleDao.addRedisArticle(article);
-				setArticleCount(article);
+				//setArticleCount(article);
 				list.add(article);
 				long len = articleDao.addRedisArticleIdR(RedisInfo.ARTICLEDATELIST+date, article.getArticleId());
 				if(len == 1){
@@ -734,7 +745,7 @@ public class ArticleManager implements IArticleManager {
 		if(tlist!=null&&!tlist.isEmpty()){
 			for(int i=0;i<tlist.size();i++){
 				ArticleInfo article = tlist.get(i);
-				setArticleCount(article);
+				//setArticleCount(article);
 				articleDao.addRedisArticle(article);
 				if(article!=null&&article.getType()==type){
 					list.add(article);
@@ -1040,5 +1051,94 @@ public class ArticleManager implements IArticleManager {
 		return result;
 	}
 
+	@Override
+	public Map<String, Object> getRecommendList(int userId,int page, int maxResults) {
+		int size = 0;
+		List<Integer> types = new ArrayList<Integer>();
+		types.add(ArticleType.DayExquisite.getIndex());
+		types.add(ArticleType.DayExquisiteReport.getIndex());
+		
+		List<ArticleInfo> tlist = articleDao.getArticleByType(types, page*maxResults+size, maxResults-size);
+		if(tlist==null){
+			Map<String,Object> map = new HashMap<String,Object>();
+			map.put("result", 0);
+			return map;
+		}
+		for(int i=0;i<tlist.size();i++){
+			ArticleInfo article = tlist.get(i);
+			setArticleCount(article);
+		}
+		return articlesToMap(tlist,userId,true);
+	}
+
+	private Map<String, Object> articlesToMap(List<ArticleInfo> articles, int userId,boolean show) {
+		Map<String, Object> map = new HashMap<String,Object>();
+		List<Map<String,Object>> aList = new ArrayList<Map<String,Object>>();
+		for(ArticleInfo article:articles){
+			
+			aList.add(articleToMap(article,userId,show));
+		}
+		map.put("articles", aList);
+		map.put("result", 1);
+		return map;
+	}
+	
+	private Map<String,Object> articleToMap(ArticleInfo article,int userId,boolean show){
+		Map<String,Object> aMap = new HashMap<String,Object>();
+		UserInfo user = userManager.getUser(article.getUser().getUserId());
+		int articleId = article.getArticleId();
+		aMap.put("articleId", articleId);
+		aMap.put("type", article.getType());
+		aMap.put("userId", user.getUserId());
+		aMap.put("name", user.getName());
+		aMap.put("headPic", user.getHeadUrl());
+		aMap.put("title", article.getTitle());
+		aMap.put("content", article.getContent());
+		ActivityInfo act = article.getActivity();
+		if(act!=null&&show){
+			aMap.put("showId", act.getActivityId());
+			aMap.put("showTitle", act.getSubject());
+			aMap.put("showType", act.getType());
+		}
+		boolean flag = articleDao.isCollection(userId,articleId);
+		aMap.put("collection", flag?1:0);
+		aMap.put("commentCount", article.getCommentCount());
+		List<String> pics = getPicListById(articleId);
+		aMap.put("pictures", pics);
+		aMap.put("browseCount", article.getBrowseCount());
+		aMap.put("url", article.getUrl());
+		aMap.put("shareUrl", FileManager.getShareUrl(articleId));
+		//aMap.put("articles", aMap);
+		return aMap;
+	}
+	
+	@Override
+	public Map<String, Object> getShowArticleList(int showId, int userId, int page, int maxResults) {
+		int size = 0;
+		List<ArticleInfo> alist = articleDao.getListByShowId(showId,page*maxResults+size,maxResults-size);
+		for(int i=0;i<alist.size();i++){
+			ArticleInfo article = alist.get(i);
+			setArticleCount(article);
+		}
+		return articlesToMap(alist,userId,false);
+	}
+
+	@Override
+	public Map<String, Object> getArticleInfo(int articleId, int userId) {
+		ArticleInfo article = getArticle(articleId);
+		return articleToMap(article,userId,false);
+	}
+
+	@Override
+	public boolean collectArticle(int userId, int articleId) {
+		boolean result = articleDao.collectArticle(userId,articleId);
+		return result;
+	}
+
+	@Override
+	public boolean browseArticle(int articleId) {
+		boolean result = articleDao.browseArticle(articleId);
+		return result;
+	}
 	
 }

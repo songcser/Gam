@@ -195,10 +195,10 @@ public class ActivityDAO implements IActivityDAO{
 	}
 	
 	@Override
-	public List<ActivityInfo> getRedisActivityList(String key){
+	public List<ActivityInfo> getRedisActivityList(String key,int size){
 		if(redisDao==null)
 			return null;
-		List<String> acIds = redisDao.lrange(key, 0, -1);
+		List<String> acIds = redisDao.lrange(key, 0, size);
 		List<ActivityInfo> list = new ArrayList<ActivityInfo>();
 		Date now = new Date();
 		SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMddHHmmss");
@@ -286,6 +286,25 @@ public class ActivityDAO implements IActivityDAO{
 		if(redisDao==null)
 			return;
 		redisDao.lrem(RedisInfo.ACTIVITYTOPLIST, 0, activityId+"");
+	}
+
+	@Override
+	public List<ActivityInfo> getActivityByType(List<Integer> types) {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < types.size(); i++) {
+			if (i == types.size() - 1) {
+				sb.append("a.type = ? ");
+			} else
+				sb.append("a.type = ? or ");
+
+		}
+		String hql = "from ActivityInfo as a where "+sb+" order by a.order";
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		for (int i = 0; i < types.size(); i++) {
+			int type = types.get(i);
+			query.setInteger(i, type);
+		}
+		return query.list();
 	}
 
 }

@@ -26,6 +26,7 @@ public class ActivityInfo {
 	private String bannerPic;
 	private String contentPic;
 	private Date offDate;
+	private int order;
 	private int status;
 	private int type;
 	private Set<ArticleInfo> articles = new HashSet<ArticleInfo>();
@@ -135,6 +136,14 @@ public class ActivityInfo {
 	public static String getKey(String activityId) {
 		
 		return key+activityId;
+	}
+
+	public int getOrder() {
+		return order;
+	}
+
+	public void setOrder(int order) {
+		this.order = order;
 	}
 
 	

@@ -1,7 +1,9 @@
 package com.stark.web.service;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import com.stark.web.dao.ActivityDAO;
 import com.stark.web.dao.IActivityDAO;
@@ -63,7 +65,7 @@ public class ActivityManager implements IActivityManager{
 	@Override
 	public List<ActivityInfo> getBannerActivity() {
 		
-		List<ActivityInfo> list = activityDao.getRedisActivityList(RedisInfo.ACTIVITYBANNERLIST);
+		List<ActivityInfo> list = activityDao.getRedisActivityList(RedisInfo.ACTIVITYBANNERLIST,5);
 		if(list==null||list.size()==0){
 			list = activityDao.getActivityByType(ActivityType.Banner.getIndex(),5);
 			if(list!=null){
@@ -79,7 +81,7 @@ public class ActivityManager implements IActivityManager{
 
 	@Override
 	public List<ActivityInfo> getTopRecommendActivity() {
-		List<ActivityInfo> list = activityDao.getRedisActivityList(RedisInfo.ACTIVITYTOPLIST);
+		List<ActivityInfo> list = activityDao.getRedisActivityList(RedisInfo.ACTIVITYTOPLIST,2);
 		//System.out.println(list.size());
 		if(list==null||list.isEmpty()){
 			list = activityDao.getActivityByType(ActivityType.TopRecommend.getIndex(),2);
@@ -126,7 +128,7 @@ public class ActivityManager implements IActivityManager{
 
 	@Override
 	public List<ActivityInfo> getAllActivity() {
-		List<ActivityInfo> list = activityDao.getRedisActivityList(RedisInfo.ACTIVITYALLLIST);
+		List<ActivityInfo> list = activityDao.getRedisActivityList(RedisInfo.ACTIVITYALLLIST,-1);
 		if(list==null||list.isEmpty()){
 			list = activityDao.getAllActivity();
 			if(list!=null&&!list.isEmpty()){
@@ -139,6 +141,14 @@ public class ActivityManager implements IActivityManager{
 		}
 		return list;
 	}
-	
+
+	@Override
+	public List<ActivityInfo> getAllShowList() {
+		List<Integer> types = new ArrayList<Integer>();
+		types.add(ActivityType.Join.getIndex());
+		types.add(ActivityType.NoJoin.getIndex());
+		List<ActivityInfo> list = activityDao.getActivityByType(types);
+		return list;
+	}
 	
 }

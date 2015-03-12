@@ -131,6 +131,7 @@
 	    }
 	
 	function selectActivity(activityId,page) {
+		
 		selectActivityId = activityId;
 		page = parseInt(page);
         if(page<0)
@@ -400,6 +401,71 @@
         $("#articleFormFile").submit();
         
     }
+	var type = 0;
+	var activityId = 0;
+	function uploadBannerPic(id){
+		type=0;
+		activityId=id;
+		$("#activityId").val(id);
+		$("#activityType").val("banner");
+		$("#uploadFileId").click();
+	}
+	
+	function uploadContentPic(){
+		type=1;
+		activityId=selectActivityId;
+		$("#activityId").val(selectActivityId);
+        $("#activityType").val("content");
+        $("#uploadFileId").click();
+	}
+	
+	var flagCount = 0;
+	function addFile(file) {
+		//var img = new Image();
+		
+		//var file = $("#uploadFileId");
+		//img.src = objImg[0].getAsDataUrl();
+		
+		if (file.files && file.files[0]) {
+			var img ;
+			if(type==0){
+				img =  $("#activityBannerPic"+activityId)[0];
+			}
+			else {
+				img = $("#ActivityContentPicId")[0];
+			}
+			img.onload = function() {
+	            var w = img.width;
+	            var h = img.height;
+	            var fileSize = file.files[0].size;
+	            if(flagCount==0){
+	            	file.name+="?"+img.naturalWidth+"&"+img.naturalHeight;
+	            	document.getElementById("formFileUpload").submit();
+	            }
+	            else {
+	            	flagCount=0;
+	            }
+	            flagCount++;
+	            
+	        }
+	        var reader = new FileReader();
+	        reader.onload = function(evt) {
+	            //var quality =  80;
+	            img.src = evt.target.result;
+	            //img.src = jic.compress(img,quality).src
+	            //
+	        }
+	        reader.readAsDataURL(file.files[0]);
+	        
+		}
+		
+		//document.forms[0].submit();
+    }
+	function callbackUpload(str){
+		
+        //$("#activityBannerPic"+activityId).attr("src",str);
+        $("#formFileUpload").reset();
+    }
 </script>
 
 </head>
@@ -415,6 +481,11 @@
 		</ul>
 
 		<div  style="width: 33%; height: 93%; float: left;">
+		<form id='formFileUpload' name='formFile' method="post" action="../activity/uploadPicture.do" target='frameFile' enctype="multipart/form-data">
+             <input size="100" type="file" name="file" id="uploadFileId" style="display:none" onchange="addFile(this)"/>
+             <input type="hidden" name="activityType"  id="activityType">
+             <input type="hidden" name="activityId" id="activityId">
+        </form>
 			<div id="activityDiv" style="width: 100%;height:100%;">
 				<div class="bg padding-large" style="height:100%">
 					<button class="button bg-blue radius-rounded " onclick="createActivity()">新建活动</button>
@@ -428,11 +499,11 @@
 									<div class="media bg-red-light border margin" name="activityListDiv" title="1" id="activity${o.activityId }">
 								</c:if>
 										<div class="float-left margin-right">
-											<a href="javascript:selectActivity(${o.activityId})"> <img src="${o.getBannerPicUrl() }" width="300px" height="200px" class="radius" alt="...">
+											<a href="javascript:selectActivity(${o.activityId})"> <img src="${o.getBannerPicUrl() }" id="activityBannerPic${o.activityId }" width="300px" height="200px" class="radius" alt="...">
 											</a>
 										</div>
 										<div class="media-body margin-large" style="height: 80px">
-											<strong>${o.subject }</strong>
+											<a href="javascript:uploadBannerPic(${o.activityId })"><strong>${o.subject }</strong></a>
 		                                    <p class="margin-left text-small text-gray">下线时间：${o.getOffDateString().substring(0,10) }</p>
 		                                    <c:if test="${o.type==0 }"> <p class="margin-left text-small text-gray">类型：Banner</p></c:if>
 		                                   <c:if test="${o.type==1 }"> <p class="margin-left text-small text-gray">类型：置顶推荐</p></c:if>
@@ -451,7 +522,7 @@
         <div id="secondDiv" class="padding-large" style="width: 42%; height: 93%; overFlow-y: scroll;float:left; border-right: 1px #aaa solid; border-left: 1px #aaa solid;">
         <div class="margin-large border" style="display: none" id="activityArticleListDiv">
             <div class="media media-y bg-blue-light border margin">
-                <img src="" width="300px" height="200px" class="radius" alt="..." id="ActivityContentPicId">
+                <a href="javascript:uploadContentPic()"><img src="" width="300px" height="200px" class="radius" alt="..." id="ActivityContentPicId"></a>
             </div>
             <div id="articleListDiv" class="padding bg-mix radius"></div>
         </div>

@@ -1,6 +1,7 @@
 package com.stark.web.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.stark.web.entity.ActivityInfo;
 
@@ -25,5 +26,8 @@ public interface IActivityManager {
 	public boolean setActivityStatus(int activityId, int index);
 
 	public List<ActivityInfo> getAllActivity();
+
+	public List<ActivityInfo> getAllShowList();
+
 
 }

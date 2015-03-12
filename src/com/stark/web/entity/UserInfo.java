@@ -58,6 +58,7 @@ public class UserInfo {
 	private String sinaOpenId;
 	private String weChatOpenId;
 	private int noticeStatus;
+	private Set<ArticleInfo> collectArticles = new HashSet<ArticleInfo>();
 	
 	//private String headUrl;
 	
@@ -309,6 +310,14 @@ public class UserInfo {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public Set<ArticleInfo> getCollectArticles() {
+		return collectArticles;
+	}
+
+	public void setCollectArticles(Set<ArticleInfo> collectArticles) {
+		this.collectArticles = collectArticles;
 	}
 
 	

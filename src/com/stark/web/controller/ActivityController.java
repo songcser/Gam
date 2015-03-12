@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -170,4 +171,82 @@ public class ActivityController {
 		out.close();
 	}
 	
+	@RequestMapping("getShowList2.0.do")
+	@ResponseBody
+	public Map<String,Object> getShowList2(){
+		Map<String,Object> map = new HashMap<String,Object>();
+		List<ActivityInfo> list = activityManager.getAllShowList();
+		if(list==null){
+			map.put("result", 0);
+			return map;
+		}
+		List<Map<String,Object>> lm = new ArrayList<Map<String,Object>>();
+		for(ActivityInfo act:list){
+			Map<String,Object> am = new HashMap<String,Object>();
+			am.put("showId", act.getActivityId());
+			am.put("showTitle", act.getSubject());
+			am.put("showPic", act.getBannerPicUrl());
+		}
+		
+		return map;
+	}
+	
+	@RequestMapping("uploadPicture.do")
+	public void uploadPicture(HttpServletRequest request, HttpServletResponse response) throws IOException{
+		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());
+		PrintWriter out = response.getWriter();
+		String picUrl = "";
+		if (multipartResolver.isMultipart(request)) {
+
+			MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
+			// System.out.println(user);
+			Iterator<String> iter = multiRequest.getFileNames();
+			// String name = (String)multiRequest.getAttribute("name");
+			//String name = multiRequest.getParameter("name");
+			//int userId = Integer.parseInt(multiRequest.getParameter("userId"));
+			int activityId = Integer.parseInt(multiRequest.getParameter("activityId"));
+			String activityType = multiRequest.getParameter("activityType");
+			//userManager.updateUserName(userId, name);
+			// System.out.println(name);
+			while (iter.hasNext()) {
+				MultipartFile file = multiRequest.getFile((String) iter.next());
+				if (file != null) {
+					String fileName = file.getOriginalFilename();
+					String name = file.getName();
+					System.out.println(name);
+					if (fileName.equals("")||"".equals(name))
+						continue;
+					// System.out.println("File Name:"+file.getOriginalFilename());
+					int index = name.indexOf("?");
+					String filepix = "";
+					if(index>0){
+						filepix = name.substring(index);
+					}
+					String path = FileManager.getActivityPicturePath(activityId, fileName);
+					
+					try {
+					FileManager.upload(path, file);
+					if("banner".equals(activityType)){
+						activityManager.addBannerPic(activityId, fileName+filepix);
+						//activityManager.uploadBannerPic(activityId,fileName);
+					}
+					else if("content".equals(activityType)){
+						activityManager.addContentPic(activityId, fileName+filepix);
+					}
+					//userManager.addUserHeadPic(userId, fileName);
+					picUrl = FileManager.getActivityPictureUrl(activityId, fileName+filepix);
+					//headUrl = FileManager.getUserPictureUrl(userId, fileName);
+					} catch (IllegalStateException e) {
+						e.printStackTrace();
+					}
+				}
+
+			}
+
+		}
+		out.print("<script language='javascript'>parent.callbackUpload('"+picUrl+"');</script>");
+		//map.put("result", 0);
+		out.flush();
+		out.close();
+	}
 }

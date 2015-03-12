@@ -57,6 +57,12 @@
 			</key>
 			<many-to-many class="UserInfo" column="UserId" unique="false" />
 		</set>
+		<set name="activities" table="RelActivityArticle" inverse="false" lazy="true" cascade="delete">
+            <key>
+                <column name="ArticleId" unique-key="multicolumn_unique_key_name"/>
+            </key>
+            <many-to-many class="ActivityInfo" column="ActivityId"/>
+        </set>
 		<!-- <set cascade="delete" inverse="true" lazy="true" name="activityInfos" sort="unsorted" table="RelArticleActivity"> <key> <column name="ArticleId" unique-key="multicolumn_unique_key_name"/> 
 			</key> <many-to-many class="ActivityInfo" column="ActivityId" unique="false"/> </set> -->  <!-- <property name="url" type="java.lang.String"> <column name="URL" /> </property> <property name="title" type="java.lang.String"> <column name="TITLE" /> </property> <property name="abbreviation" 
 			type="java.lang.String"> <column name="ABBREVIATION" /> </property> -->

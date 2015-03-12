@@ -968,5 +968,22 @@ public class UserDAO implements IUserDAO{
 		String key = RedisInfo.USERLOGINSET;
 		return redisDao.smembers(key);
 	}
+
+	@Override
+	public List<UserInfo> getMeetList(int count) {
+		String hql = "select u from UserInfo as u where (select count(a.articleId) from ArticleInfo as a where a.user.userId=u.userId) > 3 order by rand()";
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		query.setMaxResults(count);
+		return query.list();
+	}
+
+	@Override
+	public List<UserInfo> getMeetList(int sex, int maxCount) {
+		String hql = "select u from UserInfo as u where u.sex =: sex and (select count(a.articleId) from ArticleInfo as a where a.user.userId=u.userId) > 3 order by rand()";
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		query.setInteger("sex", sex);
+		query.setMaxResults(maxCount);
+		return query.list();
+	}
 	
 }

@@ -91,7 +91,9 @@ public class EnumBase {
 	
 	public enum ActivityType {
 		Banner("Banner", 0), 
-		TopRecommend("置顶推荐", 1);
+		TopRecommend("置顶推荐", 1),
+		Join("可参加",2),
+		NoJoin("不可参加",3);
 
 		private String name;
 		private int index;
@@ -675,7 +677,9 @@ public class EnumBase {
 		ExquisiteMagazineReport("精选杂志被举报",8),
 		NoAuditingActivity("未审核活动推文",9),
 		Activity("活动推文",10),
-		Delete("已删除",11);
+		Delete("已删除",11),
+		ExquisiteNoAuditing("精选未审核",12);
+		
 
 		private String name;
 		private int index;
