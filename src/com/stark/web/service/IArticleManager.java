@@ -140,4 +140,6 @@ public interface IArticleManager {
 
 	public boolean browseArticle(int articleId);
 
+	public Map<String, Object> getFollowArticleList(int userId, int page, int maxResults2);
+
 }

@@ -1440,4 +1440,11 @@ public class ArticleController {
 		map.put("result", result?1:0);
 		return map;
 	}
+
+	@RequestMapping("getFollowArticleList2.0.do")
+	@ResponseBody
+	public Map<String,Object> getFollowArticleList2(int userId,int page){
+		Map<String,Object> map = articleManager.getFollowArticleList(userId, page, maxResults2);
+		return null;
+	}
 }

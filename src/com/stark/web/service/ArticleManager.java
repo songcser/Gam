@@ -801,9 +801,10 @@ public class ArticleManager implements IArticleManager {
 				articleDao.decRedisArticleCount(RedisInfo.ARTICLENOAUDITINGCOUNT);
 			}
 			else if(oldType==ArticleType.Activity.getIndex()){
+				//ArticleInfo article = getArticle(articleId); 
 				articleDao.decRedisArticleCount(RedisInfo.ARTICLEACTIVITYCOUNT);
-				articleDao.removeRedisArticleList(RedisInfo.ACTIVITYARTICLEALLLIST, articleId);
-				articleDao.removeRedisArticleList(RedisInfo.ACTIVITYARTICLEAUDITINGLIST, articleId);
+				articleDao.removeRedisArticleList(RedisInfo.ACTIVITYARTICLEALLLIST+article.getActivity().getActivityId(), articleId);
+				articleDao.removeRedisArticleList(RedisInfo.ACTIVITYARTICLEAUDITINGLIST+article.getActivity().getActivityId(), articleId);
 			}
 			
 			if(type==ArticleType.Publish.getIndex()){
@@ -923,21 +924,30 @@ public class ArticleManager implements IArticleManager {
 
 	@Override
 	public List<Map<String, Object>> getArticlePicturesByUserId(int userId, int page,int maxPictureResult) {
+		List<ArticleInfo> articles = getArticleByUserId(userId,page,maxPictureResult);  
 		
-		articleDao.getRedisArticlePicByUserId(userId,page,maxPictureResult);
+		//articleDao.getRedisArticlePicByUserId(userId,page,maxPictureResult);
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-		List<Object[]> picList = getArticlePicByUserId(userId, page, maxPictureResult);
-		
-		for (Iterator<Object[]> iterator = picList.iterator(); iterator.hasNext();) {
-			Object[] objects = iterator.next();
+//		List<Object[]> picList = getArticlePicByUserId(userId, page, maxPictureResult);
+		for(ArticleInfo article:articles){
+			List<String> pList = getPicListById(article.getArticleId());
 			Map<String, Object> picMap = new HashMap<String, Object>();
-			int articleId = (int)objects[0];
+			int articleId = article.getArticleId();
 			picMap.put("articleId", articleId);
-			String path = (String)objects[1];
-			picMap.put("url", FileManager.getArticlePictureUrl(articleId, path));
-
+			picMap.put("url", FileManager.getArticlePictureUrl(articleId, pList.get(0)));
+			
 			list.add(picMap);
 		}
+//		for (Iterator<Object[]> iterator = picList.iterator(); iterator.hasNext();) {
+//			Object[] objects = iterator.next();
+//			Map<String, Object> picMap = new HashMap<String, Object>();
+//			int articleId = (int)objects[0];
+//			picMap.put("articleId", articleId);
+//			String path = (String)objects[1];
+//			picMap.put("url", FileManager.getArticlePictureUrl(articleId, path));
+//
+//			list.add(picMap);
+//		}
 		return list;
 	}
 
@@ -1139,6 +1149,17 @@ public class ArticleManager implements IArticleManager {
 	public boolean browseArticle(int articleId) {
 		boolean result = articleDao.browseArticle(articleId);
 		return result;
+	}
+
+	@Override
+	public Map<String, Object> getFollowArticleList(int userId, int page, int maxResults) {
+		List<ArticleInfo> articles = articleDao.getFollowArticle(userId, page, maxResults);
+		if(articles==null){
+			Map<String,Object> map = new HashMap<String,Object>();
+			map.put("result", 0);
+			return map;
+		}
+		return articlesToMap(articles,userId,true);
 	}
 	
 }

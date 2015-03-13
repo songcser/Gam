@@ -11,6 +11,8 @@ import java.util.Set;
 
 import javax.annotation.Resource;
 
+import org.springframework.stereotype.Component;
+
 import com.stark.web.entity.EnumBase;
 import com.stark.web.entity.RedisInfo;
 import com.stark.web.entity.RelUserFollow;
@@ -25,16 +27,17 @@ public class UserManager implements IUserManager{
 	
 	private IUserDAO userDao;
 	
-//	private IArticleManager articleManager;
+	//@Resource
+	//private IArticleManager articleManager;
 	
 	
 	public void setUserDao(IUserDAO userDao) {
 		this.userDao = userDao;
 	}
 	
-	public void setArticleManager(IArticleManager articleManager){
-//		this.articleManager = articleManager;
-	}
+	//public void setArticleManager(IArticleManager articleManager){
+	//	this.articleManager = articleManager;
+	//}
 
 	@Override
 	public int addUser(UserInfo uInfo) {
@@ -703,38 +706,17 @@ public class UserManager implements IUserManager{
 	}
 
 	@Override
-	public Map<String, Object> getMeetList(int userId,int sex,int maxCount) {
+	public List<UserInfo> getMeetList(int userId,int sex,int maxCount) {
 		List<UserInfo> uList = null;
-		Map<String,Object> map = new HashMap<String,Object>();
 		if(sex==2){
 			uList = userDao.getMeetList(maxCount);
 		}
 		else {
 			uList = userDao.getMeetList(sex,maxCount);
 		}
-		if(uList==null){
-			map.put("result", 0);
-			return map;
-		}
 		
-		map = usersToMap(uList,3);
-		map.put("result", 1);
-		return map;
+		return uList;
 	}
 
-	private Map<String, Object> usersToMap(List<UserInfo> uList,int picSize) {
-		Map<String,Object> map = new HashMap<String,Object>();
-		List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
-		for(UserInfo user:uList){
-			Map<String,Object> uMap = userToMap(user);
-			if(picSize>0){
-				//List<Map<String,Object>> pics = articleManager.getArticlePicturesByUserId(user.getUserId(), 0, picSize);
-				//uMap.put("articlePics", pics);
-			}
-			
-			list.add(uMap);
-		}
-		map.put("users", list);
-		return map;
-	}
+	
 }

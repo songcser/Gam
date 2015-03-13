@@ -973,15 +973,17 @@ public class UserDAO implements IUserDAO{
 	public List<UserInfo> getMeetList(int count) {
 		String hql = "select u from UserInfo as u where (select count(a.articleId) from ArticleInfo as a where a.user.userId=u.userId) > 3 order by rand()";
 		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		query.setFirstResult(0);
 		query.setMaxResults(count);
 		return query.list();
 	}
 
 	@Override
 	public List<UserInfo> getMeetList(int sex, int maxCount) {
-		String hql = "select u from UserInfo as u where u.sex =: sex and (select count(a.articleId) from ArticleInfo as a where a.user.userId=u.userId) > 3 order by rand()";
+		String hql = "select u from UserInfo as u where u.sex =:sex and (select count(a.articleId) from ArticleInfo as a where a.user.userId=u.userId) > 3 order by rand()";
 		Query query = sessionFactory.getCurrentSession().createQuery(hql);
 		query.setInteger("sex", sex);
+		query.setFirstResult(0);
 		query.setMaxResults(maxCount);
 		return query.list();
 	}

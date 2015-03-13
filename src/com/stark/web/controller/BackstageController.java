@@ -50,10 +50,14 @@ public class BackstageController {
 	}
 	
 	@RequestMapping("/adminLogin.do")
-	public String adminLogin(String name, String password,int adminRole, HttpServletRequest request,HttpServletResponse response) throws UnsupportedEncodingException {
-		System.out.println("==> /backstage/adminLogin?name=" + name + "&password=" + password+"&adminRole="+adminRole);
+	public String adminLogin(String name, String password, HttpServletRequest request,HttpServletResponse response) throws UnsupportedEncodingException {
 		//int adminId = userManager.isAdminByDoorplate(name, password);
 		UserInfo user = new UserInfo();
+		String role = request.getParameter("adminRole");
+		if(role==null){
+			return "/adminLogin";
+		}
+		int adminRole = Integer.parseInt(role);
 		if(adminRole==UserRole.Admin.getIndex()){
 			user = userManager.isAdmin(name, password);
 		}
@@ -127,13 +131,17 @@ public class BackstageController {
 		
 		int userId = 0;
 		int role=-1;
+		boolean isLogin = false;
+		if(cookies==null){
+			return "/adminLogin";
+		}
 		for(Cookie cookie : cookies){
 			//System.out.println("Cookie: "+cookie.getName());
 			
 			if(cookie.getName().equals("userId")){
 				userId =Integer.parseInt(cookie.getValue());
 				request.setAttribute("userId", userId);
-				 
+				isLogin = true;
 			}
 			else if(cookie.getName().equals("userName")){
 				try {
@@ -150,7 +158,9 @@ public class BackstageController {
 				
 			}
 		}
-		
+		if(!isLogin){
+			return "/adminLogin";
+		}
 		List<UserInfo> operators = null;
 		if(view!=null&&view.equals("all")){
 			operators = userManager.getOperatiors();
@@ -208,10 +218,15 @@ public class BackstageController {
 		//List<TagInfo> tags = tagManager.getHotTags();
 		//HttpSession session = request.getSession(true);
 		Cookie cookies[]=request.getCookies();
+		if(cookies==null){
+			return "/adminLogin";
+		}
+		boolean isLogin = false;
 		for(Cookie cookie : cookies){
 			//System.out.println("Cookie: "+cookie.getName());
 			if(cookie.getName().equals("userId")){
 				request.setAttribute("userId", Integer.parseInt(cookie.getValue()));
+				isLogin = true;
 			}
 			else if(cookie.getName().equals("userName")){
 				try {
@@ -223,6 +238,9 @@ public class BackstageController {
 			else if(cookie.getName().equals("userRole")){
 				request.setAttribute("userRole", cookie.getValue());
 			}
+		}
+		if(!isLogin){
+			return "/adminLogin";
 		}
 		//int userId = (int)session.getAttribute("adminId");
 		//String userName = (String)session.getAttribute("adminName");
@@ -256,10 +274,15 @@ public class BackstageController {
 		request.setAttribute("activitys", activitys);
 		
 		Cookie cookies[]=request.getCookies();
+		if(cookies==null){
+			return "/adminLogin";
+		}
+		boolean isLogin = false;
 		for(Cookie cookie : cookies){
 			//System.out.println("Cookie: "+cookie.getName());
 			if(cookie.getName().equals("userId")){
 				request.setAttribute("userId", Integer.parseInt(cookie.getValue()));
+				isLogin = true;
 			}
 			else if(cookie.getName().equals("userName")){
 				try {
@@ -272,7 +295,9 @@ public class BackstageController {
 				request.setAttribute("userRole", cookie.getValue());
 			}
 		}
-		
+		if(!isLogin){
+			return "/adminLogin";
+		}
 		//HttpSession session = request.getSession(true);
 		//int userId = (int)session.getAttribute("adminId");
 		//String userName = (String)session.getAttribute("adminName");
@@ -294,13 +319,21 @@ public class BackstageController {
 		System.out.println("==> /backstage/toMain.do");
 		//javax.servlet.http.HttpSession session = request.getSession(true);
 		Cookie cookies[]=request.getCookies();
+		if(cookies==null){
+			return "/adminLogin";
+		}
+		boolean isLogin = false;
 		for(Cookie cookie : cookies){
 			//System.out.println("Cookie: "+cookie.getName());
 			if(cookie.getName().equals("userId")){
 				UserInfo user = userManager.getUser(Integer.parseInt(cookie.getValue()));
 				request.setAttribute("user", user);
+				isLogin = true;
 			}
 			
+		}
+		if(!isLogin){
+			return "/adminLogin";
 		}
 		int operCount = userManager.getOperatiorCount();
 		int simCount = userManager.getSimulationCount();

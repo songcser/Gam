@@ -115,6 +115,6 @@ public interface IUserManager {
 
 	public Set<String> getLogoutUser();
 
-	public Map<String, Object> getMeetList(int userId, int sex,int maxCount);
+	public List<UserInfo> getMeetList(int userId, int sex,int maxCount);
 
 }

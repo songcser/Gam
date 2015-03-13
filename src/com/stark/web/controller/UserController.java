@@ -1399,7 +1399,29 @@ public class UserController {
 	@ResponseBody
 	public Map<String,Object> getMeetList2(int userId,int sex){
 		Map<String,Object> map = new HashMap<String,Object>();
-		map = userManager.getMeetList(userId,sex,maxMeetingCount);
+		List<UserInfo> uList = userManager.getMeetList(userId,sex,maxMeetingCount);
+		if(uList==null){
+			map.put("result", 0);
+			return map;
+		}
+		map = usersToMap(uList,3);
+		map.put("result", 1);
+		return map;
+	}
+	
+	private Map<String, Object> usersToMap(List<UserInfo> uList,int picSize) {
+		Map<String,Object> map = new HashMap<String,Object>();
+		List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
+		for(UserInfo user:uList){
+			Map<String,Object> uMap = userManager.userToMap(user);
+			if(picSize>0){
+				List<Map<String,Object>> pics = articleManager.getArticlePicturesByUserId(user.getUserId(), 0, picSize);
+				uMap.put("articlePics", pics);
+			}
+			
+			list.add(uMap);
+		}
+		map.put("users", list);
 		return map;
 	}
 }
