@@ -576,8 +576,6 @@ public class ShareRedisDAO implements IRedisDAO{
         	for(String key:keys){
         		result = shardedJedis.del(key);
         	}
-            
-
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             broken = true;

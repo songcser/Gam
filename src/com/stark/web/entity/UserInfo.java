@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import com.stark.web.define.EnumBase;
 import com.stark.web.hunter.FileManager;
 
 public class UserInfo {

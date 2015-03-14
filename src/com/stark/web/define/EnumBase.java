@@ -1,4 +1,4 @@
-package com.stark.web.entity;
+package com.stark.web.define;
 
 public class EnumBase {
 
@@ -678,7 +678,10 @@ public class EnumBase {
 		NoAuditingActivity("未审核活动推文",9),
 		Activity("活动推文",10),
 		Delete("已删除",11),
-		ExquisiteNoAuditing("精选未审核",12);
+		ExquisiteNoAuditing("精选未审核",12),
+		CommonExquisite("普通精选",13),
+		ActivityExquisite("活动精选",14),
+		CommonNoAuditing("普通未审核",15);
 		
 
 		private String name;

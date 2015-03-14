@@ -39,9 +39,9 @@ import com.aliyun.oss.model.UploadPartResult;
 import com.baidu.ueditor.PathFormat;
 import com.stark.web.define.AppInfo;
 import com.stark.web.define.BaseState;
+import com.stark.web.define.EnumBase;
 import com.stark.web.define.MultiState;
 import com.stark.web.define.State;
-import com.stark.web.entity.EnumBase;
 
 public class FileManager {
 

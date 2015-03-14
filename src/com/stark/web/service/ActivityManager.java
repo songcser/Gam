@@ -7,10 +7,10 @@ import java.util.Map;
 
 import com.stark.web.dao.ActivityDAO;
 import com.stark.web.dao.IActivityDAO;
+import com.stark.web.define.RedisInfo;
+import com.stark.web.define.EnumBase.ActivityStatus;
+import com.stark.web.define.EnumBase.ActivityType;
 import com.stark.web.entity.ActivityInfo;
-import com.stark.web.entity.RedisInfo;
-import com.stark.web.entity.EnumBase.ActivityStatus;
-import com.stark.web.entity.EnumBase.ActivityType;
 
 public class ActivityManager implements IActivityManager{
 

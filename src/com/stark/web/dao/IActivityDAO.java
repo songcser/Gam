@@ -2,8 +2,8 @@ package com.stark.web.dao;
 
 import java.util.List;
 
+import com.stark.web.define.EnumBase.ActivityStatus;
 import com.stark.web.entity.ActivityInfo;
-import com.stark.web.entity.EnumBase.ActivityStatus;
 
 public interface IActivityDAO {
 

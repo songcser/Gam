@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.stark.web.entity.ArticleInfo;
 import com.stark.web.entity.RelUserFollow;
 import com.stark.web.entity.RelUserFriend;
 import com.stark.web.entity.UserInfo;
@@ -116,5 +117,9 @@ public interface IUserManager {
 	public Set<String> getLogoutUser();
 
 	public List<UserInfo> getMeetList(int userId, int sex,int maxCount);
+
+	public void addFollowArticle(int userId, List<ArticleInfo> alist);
+
+	public List<UserInfo> getAllFansList(int userId);
 
 }

@@ -1,4 +1,4 @@
-package com.stark.web.entity;
+package com.stark.web.define;
 
 public class RedisInfo {
 	public static final String ARTICLETYPELIST = "Article:Type:List:";							//推文类型列表
@@ -15,6 +15,8 @@ public class RedisInfo {
 	public static final String ARTICLEPICTURELIST = "Article:Picture:List:";						//推文图片列表
 	public static final String ARTICLEDATELIST = "Article:Date:List:";							//推文按日期列表
 	public static final String ARTICLECOMMENTLIST = "Article:Comment:List:";						//推文评论列表
+	public static final String ARTICLERECOMMENDLIST = "Article:Recommend:List";					//推文推荐列表
+	
 	
 	public static final String USERARTICLELIST = "User:Article:List:";							//用户发布推文列表
 	public static final String USEROSLIST = "User:OS:List";										//运营人员和模拟用户列表
@@ -33,6 +35,8 @@ public class RedisInfo {
 	public static final String USEREMAILPASSWORD = "User:EmailPassword:";						//用户邮箱密码
 	public static final String USERLOGINSET = "User:Login:Set";								//用户最新登录集
 	public static final String USEREMAILSET = "User:Email:Set";								//用户邮箱集
+	public static final String USERCOLLECTIONLIST = "User:Collection:List:";				//用户收藏推文列表
+	public static final String USERFOLLOWARTICLEZSET = "User:Follow:Article:ZSet:";			//用户关注推文集
 	
 	public static final String ACTIVITYBANNERLIST="Activity:Banner:List";							//活动banner列表
 	public static final String ACTIVITYTOPLIST = "Activity:Top:List";								//活动置顶推荐列表

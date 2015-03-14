@@ -5,7 +5,7 @@ import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
-import com.stark.web.entity.EnumBase;
+import com.stark.web.define.EnumBase;
 import com.stark.web.entity.TagInfo;
 
 public class TagDAO implements ITagDAO {

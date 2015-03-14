@@ -10,10 +10,10 @@ import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import com.stark.web.controller.NoticeController;
+import com.stark.web.define.RedisInfo;
 import com.stark.web.entity.ArticleInfo;
 import com.stark.web.entity.CommentInfo;
 import com.stark.web.entity.NoticeInfo;
-import com.stark.web.entity.RedisInfo;
 import com.stark.web.entity.UserInfo;
 
 public class NoticeDAO implements INoticeDAO{

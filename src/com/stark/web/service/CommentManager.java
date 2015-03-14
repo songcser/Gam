@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.stark.web.dao.ICommentDAO;
+import com.stark.web.define.RedisInfo;
 import com.stark.web.entity.CommentInfo;
-import com.stark.web.entity.RedisInfo;
 import com.sun.org.apache.xerces.internal.dom.CommentImpl;
 
 public class CommentManager implements ICommentManager {

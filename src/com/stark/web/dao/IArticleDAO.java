@@ -209,4 +209,18 @@ public interface IArticleDAO {
 
 	public boolean browseArticle(int articleId);
 
+	public List<ArticleInfo> getCollectionList(int userId, int page, int maxResult);
+
+	public long addRedisBrowseCount(int articleId);
+
+	public Set<String> getRedisFollowArticleIdSet(String string, int page, int maxResult);
+
+	public void addRedisSetArticleId(String key, double score,String member);
+
+	public List<String> getRedisArticleIds(String string);
+
+	public List<ArticleInfo> getArticleByUserId(int userId, List<Integer> list);
+
+	public void deleteRedisKey(String key);
+
 }

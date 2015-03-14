@@ -7,7 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import com.stark.web.entity.EnumBase.ArticleType;
+import com.stark.web.define.EnumBase.ArticleType;
 import com.stark.web.hunter.FileManager;
 
 public class ArticleInfo {
@@ -23,6 +23,7 @@ public class ArticleInfo {
 	public static String COMMENTCOUNT = "CommentCount";
 	public static String ACTIVITYID = "ActivityId";
 	public static String REFERENCE = "Reference";
+	public static String BROWSECOUNT = "BrowseCount";
 
 	private int articleId;
 
@@ -45,7 +46,7 @@ public class ArticleInfo {
 	private Set<String> atUser = new HashSet<String>();
 	private Set<ActivityInfo> activities = new HashSet<ActivityInfo>();
 	private Set<CommentInfo> comments = new HashSet<CommentInfo>();
-	//private Set<UserInfo> collections = new HashSet<UserInfo>();
+	private Set<UserInfo> collectors = new HashSet<UserInfo>();
 	private int browseCount;
 
 	public ArticleInfo(int articleId) {
@@ -260,6 +261,14 @@ public class ArticleInfo {
 
 	public void setActivities(Set<ActivityInfo> activities) {
 		this.activities = activities;
+	}
+
+	public Set<UserInfo> getCollectors() {
+		return collectors;
+	}
+
+	public void setCollectors(Set<UserInfo> collectors) {
+		this.collectors = collectors;
 	}
 
 	

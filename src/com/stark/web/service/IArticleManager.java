@@ -142,4 +142,10 @@ public interface IArticleManager {
 
 	public Map<String, Object> getFollowArticleList(int userId, int page, int maxResults2);
 
+	public Map<String, Object> getCollectionPictures(int userId, int page, int maxPictureResult);
+
+	public List<ArticleInfo> getAllArticleByUserId(int followId);
+
+	public void addSetArticleId(String key, int score, String member);
+
 }

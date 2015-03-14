@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,12 +25,12 @@ import org.springframework.stereotype.Component;
 
 import com.stark.web.dao.IArticleDAO;
 import com.stark.web.dao.IUserDAO;
+import com.stark.web.define.RedisInfo;
+import com.stark.web.define.EnumBase.ArticleType;
 import com.stark.web.entity.ActivityInfo;
 import com.stark.web.entity.ArticleInfo;
 import com.stark.web.entity.ArticlePublishTimeLine;
 import com.stark.web.entity.ChartletInfo;
-import com.stark.web.entity.RedisInfo;
-import com.stark.web.entity.EnumBase.ArticleType;
 import com.stark.web.entity.FileInfo;
 import com.stark.web.entity.RelArticleForward;
 import com.stark.web.entity.RelChartletPicture;
@@ -68,12 +69,17 @@ public class ArticleManager implements IArticleManager {
 		int id = articleDao.addArticle(aInfo);
 		if (id > 0) {
 			aInfo.setArticleId(id);
+			aInfo.setBrowseCount(0);
 			articleDao.addRedisArticle(aInfo);
 			articleDao.addRedisUserArticleList(aInfo.getUser().getUserId(),aInfo.getArticleId());
 			articleDao.addRedisUpdateList(id);
 			articleDao.addRedisUserArticleCount(aInfo.getUser().getUserId());
 			SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
 			articleDao.addRedisArticleId(RedisInfo.ARTICLEDATELIST+sdf.format(aInfo.getDate()), id);
+			
+			int userId = aInfo.getUser().getUserId();
+			addFansArticleZSet(userId);
+			
 			int type = aInfo.getType();
 			if(type==ArticleType.Publish.getIndex()){
 				articleDao.addRedisArticleCount(RedisInfo.ARTICLEPUBLISHCOUNT);
@@ -131,6 +137,18 @@ public class ArticleManager implements IArticleManager {
 		return id;
 	}
 	
+	private void addFansArticleZSet(int userId) {
+		List<UserInfo> fans = userManager.getAllFansList(userId);
+		String key = RedisInfo.USERFOLLOWARTICLEZSET+userId;
+		for(UserInfo user :fans){
+			List<ArticleInfo> articles = getAllArticleByUserId(user.getUserId());
+			for(ArticleInfo article:articles){
+				int articleId = article.getArticleId();
+				addSetArticleId(key,articleId,articleId+"");
+			}
+		}
+	}
+
 	public IUserDAO getUserDao() {
 		return userDao;
 	}
@@ -171,18 +189,7 @@ public class ArticleManager implements IArticleManager {
 			if(size==maxCount)
 				return alist;
 		}
-		List<Integer> list = new ArrayList<Integer>(); 
-		list.add(ArticleType.Publish.getIndex());
-		list.add(ArticleType.Forward.getIndex());
-		list.add(ArticleType.DayExquisite.getIndex());
-		list.add(ArticleType.FashionMagazine.getIndex());
-		list.add(ArticleType.ExquisiteMagazine.getIndex());
-		list.add(ArticleType.Report.getIndex());
-		list.add(ArticleType.DayExquisiteReport.getIndex());
-		list.add(ArticleType.FashionMagazineReport.getIndex());
-		list.add(ArticleType.ExquisiteMagazineReport.getIndex());
-		list.add(ArticleType.NoAuditingActivity.getIndex());
-		list.add(ArticleType.Activity.getIndex());
+		List<Integer> list = getCommonArticleTypeList();
 		
 		List<ArticleInfo> tlist = articleDao.getArticleByUserId(uid,list, page*maxCount+size, maxCount-size);
 		if(tlist!=null){
@@ -970,7 +977,7 @@ public class ArticleManager implements IArticleManager {
 		if(tlist!=null&&!tlist.isEmpty()){
 			for(int i=0;i<tlist.size();i++){
 				ArticleInfo article = tlist.get(i);
-				setArticleCount(article);
+				//setArticleCount(article);
 				articleDao.addRedisArticle(article);
 				articleDao.addRedisArticleIdR(RedisInfo.ACTIVITYARTICLEALLLIST+activityId, article.getArticleId());
 				list.add(article);
@@ -1063,37 +1070,63 @@ public class ArticleManager implements IArticleManager {
 
 	@Override
 	public Map<String, Object> getRecommendList(int userId,int page, int maxResults) {
-		int size = 0;
+		List<ArticleInfo> articles = new ArrayList<ArticleInfo>();
+		List<String> ids = articleDao.getRedisArticleIds(RedisInfo.ARTICLECOMMENTLIST, page, maxResults);
+		int size = idsToArticleList(ids,articles);
+		if(size==maxResults)
+			return articlesToMap(articles,userId);
+		
 		List<Integer> types = new ArrayList<Integer>();
 		types.add(ArticleType.DayExquisite.getIndex());
 		types.add(ArticleType.DayExquisiteReport.getIndex());
-		
+		types.add(ArticleType.CommonExquisite.getIndex());
 		List<ArticleInfo> tlist = articleDao.getArticleByType(types, page*maxResults+size, maxResults-size);
-		if(tlist==null){
-			Map<String,Object> map = new HashMap<String,Object>();
-			map.put("result", 0);
-			return map;
-		}
-		for(int i=0;i<tlist.size();i++){
-			ArticleInfo article = tlist.get(i);
-			setArticleCount(article);
-		}
-		return articlesToMap(tlist,userId,true);
+		
+		listToListAndAddRedisId(RedisInfo.ARTICLECOMMENTLIST,tlist,articles);
+		
+		return articlesToMap(articles,userId);
 	}
 
-	private Map<String, Object> articlesToMap(List<ArticleInfo> articles, int userId,boolean show) {
+	private boolean listToListAndAddRedisId(String key,List<ArticleInfo> fromList,List<ArticleInfo> toList) {
+		if(fromList==null){
+			return false;
+		}
+		for(int i=0;i<fromList.size();i++){
+			ArticleInfo article = fromList.get(i);
+			articleDao.addRedisArticle(article);
+			articleDao.addRedisArticleIdR(key, article.getArticleId());
+			//setArticleCount(article);
+			toList.add(article);
+		}
+		return true;
+	}
+
+	private int idsToArticleList(List<String> ids, List<ArticleInfo> list) {
+		if(ids!=null&&!ids.isEmpty()){
+    		for(String id:ids){
+    			ArticleInfo article = getArticle(Integer.parseInt(id));
+    			if(article!=null){
+    				list.add(article);
+    			}
+    		}
+    		return ids.size();
+		}
+		return 0;
+	}
+
+	private Map<String, Object> articlesToMap(List<ArticleInfo> articles, int userId) {
 		Map<String, Object> map = new HashMap<String,Object>();
 		List<Map<String,Object>> aList = new ArrayList<Map<String,Object>>();
 		for(ArticleInfo article:articles){
 			
-			aList.add(articleToMap(article,userId,show));
+			aList.add(articleToMap(article,userId));
 		}
 		map.put("articles", aList);
 		map.put("result", 1);
 		return map;
 	}
 	
-	private Map<String,Object> articleToMap(ArticleInfo article,int userId,boolean show){
+	private Map<String,Object> articleToMap(ArticleInfo article,int userId){
 		Map<String,Object> aMap = new HashMap<String,Object>();
 		UserInfo user = userManager.getUser(article.getUser().getUserId());
 		int articleId = article.getArticleId();
@@ -1105,14 +1138,27 @@ public class ArticleManager implements IArticleManager {
 		aMap.put("title", article.getTitle());
 		aMap.put("content", article.getContent());
 		ActivityInfo act = article.getActivity();
-		if(act!=null&&show){
+		if(act!=null){
 			aMap.put("showId", act.getActivityId());
 			aMap.put("showTitle", act.getSubject());
 			aMap.put("showType", act.getType());
 		}
+		else{
+			aMap.put("showId", 0);
+			aMap.put("showTitle", "");
+			aMap.put("showType", 0);
+		}
 		boolean flag = articleDao.isCollection(userId,articleId);
 		aMap.put("collection", flag?1:0);
+		flag = false;
+		if(userId>0){
+			flag = isPraise(userId, articleId);
+		}
+		aMap.put("praiseStatus", flag ? 1 : 0);
+		
+		aMap.put("praiseCount", article.getPraiseCount());
 		aMap.put("commentCount", article.getCommentCount());
+		
 		List<String> pics = getPicListById(articleId);
 		aMap.put("pictures", pics);
 		aMap.put("browseCount", article.getBrowseCount());
@@ -1122,44 +1168,157 @@ public class ArticleManager implements IArticleManager {
 		return aMap;
 	}
 	
+	
 	@Override
 	public Map<String, Object> getShowArticleList(int showId, int userId, int page, int maxResults) {
-		int size = 0;
+		List<ArticleInfo> articles = new ArrayList<ArticleInfo>();
+		List<String> ids = articleDao.getRedisArticleIds(RedisInfo.ACTIVITYARTICLEALLLIST+showId, page, maxResults);
+		int size = idsToArticleList(ids,articles);
+		if(size==maxResults)
+			return articlesToMap(articles,userId);
+		
 		List<ArticleInfo> alist = articleDao.getListByShowId(showId,page*maxResults+size,maxResults-size);
-		for(int i=0;i<alist.size();i++){
-			ArticleInfo article = alist.get(i);
-			setArticleCount(article);
-		}
-		return articlesToMap(alist,userId,false);
+		
+		listToListAndAddRedisId(RedisInfo.ARTICLECOMMENTLIST,alist,articles);
+		
+		return articlesToMap(articles,userId);
 	}
 
+	
 	@Override
 	public Map<String, Object> getArticleInfo(int articleId, int userId) {
 		ArticleInfo article = getArticle(articleId);
-		return articleToMap(article,userId,false);
+		return articleToMap(article,userId);
 	}
 
+	
 	@Override
 	public boolean collectArticle(int userId, int articleId) {
 		boolean result = articleDao.collectArticle(userId,articleId);
+		if(result){
+			String key = RedisInfo.USERCOLLECTIONLIST+userId;
+			articleDao.addRedisArticleIdR(key, articleId);
+		}
 		return result;
 	}
 
+	
 	@Override
 	public boolean browseArticle(int articleId) {
 		boolean result = articleDao.browseArticle(articleId);
+		if(result){
+			articleDao.addRedisBrowseCount(articleId);
+		}
 		return result;
 	}
 
+	
 	@Override
 	public Map<String, Object> getFollowArticleList(int userId, int page, int maxResults) {
-		List<ArticleInfo> articles = articleDao.getFollowArticle(userId, page, maxResults);
-		if(articles==null){
+		List<ArticleInfo> articles = new ArrayList<ArticleInfo>();
+		String key = RedisInfo.USERFOLLOWARTICLEZSET+userId;
+		Set<String> ids = articleDao.getRedisFollowArticleIdSet(key, page, maxResults);
+		int size = idsToArticleList(ids,articles);
+		if(size==maxResults)
+			return articlesToMap(articles,userId);
+		
+		List<ArticleInfo> alist = articleDao.getFollowArticle(userId, page*maxResults+size,maxResults-size);
+		if(alist==null){
 			Map<String,Object> map = new HashMap<String,Object>();
 			map.put("result", 0);
 			return map;
 		}
-		return articlesToMap(articles,userId,true);
+		
+		listToZSetAndAddRedisId(key,alist,articles);
+		
+		return articlesToMap(articles,userId);
+	}
+
+	
+	private boolean listToZSetAndAddRedisId(String key, List<ArticleInfo> fromList, List<ArticleInfo> toList) {
+		if(fromList==null){
+			return false;
+		}
+		for(int i=0;i<fromList.size();i++){
+			ArticleInfo article = fromList.get(i);
+			articleDao.addRedisArticle(article);
+			int articleId = article.getArticleId();
+			
+			addSetArticleId(key,articleId,articleId+"");
+			//setArticleCount(article);
+			toList.add(article);
+		}
+		return true;
+	}
+
+	public void addSetArticleId(String key, int score, String member) {
+		articleDao.addRedisSetArticleId(key, score,member);
+	}
+
+	private int idsToArticleList(Set<String> ids, List<ArticleInfo> list) {
+		if(ids!=null&&!ids.isEmpty()){
+    		for(String id:ids){
+    			ArticleInfo article = getArticle(Integer.parseInt(id));
+    			if(article!=null){
+    				list.add(article);
+    			}
+    		}
+    		return ids.size();
+		}
+		return 0;
+	}
+
+	@Override
+	public Map<String, Object> getCollectionPictures(int userId, int page, int maxResults) {
+		List<ArticleInfo> articles = new ArrayList<ArticleInfo>();
+		String key = RedisInfo.USERCOLLECTIONLIST+userId;
+		List<String> ids = articleDao.getRedisArticleIds(key, page, maxResults);
+		int size = idsToArticleList(ids,articles);
+		if(size==maxResults)
+			return articlesToMap(articles,userId);
+		
+		List<ArticleInfo> alist = articleDao.getCollectionList(userId,page*maxResults+size,maxResults-size);
+		
+		listToListAndAddRedisId(key,alist,articles);
+		
+		return articlesToMap(articles,userId);
+	}
+
+	
+	@Override
+	public List<ArticleInfo> getAllArticleByUserId(int userId) {
+		List<ArticleInfo> articles = new ArrayList<ArticleInfo>();
+		String key = RedisInfo.USERARTICLELIST+userId;
+		List<String> ids = articleDao.getRedisArticleIds(key);
+		
+		int size = idsToArticleList(ids,articles);
+		UserInfo user = userManager.getUser(userId);
+		if(user.getArticleCount()==size)
+			return articles;
+		
+		List<Integer> list = getCommonArticleTypeList();
+		
+		List<ArticleInfo> alist = articleDao.getArticleByUserId(userId, list);
+		articleDao.deleteRedisKey(key);
+		listToListAndAddRedisId(key,alist,articles);
+		
+		return alist;
 	}
 	
+	private List<Integer> getCommonArticleTypeList(){
+		List<Integer> list = new ArrayList<Integer>(); 
+		list.add(ArticleType.Publish.getIndex());
+		list.add(ArticleType.Forward.getIndex());
+		list.add(ArticleType.DayExquisite.getIndex());
+		list.add(ArticleType.FashionMagazine.getIndex());
+		list.add(ArticleType.ExquisiteMagazine.getIndex());
+		list.add(ArticleType.Report.getIndex());
+		list.add(ArticleType.DayExquisiteReport.getIndex());
+		list.add(ArticleType.FashionMagazineReport.getIndex());
+		list.add(ArticleType.ExquisiteMagazineReport.getIndex());
+		list.add(ArticleType.NoAuditingActivity.getIndex());
+		list.add(ArticleType.Activity.getIndex());
+		
+		return list;
+	}
 }

@@ -14,13 +14,13 @@ import org.springframework.data.redis.core.BoundHashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
 
+import com.stark.web.define.RedisInfo;
+import com.stark.web.define.EnumBase.ArticleType;
+import com.stark.web.define.EnumBase.UserRole;
 import com.stark.web.entity.ArticleInfo;
-import com.stark.web.entity.RedisInfo;
 import com.stark.web.entity.RelUserFollow;
 import com.stark.web.entity.RelUserFriend;
 import com.stark.web.entity.UserInfo;
-import com.stark.web.entity.EnumBase.ArticleType;
-import com.stark.web.entity.EnumBase.UserRole;
 import com.stark.web.service.WebManager;
 
 public class UserDAO implements IUserDAO{
@@ -987,5 +987,29 @@ public class UserDAO implements IUserDAO{
 		query.setMaxResults(maxCount);
 		return query.list();
 	}
+
+	@Override
+	public Set<String> getRedisSetUserIds(String key) {
+		if(redisDao==null)
+			return null;
+		return redisDao.zrevrange(key, 0, -1);
+	}
+
+	@Override
+	public List<UserInfo> getFansList(int userId) {
+		String hqlString = "select u from UserInfo as u,RelUserFollow as r where r.follow.userId = ? and r.user.userId=u.userId";
+		Query query = sessionFactory.getCurrentSession().createQuery(hqlString);
+		query.setInteger(0, userId);
+		return query.list();
+	}
+
+	@Override
+	public void deleteRedisKey(String key) {
+		if(redisDao==null)
+			return ;
+		redisDao.del(key);
+	}
+
+
 	
 }

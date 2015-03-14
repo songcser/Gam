@@ -23,7 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
-import com.stark.web.entity.EnumBase;
+import com.stark.web.define.EnumBase;
 import com.stark.web.entity.NoticeInfo;
 import com.stark.web.entity.UserInfo;
 import com.stark.web.hunter.FileManager;

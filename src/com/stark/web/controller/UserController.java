@@ -33,9 +33,10 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import com.stark.web.dao.ArticleDAO;
-import com.stark.web.entity.EnumBase.*;
+import com.stark.web.define.EnumBase;
+import com.stark.web.define.RedisInfo;
+import com.stark.web.define.EnumBase.*;
 import com.stark.web.entity.ArticleInfo;
-import com.stark.web.entity.EnumBase;
 import com.stark.web.entity.NoticeInfo;
 import com.stark.web.entity.PetInfo;
 import com.stark.web.entity.RelUserFollow;
@@ -681,6 +682,14 @@ public class UserController {
 		rel.setDate(new Date());
 
 		boolean result = userManager.addFollow(rel);
+		if(result){
+			List<ArticleInfo> alist = articleManager.getAllArticleByUserId(followId);
+			//userManager.addFollowArticle(userId,alist);
+			for(ArticleInfo article:alist){
+				int articleId = article.getArticleId();
+				articleManager.addSetArticleId(RedisInfo.USERFOLLOWARTICLEZSET+userId,articleId,articleId+"");
+			}
+		}
 		
 		if (result) {
 			NoticeInfo notice = new NoticeInfo();

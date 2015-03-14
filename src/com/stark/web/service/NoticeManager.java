@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.stark.web.dao.INoticeDAO;
+import com.stark.web.define.RedisInfo;
 import com.stark.web.entity.NoticeInfo;
-import com.stark.web.entity.RedisInfo;
 
 public class NoticeManager implements INoticeManager{
 

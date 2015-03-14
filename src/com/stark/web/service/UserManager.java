@@ -13,14 +13,15 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Component;
 
-import com.stark.web.entity.EnumBase;
-import com.stark.web.entity.RedisInfo;
+import com.stark.web.entity.ArticleInfo;
 import com.stark.web.entity.RelUserFollow;
 import com.stark.web.entity.RelUserFriend;
 import com.stark.web.entity.UserInfo;
-import com.stark.web.entity.EnumBase.UserRole;
 import com.stark.web.hunter.FileManager;
 import com.stark.web.dao.IUserDAO;
+import com.stark.web.define.EnumBase;
+import com.stark.web.define.RedisInfo;
+import com.stark.web.define.EnumBase.UserRole;
 
 public class UserManager implements IUserManager{
 
@@ -716,6 +717,46 @@ public class UserManager implements IUserManager{
 		}
 		
 		return uList;
+	}
+
+	@Override
+	public void addFollowArticle(int userId, List<ArticleInfo> alist) {
+		
+	}
+
+	@Override
+	public List<UserInfo> getAllFansList(int userId) {
+		List<UserInfo> users = new ArrayList<UserInfo>();
+		String key = RedisInfo.USERFANSZSET+userId;
+		Set<String> ids = userDao.getRedisSetUserIds(key);
+		if(ids==null)
+			return null;
+		int size = ids.size();
+		UserInfo user = getUser(userId);
+		if(user.getFansCount()==size){
+			for(String id :ids){
+				users.add(getUser(Integer.parseInt(id)));
+			}
+			return users;
+		}
+		
+		users.clear();
+		List<RelUserFollow> ruf = userDao.getUserFansList(userId,0,-1);
+		if(users!=null){
+			userDao.deleteRedisKey(key);
+			for(RelUserFollow rel : ruf){
+				
+				//RelUserFollow rel = ruf.get(i);
+				UserInfo u = getUser(rel.getUser().getUserId());
+				if(u!=null){
+					users.add(user);
+					userDao.addRedisOnlyFansZSet(rel);
+				}
+			}
+		}
+		
+		
+		return users;
 	}
 
 	

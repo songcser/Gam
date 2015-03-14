@@ -37,19 +37,19 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
+import com.stark.web.define.EnumBase;
+import com.stark.web.define.EnumBase.ArticleType;
+import com.stark.web.define.EnumBase.ChartletStatus;
+import com.stark.web.define.EnumBase.ChartletType;
+import com.stark.web.define.EnumBase.NoticeStatus;
+import com.stark.web.define.EnumBase.NoticeType;
 import com.stark.web.entity.ActivityInfo;
 import com.stark.web.entity.ArticleInfo;
 import com.stark.web.entity.ArticlePublishTimeLine;
 import com.stark.web.entity.ChartletInfo;
 import com.stark.web.entity.CommentInfo;
-import com.stark.web.entity.EnumBase;
 import com.stark.web.entity.RelChartletPicture;
 import com.stark.web.entity.UserGroup;
-import com.stark.web.entity.EnumBase.ArticleType;
-import com.stark.web.entity.EnumBase.ChartletStatus;
-import com.stark.web.entity.EnumBase.ChartletType;
-import com.stark.web.entity.EnumBase.NoticeStatus;
-import com.stark.web.entity.EnumBase.NoticeType;
 import com.stark.web.entity.NoticeInfo;
 import com.stark.web.entity.TagInfo;
 import com.stark.web.entity.UserInfo;
@@ -1445,6 +1445,13 @@ public class ArticleController {
 	@ResponseBody
 	public Map<String,Object> getFollowArticleList2(int userId,int page){
 		Map<String,Object> map = articleManager.getFollowArticleList(userId, page, maxResults2);
-		return null;
+		return map;
+	}
+	
+	@RequestMapping("getCollectionPictures2.0.do")
+	@ResponseBody
+	public Map<String,Object> getCollectionPictures2(int userId,int page){
+		Map<String,Object> map = articleManager.getCollectionPictures(userId,page,maxPictureResult);
+		return map;
 	}
 }

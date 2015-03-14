@@ -6,20 +6,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
+import com.stark.web.define.RedisInfo;
+import com.stark.web.define.EnumBase.ArticleType;
 import com.stark.web.entity.ActivityInfo;
 import com.stark.web.entity.ArticleInfo;
 import com.stark.web.entity.ArticlePublishTimeLine;
 import com.stark.web.entity.ChartletInfo;
 import com.stark.web.entity.FileInfo;
-import com.stark.web.entity.RedisInfo;
 import com.stark.web.entity.RelArticleForward;
 import com.stark.web.entity.RelChartletPicture;
 import com.stark.web.entity.UserInfo;
-import com.stark.web.entity.EnumBase.ArticleType;
 
 public class ArticleDAO implements IArticleDAO {
 
@@ -317,6 +318,9 @@ public class ArticleDAO implements IArticleDAO {
 		aInfo.setCommentCount(cCount);
 		map.put(ArticleInfo.COMMENTCOUNT, ""+cCount);
 		
+		int bCount = aInfo.getBrowseCount();
+		map.put(ArticleInfo.BROWSECOUNT, bCount+"");
+		
 		if(aInfo.getActivity()!=null){
 			map.put(ArticleInfo.ACTIVITYID, aInfo.getActivity().getActivityId()+"");
 		}
@@ -598,6 +602,14 @@ public class ArticleDAO implements IArticleDAO {
 				article.setPraiseCount(Integer.parseInt(aMap.get(ArticleInfo.PRAISECOUNT)));
 				article.setCommentCount(Integer.parseInt(aMap.get(ArticleInfo.COMMENTCOUNT)));
 				
+				String browserCount = aMap.get(ArticleInfo.BROWSECOUNT);
+				if(browserCount!=null&&!browserCount.equals("")){
+					article.setBrowseCount(Integer.parseInt(browserCount));
+				}
+				else {
+					article.setBrowseCount(0);
+				}
+				
 				String activityId = aMap.get(ArticleInfo.ACTIVITYID);
 				if(activityId!=null){
 					article.setActivity(new ActivityInfo(Integer.parseInt(activityId)));
@@ -691,7 +703,13 @@ public class ArticleDAO implements IArticleDAO {
 		}
 		article.setPraiseCount(Integer.parseInt(aMap.get(ArticleInfo.PRAISECOUNT)));
 		article.setCommentCount(Integer.parseInt(aMap.get(ArticleInfo.COMMENTCOUNT)));
-		
+		String browserCount = aMap.get(ArticleInfo.BROWSECOUNT);
+		if(browserCount!=null&&!browserCount.equals("")){
+			article.setBrowseCount(Integer.parseInt(browserCount));
+		}
+		else {
+			article.setBrowseCount(0);
+		}
 		String activityId = aMap.get(ArticleInfo.ACTIVITYID);
 		if(activityId!=null){
 			article.setActivity(new ActivityInfo(Integer.parseInt(activityId)));
@@ -1041,5 +1059,77 @@ public class ArticleDAO implements IArticleDAO {
 		query.setInteger("articleId", articleId);
 		
 		return query.executeUpdate()>0;
+	}
+
+	@Override
+	public List<ArticleInfo> getCollectionList(int userId, int start, int maxResult) {
+		String hql = "select a from ArticleInfo as a join a.collectors as ac where ac.userId =:userId";
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		query.setInteger("userId", userId);
+		query.setFirstResult(start);
+		query.setMaxResults(maxResult);
+		return query.list();
+	}
+
+	@Override
+	public long addRedisBrowseCount(int articleId) {
+		if(redisDao==null)
+			return 0;
+		return redisDao.hincrby(ArticleInfo.getKey(articleId), ArticleInfo.BROWSECOUNT, 1);
+	}
+
+	@Override
+	public Set<String> getRedisFollowArticleIdSet(String key, int page, int maxCount) {
+		if(redisDao==null)
+			return null;
+		
+		return redisDao.zrevrange(key, page*maxCount, (page+1)*maxCount-1);
+	}
+
+	@Override
+	public void addRedisSetArticleId(String key, double score, String member) {
+		if(redisDao==null)
+			return ;
+		
+		redisDao.zadd(key, score, member);
+	}
+
+	@Override
+	public List<String> getRedisArticleIds(String key) {
+		if(redisDao==null)
+			return null;
+		return redisDao.lrange(key, 0, -1);
+	}
+
+	@Override
+	public List<ArticleInfo> getArticleByUserId(int userId, List<Integer> typeList) {
+		
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < typeList.size(); i++) {
+			if (i == typeList.size() - 1) {
+				sb.append("a.type = ? ");
+			} else
+				sb.append("a.type = ? or ");
+
+		}
+		String hql = "from ArticleInfo as a where a.user.userId = ? and ("+sb+") order by a.date desc";
+		//String hql = "select a from ArticleInfo as a join a.tags as t where t.content in (" + sb + ")";
+		//System.out.println("Hql:   " + hql);
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		query.setInteger(0, userId);
+		for (int i = 0; i < typeList.size(); i++) {
+			int type = typeList.get(i);
+			query.setInteger(i+1, type);
+		}
+		
+
+		return query.list();
+	}
+
+	@Override
+	public void deleteRedisKey(String key) {
+		if(redisDao==null)
+			return ;
+		redisDao.del(key);
 	}
 }

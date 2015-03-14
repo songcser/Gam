@@ -22,9 +22,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
+import com.stark.web.define.EnumBase.ActivityStatus;
 import com.stark.web.entity.ActivityInfo;
 import com.stark.web.entity.CommentInfo;
-import com.stark.web.entity.EnumBase.ActivityStatus;
 import com.stark.web.hunter.FileManager;
 import com.stark.web.service.IActivityManager;
 import com.stark.web.service.IArticleManager;
