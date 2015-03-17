@@ -309,7 +309,8 @@ public class UserManager implements IUserManager{
 	public UserInfo isAdmin(String username, String password) {
 		UserInfo user = userDao.isExist(username, password, EnumBase.UserRole.Admin.getIndex());
 		if(user!=null){
-			userDao.addRedisUser(user);
+			//userDao.addRedisUser(user);
+			getUser(user.getUserId());
 		}
 			
 		return user;

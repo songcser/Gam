@@ -158,11 +158,11 @@ public class UserDAO implements IUserDAO{
 	@Override
 	public UserInfo isExist(String username, String password,int role) {
 		//System.out.println(username+password+role);
-		String hql = "from UserInfo as u where u.name = ? and u.password=? and u.role = ?";
+		String hql = "from UserInfo as u where u.name =:name and u.password=:password and u.role =:role";
 		Query query = sessionFactory.getCurrentSession().createQuery(hql);
-		query.setString(0, username);
-		query.setString(1, password);
-		query.setInteger(2, role);
+		query.setString("name", username);
+		query.setString("password", password);
+		query.setInteger("role", role);
 		
 		
 		return (UserInfo)query.uniqueResult();
