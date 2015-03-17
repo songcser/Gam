@@ -112,7 +112,7 @@ public class BackstageController {
 			request.setAttribute("deleteCount", deleteCount);
 			request.setAttribute("reportCount", reportCount);
 			
-			return "/main";
+			return "/home";
 		}
 //		PrintWriter out = response.getWriter();
 //		out.print("<script language='javascript'>parent.callback();</script>");
