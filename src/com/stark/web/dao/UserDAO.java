@@ -1010,6 +1010,17 @@ public class UserDAO implements IUserDAO{
 		redisDao.del(key);
 	}
 
+	@Override
+	public String getRedisUserPassword(String key) {
+		
+		return redisDao.get(key);
+	}
+
+	@Override
+	public void addRedisUserPassword(String key, int userId) {
+		redisDao.set(key, userId+"");
+	}
+
 
 	
 }

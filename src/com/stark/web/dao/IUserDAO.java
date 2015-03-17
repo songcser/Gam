@@ -176,5 +176,9 @@ public interface IUserDAO {
 
 	public void deleteRedisKey(String key);
 
+	public String getRedisUserPassword(String string);
+
+	public void addRedisUserPassword(String key, int userId);
+
 
 }

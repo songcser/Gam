@@ -307,10 +307,16 @@ public class UserManager implements IUserManager{
 
 	@Override
 	public UserInfo isAdmin(String username, String password) {
+		String key = RedisInfo.USERADMINPASSWORD+username+":"+password;
+		String id = userDao.getRedisUserPassword(key);
+		if(id!=null&&!id.equals("")){
+			return getUser(Integer.parseInt(id));
+		}
 		UserInfo user = userDao.isExist(username, password, EnumBase.UserRole.Admin.getIndex());
 		if(user!=null){
 			//userDao.addRedisUser(user);
 			getUser(user.getUserId());
+			userDao.addRedisUserPassword(key,user.getUserId());
 		}
 			
 		return user;
@@ -486,7 +492,17 @@ public class UserManager implements IUserManager{
 
 	@Override
 	public UserInfo isOperatior(String name, String password) {
-		return userDao.isExist(name, password, EnumBase.UserRole.Operatior.getIndex());
+		String key = RedisInfo.USEROPERATIORPASSWORD+name+":"+password;
+		String id = userDao.getRedisUserPassword(key);
+		if(id!=null&&!id.equals("")){
+			return getUser(Integer.parseInt(id));
+		}
+		UserInfo user = userDao.isExist(name, password, EnumBase.UserRole.Operatior.getIndex());
+		if(user!=null){
+			getUser(user.getUserId());
+			userDao.addRedisUserPassword(key, user.getUserId());
+		}
+		return user;
 	}
 
 	@Override
