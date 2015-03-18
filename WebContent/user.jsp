@@ -17,14 +17,15 @@ body{
 	<%@ include file="header.jsp"%>
 	<div id="mainBody" class="container-fluid" >
 		<div class="row" style="height:100%">
-			<div class="col-sm-4 margin radius" style="height:100%;">
+			<div class="col-sm-4 margin-left radius" style="height:100%;">
+			 <form id='searchNameForm' name='searchNameForm' method="post" action="searchByName.do" >
 			     <div class="input-group margin-bottom">
-                    <input type="text" class="form-control" placeholder="Search By Name">
+                    <input type="text" id="searchName" name="name" class="form-control" placeholder="Search By Name">
                     <span class="input-group-btn">
                         <button class="btn btn-default" type="button" onclick="searchByName()">Go!</button>
                     </span>
                 </div>
-                
+                 </form>
 				<%@ include file="userList.jsp"%>
 			</div>
 			<div class="col-sm-6 " id="articleList" style="height:100%;overflow:auto">
@@ -47,7 +48,9 @@ body{
 	document.getElementById("mainBody").style.height=total+"px";
 	
 	function searchByName(){
-		window.location = "searchByName.do";
+		//var name = $("#searchName").val();
+		//window.location = "searchByName.do?name="+name;
+		$("#searchNameForm").submit();
 	}
 	</script>
 </body>

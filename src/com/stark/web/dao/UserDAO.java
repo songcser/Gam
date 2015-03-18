@@ -616,7 +616,6 @@ public class UserDAO implements IUserDAO{
 
 	@Override
 	public long addRedisUsers(String key, int userId) {
-		System.out.println(redisDao);
 		if(redisDao==null)
 			return 0;
 		return redisDao.rpush(key, userId+"");
@@ -1023,7 +1022,10 @@ public class UserDAO implements IUserDAO{
 
 	@Override
 	public List<UserInfo> getUserByName(String name) {
-		return null;
+		String hql = "select u from UserInfo as u where u.name =:name";
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		query.setString("name", name);
+		return query.list();
 	}
 
 

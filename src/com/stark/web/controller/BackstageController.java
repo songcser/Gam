@@ -375,8 +375,13 @@ public class BackstageController {
 	}
 	
 	@RequestMapping("searchByName.do")
-	public String searchByName(String name){
-		List<UserInfo> user = userManager.getUserByName(name);
+	public String searchByName(String name,HttpServletRequest request){
+		List<UserInfo> users = userManager.getUserByName(name);
+		if(users!=null){
+			request.setAttribute("operations", users);
+		}
+		request.setAttribute("webIcon", FileManager.getWebIcon());
+		request.setAttribute("roles", UserRole.values());
 		return "user";
 	}
 }

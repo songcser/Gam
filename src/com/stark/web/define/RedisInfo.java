@@ -37,8 +37,9 @@ public class RedisInfo {
 	public static final String USEREMAILSET = "User:Email:Set";								//用户邮箱集
 	public static final String USERCOLLECTIONLIST = "User:Collection:List:";				//用户收藏推文列表
 	public static final String USERFOLLOWARTICLEZSET = "User:Follow:Article:ZSet:";			//用户关注推文集
-	public static final String USERADMINPASSWORD = "User:Admin:Password:";					//用户管理员密码
-	public static final String USEROPERATIORPASSWORD = "User:Operatior:Password:";			//
+	public static final String USERADMINPASSWORD = "User:Admin:Password:";					//管理员密码
+	public static final String USEROPERATIORPASSWORD = "User:Operatior:Password:";			//运营人员密码
+	public static final String USERNAMELIST = "User:Name:List:";							//用户名字列表
 	
 	public static final String ACTIVITYBANNERLIST="Activity:Banner:List";							//活动banner列表
 	public static final String ACTIVITYTOPLIST = "Activity:Top:List";								//活动置顶推荐列表
@@ -48,5 +49,6 @@ public class RedisInfo {
 	
 	public static final String CHARTLETALLLIST = "Chartlet:All:List";								//贴图列表
 	public static final String CHARTLETPICTURELIST = "Chartlet:Picture:List:";					//贴图图片列表
+	
 	
 }

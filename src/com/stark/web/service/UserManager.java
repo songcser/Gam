@@ -778,8 +778,31 @@ public class UserManager implements IUserManager{
 
 	@Override
 	public List<UserInfo> getUserByName(String name) {
-		List<UserInfo> user = userDao.getUserByName(name);
-		return null;
+		String key = RedisInfo.USERNAMELIST+name;
+		List<String> ids = userDao.getRedisUsers(key);
+		List<UserInfo> list = null;
+		list = idsToUserList(ids);
+		if(list!=null&&!list.isEmpty())
+			return list;
+		
+		List<UserInfo> users = userDao.getUserByName(name);
+		if(users!=null&&!users.isEmpty()){
+			for(UserInfo user:users)
+			userDao.addRedisUsers(key, user.getUserId());
+		}
+		return users;
+	}
+
+	private List<UserInfo> idsToUserList(List<String> ids) {
+		List<UserInfo> list = new ArrayList<UserInfo>();
+		if(ids==null||ids.isEmpty()){
+			return null;
+		}
+		for(String id:ids){
+			UserInfo user = getUser(Integer.parseInt(id));
+			list.add(user);
+		}
+		return list;
 	}
 
 	
