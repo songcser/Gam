@@ -122,4 +122,6 @@ public interface IUserManager {
 
 	public List<UserInfo> getAllFansList(int userId);
 
+	public List<UserInfo> getUserByName(String name);
+
 }

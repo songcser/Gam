@@ -180,5 +180,7 @@ public interface IUserDAO {
 
 	public void addRedisUserPassword(String key, int userId);
 
+	public List<UserInfo> getUserByName(String name);
+
 
 }

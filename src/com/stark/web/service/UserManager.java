@@ -776,5 +776,11 @@ public class UserManager implements IUserManager{
 		return users;
 	}
 
+	@Override
+	public List<UserInfo> getUserByName(String name) {
+		List<UserInfo> user = userDao.getUserByName(name);
+		return null;
+	}
+
 	
 }

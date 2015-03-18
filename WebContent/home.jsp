@@ -7,6 +7,7 @@
 <title>Uha 首页</title>
 <link rel="stylesheet" href="../css/bootstrap.css">
 <style type="text/css">
+
 #head {
 	padding-top: 100px;
 	width: 300px;
@@ -37,7 +38,7 @@
 	}
 </script>
 </head>
-<body>
+<body class="bg-blue-light">
 	<%@ include file="header.jsp"%>
 	<form id='formFile' name='formFile' method="post" action="../user/modifyAdmin.do" target='frameFile' enctype="multipart/form-data">
 		<input size="100" type="file" name="file" id="headFileId" style="display: none" onchange="addFile()" /> <input type="hidden" name="userId" value="${user.userId }">

@@ -188,6 +188,81 @@ td,
 th {
   padding: 0;
 }
+/*add by jysong 2015.3.18*/
+.text-justify{text-align:justify;}
+.text-large{font-size:24px;}
+.text-big{font-size:16px;}
+.text-default{font-size:14px;}
+.text-small{font-size:12px;}
+.text-little{font-size:10px;}
+.padding-large{padding:30px;}
+.padding-large-top{padding-top:30px;}
+.padding-large-right{padding-right:30px;}
+.padding-large-bottom{padding-bottom:30px;}
+.padding-large-left{padding-left:30px;}
+.padding-big{padding:20px;}
+.padding-big-top{padding-top:20px;}
+.padding-big-right{padding-right:20px;}
+.padding-big-bottom{padding-bottom:20px;}
+.padding-big-left{padding-left:20px;}
+.padding{padding:10px;}
+.padding-top{padding-top:10px;}
+.padding-right{padding-right:10px;}
+.padding-bottom{padding-bottom:10px;}
+.padding-left{padding-left:10px;}
+.padding-small{padding:5px;}
+.padding-small-top{padding-top:5px;}
+.padding-small-right{padding-right:5px;}
+.padding-small-bottom{padding-bottom:5px;}
+.padding-small-left{padding-left:5px;}
+.padding-little{padding:2px;}
+.padding-little-top{padding-top:2px;}
+.padding-little-right{padding-right:2px;}
+.padding-little-bottom{padding-bottom:2px;}
+.padding-little-left{padding-left:2px;}
+.margin-large{margin:30px;}
+.margin-large-top{margin-top:30px;}
+.margin-large-right{margin-right:30px;}
+.margin-large-bottom{margin-bottom:30px;}
+.margin-large-left{margin-left:30px;}
+.margin-big{margin:20px;}
+.margin-big-top{margin-top:20px;}
+.margin-big-right{margin-right:20px;}
+.margin-big-bottom{margin-bottom:20px;}
+.margin-big-left{margin-left:20px;}
+.margin{margin:10px !important;clear:both;}
+.margin-top{margin-top:10px;}
+.margin-right{margin-right:10px;}
+.margin-bottom{margin-bottom:10px;}
+.margin-left{margin-left:10px;}
+.margin-small{margin:5px;}
+.margin-small-top{margin-top:5px;}
+.margin-small-right{margin-right:5px;}
+.margin-small-bottom{margin-bottom:5px;}
+.margin-small-left{margin-left:5px;}
+.margin-little{margin:2px;}
+.margin-little-top{margin-top:2px;}
+.margin-little-right{margin-right:2px;}
+.margin-little-bottom{margin-bottom:2px;}
+.margin-little-left{margin-left:2px;}
+.radius-none{border-radius:0;}
+.radius-small{border-radius:2px;}
+.radius{border-radius:4px;}
+.radius-big{border-radius:6px;}
+.radius-rounded{border-radius:2em;padding-left:1em;padding-right:1em;}
+.radius-circle{border-radius:50%;}
+.border{border:solid 1px #ddd;}
+.border-top{border-top:solid 1px #ddd;}
+.border-right{border-right:solid 1px #ddd;}
+.border-bottom{border-bottom:solid 1px #ddd;}
+.border-left{border-left:solid 1px #ddd;}
+.border-left-right{border-left:solid 1px #ddd;border-right:solid 1px #ddd;}
+.border-top-bottom{border-top:solid 1px #ddd;border-bottom:solid 1px #ddd;}
+.border-large{border-width:10px;}
+.border-big{border-width:5px;}
+.border-middle{border-width:3px;}
+.border-small{border-width:2px;}
+
 /*! Source: https://github.com/h5bp/html5-boilerplate/blob/master/src/css/main.css */
 @media print {
   *,
@@ -1356,6 +1431,39 @@ a.text-warning:hover {
 a.text-danger:hover {
   color: #843534;
 }
+/*----------------add by jysong 2015.3.18----------------------*/
+.bg{
+	background-color:#f5f5f5;
+}
+.bg-black,.border-black
+{background-color:#000;}
+.bg-gray,.border-gray 
+{background-color:#999;}
+.bg-white,.button.bg,.border-white 
+{background-color:#fff;}
+.bg-red,.border-red 
+{background-color:#e33;}
+.bg-yellow,.border-yellow 
+{background-color:#f60;}
+.bg-blue,.border-blue 
+{background-color:#0ae;}
+.bg-green,.border-green 
+{background-color:#2c7;}
+.bg-red-light,.border-red-light 
+{background-color:#fee;}
+.bg-yellow-light,.border-yellow-light 
+{background-color:#ffd;}
+.bg-blue-light,.border-blue-light
+{background-color:#B0E2FF;}
+.bg-green-light,.border-green-light 
+{background-color:#efd;}
+.border-dashed{border-style:dashed;}
+.border-dotted{border-style:dotted;}
+.border-double{border-style:double;}
+.border-inset{border-style:inset;}
+.border-outset{border-style:outset;}
+/*---------------------------------------------------*/
+
 .bg-primary {
   color: #fff;
   background-color: #337ab7;
@@ -6564,3 +6672,4 @@ button.close {
   }
 }
 /*# sourceMappingURL=bootstrap.css.map */
+

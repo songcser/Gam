@@ -181,23 +181,12 @@ public class BackstageController {
 			request.setAttribute("operations", operators);
 		}
 		
-		//if(operators!=null){
-		//	request.setAttribute("operations", operators);
-			
-			//HttpSession session = request.getSession(true);
-			//int userId = (int)session.getAttribute("adminId");
-			//String userName = (String)session.getAttribute("adminName");
-			//int userRole = (int)session.getAttribute("adminRole");
-			
-			//request.setAttribute("userName", userName);
-			//request.setAttribute("userRole", userRole);
-			
-		//}
+		
 		request.setAttribute("webIcon", FileManager.getWebIcon());
 		request.setAttribute("roles", UserRole.values());
 		
 
-		return "operation";
+		return "user";
 	}
 	
 	@RequestMapping("/articleManage.do")
@@ -383,5 +372,11 @@ public class BackstageController {
 	public String publishManage(HttpServletRequest request){
 		request.setAttribute("webIcon", FileManager.getWebIcon());
 		return "publishManage";
+	}
+	
+	@RequestMapping("searchByName.do")
+	public String searchByName(String name){
+		List<UserInfo> user = userManager.getUserByName(name);
+		return "user";
 	}
 }

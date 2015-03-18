@@ -1021,6 +1021,11 @@ public class UserDAO implements IUserDAO{
 		redisDao.set(key, userId+"");
 	}
 
+	@Override
+	public List<UserInfo> getUserByName(String name) {
+		return null;
+	}
+
 
 	
 }
