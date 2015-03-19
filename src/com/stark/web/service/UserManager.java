@@ -49,6 +49,8 @@ public class UserManager implements IUserManager{
 		if(userId>0){
 			uInfo.setUserId(userId);
 			userDao.addRedisUser(uInfo);
+			
+			userDao.addRedisUsers(RedisInfo.USERNAMELIST+uInfo.getName(), userId);
 			if(uInfo.getRole()==UserRole.Normal.getIndex()){
 				userDao.addRedisUserCount(RedisInfo.NORMALCOUNT);
 				

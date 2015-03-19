@@ -350,7 +350,7 @@ public class BackstageController {
 		request.setAttribute("reportCount", reportCount);
 		//request.setAttribute("user", user);
 		request.setAttribute("webIcon", FileManager.getWebIcon());
-		return "/main";
+		return "/home";
 
 	}
 

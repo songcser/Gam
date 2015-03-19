@@ -13,13 +13,21 @@ body{
 }
 </style>
 </head>
-<body class="bg-blue-light">
+<body class="bg-blue-light ">
 	<%@ include file="header.jsp"%>
 	<div id="mainBody" class="container-fluid" >
 		<div class="row" style="height:100%">
-			<div class="col-sm-4 margin-left radius" style="height:100%;">
-			 <form id='searchNameForm' name='searchNameForm' method="post" action="searchByName.do" >
-			     <div class="input-group margin-bottom">
+			<div class="col-sm-4 margin-left radius" style="height:90%;">
+			 
+                 <div class="margin-bottom">
+                 <button class="btn bg-blue radius-rounded" onclick="createUser()">新建用户</button>
+                <a class="btn bg-green radius-rounded  pull-right margin-left" href="./operatorManage.do?view=all">查看所有</a>
+                <a class="btn bg-green radius-rounded  pull-right margin-left" href="./operatorManage.do?view=self">查看自己</a>
+                <a class="btn bg-green radius-rounded pull-right margin-left" href="javascript:viewImportantUser()">重要用户</a>
+                <a class="btn bg-green radius-rounded  pull-right " href="./operatorManage.do?view=self">标记用户</a>
+                </div>
+                <form id='searchNameForm' name='searchNameForm' method="post" action="searchByName.do" >
+                 <div class="input-group margin-bottom">
                     <input type="text" id="searchName" name="name" class="form-control" placeholder="Search By Name">
                     <span class="input-group-btn">
                         <button class="btn btn-default" type="button" onclick="searchByName()">Go!</button>
@@ -28,17 +36,18 @@ body{
                  </form>
 				<%@ include file="userList.jsp"%>
 			</div>
-			<div class="col-sm-6 " id="articleList" style="height:100%;overflow:auto">
+			<div class="col-sm-6 margin-left" id="articleList" style="height:100%;overflow:auto">
 				<div id="addOperationDiv" style="width:70%">
                 <%@ include file="createUser.jsp"%>
                 </div>
                 <div id="articlesDiv" style="display: none">
-                    <div id="articleListDiv" class="" ></div>
-                    <div id="paginationDiv" class="button-group button-group-justified bg-mix" ></div>
+                    <div id="articleListDiv"  ></div>
+                    <div id="paginationDiv" ></div>
                 </div>
 			</div>
 		</div>
 	</div>
+	<%@ include file="noticeDialog.jsp"%>
 	<script src="../js/jquery-1.11.2.min.js"></script>
 	<script src="../js/bootstrap.min.js"></script>
 	<script src="../js/main.js"></script>
@@ -52,6 +61,16 @@ body{
 		//window.location = "searchByName.do?name="+name;
 		$("#searchNameForm").submit();
 	}
+	function viewImportantUser(){
+        $("#userTable").find("tr").each(function(){
+            var tdArr = $(this).children();
+            var tdcon = tdArr.eq(3).html();
+            if(tdcon!="重要用户"&&tdcon!="<strong>角色</strong>"){
+                $(tdArr).remove();
+            }
+        });
+    }
+	
 	</script>
 </body>
 </html>
