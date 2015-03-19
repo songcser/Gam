@@ -41,6 +41,7 @@ body{
                 <%@ include file="createUser.jsp"%>
                 </div>
                 <div id="articlesDiv" style="display: none">
+                    <input type="hidden" id="articleUserId" name="userId"> 
                     <div id="articleListDiv"  ></div>
                     <div id="paginationDiv" ></div>
                 </div>
@@ -48,10 +49,10 @@ body{
 		</div>
 	</div>
 	<%@ include file="noticeDialog.jsp"%>
+	<%@ include file="commentDialog.jsp"%>
 	<script src="../js/jquery-1.11.2.min.js"></script>
 	<script src="../js/bootstrap.min.js"></script>
 	<script src="../js/main.js"></script>
-	<script src="../js/content.js"></script>
 	<script type="text/javascript">
 	var total = document.documentElement.clientHeight-90;
 	document.getElementById("mainBody").style.height=total+"px";

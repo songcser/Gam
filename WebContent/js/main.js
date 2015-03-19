@@ -12,12 +12,7 @@ function selectUser(userId,userName,page){
 	$("#createArticleDiv").css({
 		display : "block"
 	});
-	$("#commentListDiv").css({
-        display : "none"
-    });
-	$("#noticeListDiv").css({
-        display : "none"
-    });
+	
 	
 	//$("#secondDiv").scrollTop = 0;
 	var div = document.getElementById('articleList'); 
@@ -157,3 +152,106 @@ function typeChangeStr(type){
     
     return typeStr;
 }
+function strToDate(str){
+	var year=str.substr(0,4);
+	var month = parseInt(str.substr(4,2));
+	var day=str.substr(6,2);
+	var hour = str.substr(8,2);
+	var minute = str.substr(10,2);
+	var second = str.substr(12,2);
+	
+	return new Date(year,month-1,day,hour,minute,second);
+}
+
+function calculateDate(date){
+	var current = new Date();
+//	var dateDiff = getDateDiff(date,current,"day");
+//	var hourDiff = getDateDiff(date,current,"hour");
+//	if(dateDiff==0&&hourDiff>0){
+//		
+//	}
+//	if(dateDiff<2*24&&dateDiff>=24){
+//		return "前天 "+date.format("hh:mm");
+//	}
+//	if(dateDiff==1){
+//		return "昨天 "+date.format("hh:mm:ss");
+//	}
+//	if(dateDiff==0){
+//		return "今天 "+date.format("hh:mm:ss");
+//	}
+	var yearDiff = current.getFullYear()-date.getFullYear();
+	var monthDiff = current.getMonth()-date.getMonth();
+	var dayDiff = current.getDate()-date.getDate();
+	var hourDiff = current.getHours()-date.getHours();
+	var minuteDiff = current.getMinutes()-date.getMinutes();
+	var secondDiff = current.getSeconds()-date.getSeconds();
+	
+	if(yearDiff>0){
+		return date.format("yyyy年MM月dd日 hh:mm");
+	}
+	if(monthDiff>0){
+		return date.format("MM月dd日 hh:mm");
+	}
+	if(dayDiff>0){
+		return date.format("MM月dd日 hh:mm");
+	}
+	if(hourDiff>0){
+		return "今天 "+date.format("hh:mm");
+	}
+	if(minuteDiff>0){
+		return minuteDiff+"分钟前";
+	}
+	
+	return secondDiff+"秒前";
+	
+}
+
+Date.prototype.format = function(fmt)   
+{ //author: meizz   
+  var o = {   
+	"y+" : this.getFullYear(),
+    "M+" : this.getMonth()+1,                 //月份   
+    "d+" : this.getDate(),                    //日   
+    "h+" : this.getHours(),                   //小时   
+    "m+" : this.getMinutes(),                 //分   
+    "s+" : this.getSeconds(),                 //秒   
+    "q+" : Math.floor((this.getMonth()+3)/3), //季度   
+    "S"  : this.getMilliseconds()             //毫秒   
+  };   
+  if(/(y+)/.test(fmt))   
+    fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));   
+  for(var k in o)   
+    if(new RegExp("("+ k +")").test(fmt))   
+  fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));   
+  return fmt;   
+}  
+
+function getDateDiff(startTime, endTime, diffType) { 
+    //将xxxx-xx-xx的时间格式，转换为 xxxx/xx/xx的格式  
+    //startTime = startTime.replace(/\-/g, "/"); 
+    //endTime = endTime.replace(/\-/g, "/"); 
+
+    //将计算间隔类性字符转换为小写 
+    diffType = diffType.toLowerCase(); 
+   // var sTime = new Date(startTime);      //开始时间 
+    //var eTime = new Date(endTime);  //结束时间 
+    //作为除数的数字 
+    var divNum = 1; 
+    switch (diffType) { 
+        case "second": 
+            divNum = 1000; 
+            break; 
+        case "minute": 
+            divNum = 1000 * 60; 
+            break; 
+        case "hour": 
+            divNum = 1000 * 3600; 
+            break; 
+        case "day": 
+            divNum = 1000 * 3600 * 24; 
+            break; 
+        default: 
+            break; 
+    } 
+    return parseInt((endTime.getTime() - startTime.getTime()) / parseInt(divNum)); 
+}  
