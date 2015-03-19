@@ -941,7 +941,7 @@ public class ArticleManager implements IArticleManager {
 			Map<String, Object> picMap = new HashMap<String, Object>();
 			int articleId = article.getArticleId();
 			picMap.put("articleId", articleId);
-			picMap.put("url", FileManager.getArticlePictureUrl(articleId, pList.get(0)));
+			picMap.put("url", pList.get(0));
 			
 			list.add(picMap);
 		}
