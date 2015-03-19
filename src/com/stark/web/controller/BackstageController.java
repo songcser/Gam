@@ -71,16 +71,7 @@ public class BackstageController {
 			return "/adminLogin";
 		}
 		if (user != null) {
-			int operCount = userManager.getOperatiorCount();
-			int simCount = userManager.getSimulationCount();
-			int norCount = userManager.getNormalCount();
-			int publishCount = articleManager.getPublishCount();
-			int exquisiteCount = articleManager.getExquisiteCount();
-			int magazineCount = articleManager.getMagazineCount();
-			int activityCount = articleManager.getActivityArticleCount();
-			int noAuditingCount = articleManager.getNoAuditingCount();
-			int deleteCount = articleManager.getdeleteCount();
-			int reportCount = articleManager.getReportCount();
+			
 			
 			Cookie userIdCookie =new Cookie("userId",user.getUserId()+"");
 			userIdCookie.setMaxAge(60*60*12*10);
@@ -99,18 +90,9 @@ public class BackstageController {
 			//session.setAttribute("adminRole", user.getRole());
 			
 			//UserInfo user = userManager.getUser(adminId);
-			request.setAttribute("webIcon", FileManager.getWebIcon());
+			
 			request.setAttribute("user", user);
-			request.setAttribute("operatiorCount", operCount);
-			request.setAttribute("simulationCount", simCount);
-			request.setAttribute("normalCount", norCount);
-			request.setAttribute("publishCount", publishCount);
-			request.setAttribute("exquisiteCount", exquisiteCount);
-			request.setAttribute("magazineCount", magazineCount);
-			request.setAttribute("activityCount", activityCount);
-			request.setAttribute("noAuditingCount", noAuditingCount);
-			request.setAttribute("deleteCount", deleteCount);
-			request.setAttribute("reportCount", reportCount);
+			addCount(request);
 			
 			return "/home";
 		}
@@ -324,6 +306,14 @@ public class BackstageController {
 		if(!isLogin){
 			return "/adminLogin";
 		}
+		
+		addCount(request);
+		
+		return "/home";
+
+	}
+	
+	private void addCount(HttpServletRequest request){
 		int operCount = userManager.getOperatiorCount();
 		int simCount = userManager.getSimulationCount();
 		int norCount = userManager.getNormalCount();
@@ -350,8 +340,6 @@ public class BackstageController {
 		request.setAttribute("reportCount", reportCount);
 		//request.setAttribute("user", user);
 		request.setAttribute("webIcon", FileManager.getWebIcon());
-		return "/home";
-
 	}
 
 	@RequestMapping("systemManage.do")
