@@ -570,7 +570,8 @@ public class EnumBase {
 		Simulation("模拟用户",3),
 		MustFollow("必须关注", 4),
 		Recommend("推荐关注", 5),
-		Important("重要用户",6);
+		Important("重要用户",6),
+		Mark("标记用户",7);
 
 		private String name;
 		private int index;

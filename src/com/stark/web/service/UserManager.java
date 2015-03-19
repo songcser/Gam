@@ -807,5 +807,21 @@ public class UserManager implements IUserManager{
 		return list;
 	}
 
+	@Override
+	public List<UserInfo> getMarkUsers() {
+		String key = RedisInfo.USERMARKLIST;
+		List<String> ids = userDao.getRedisUsers(key);
+		List<UserInfo> list = idsToUserList(ids);
+		if(list!=null&&!list.isEmpty())
+			return list;
+		
+		List<UserInfo> users = userDao.getUsersByRole(UserRole.Mark.getIndex());
+		if(users!=null&&!users.isEmpty()){
+			for(UserInfo user:users)
+			userDao.addRedisUsers(key, user.getUserId());
+		}
+		return users;
+	}
+
 	
 }

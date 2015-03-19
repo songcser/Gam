@@ -384,4 +384,15 @@ public class BackstageController {
 		request.setAttribute("roles", UserRole.values());
 		return "user";
 	}
+	
+	@RequestMapping("markUser.do")
+	public String getMarkUser(HttpServletRequest request){ 
+		List<UserInfo> users = userManager.getMarkUsers();
+		if(users!=null){
+			request.setAttribute("operations", users);
+		}
+		request.setAttribute("webIcon", FileManager.getWebIcon());
+		request.setAttribute("roles", UserRole.values());
+		return "user";
+	}
 }

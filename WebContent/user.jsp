@@ -20,11 +20,13 @@ body{
 			<div class="col-sm-4 margin-left radius" style="height:90%;">
 			 
                  <div class="margin-bottom">
-                 <button class="btn bg-blue radius-rounded" onclick="createUser()">新建用户</button>
+                 <button class="btn bg-blue radius-rounded " onclick="createUser()">新建用户</button>
+                 <a class="btn bg-green radius-rounded  pull-right margin-left" href="./markUser.do">标记用户</a>
+                 <a class="btn bg-green radius-rounded pull-right margin-left" href="javascript:viewImportantUser()">重要用户</a>
                 <a class="btn bg-green radius-rounded  pull-right margin-left" href="./operatorManage.do?view=all">查看所有</a>
                 <a class="btn bg-green radius-rounded  pull-right margin-left" href="./operatorManage.do?view=self">查看自己</a>
-                <a class="btn bg-green radius-rounded pull-right margin-left" href="javascript:viewImportantUser()">重要用户</a>
-                <a class="btn bg-green radius-rounded  pull-right " href="./operatorManage.do?view=self">标记用户</a>
+                
+                
                 </div>
                 <form id='searchNameForm' name='searchNameForm' method="post" action="searchByName.do" >
                  <div class="input-group margin-bottom">

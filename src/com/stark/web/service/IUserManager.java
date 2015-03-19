@@ -124,4 +124,6 @@ public interface IUserManager {
 
 	public List<UserInfo> getUserByName(String name);
 
+	public List<UserInfo> getMarkUsers();
+
 }
