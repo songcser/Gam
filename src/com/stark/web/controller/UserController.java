@@ -1423,8 +1423,10 @@ public class UserController {
 		List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
 		for(UserInfo user:uList){
 			Map<String,Object> uMap = userManager.userToMap(user);
+			
 			if(picSize>0){
-				List<Map<String,Object>> pics = articleManager.getArticlePicturesByUserId(user.getUserId(), 0, picSize);
+				List<ArticleInfo> articles = articleManager.getArticleByUserId(user.getUserId(), 0, picSize);
+				List<Map<String,Object>> pics = articleManager.articlesToPictureList(articles);
 				uMap.put("articlePics", pics);
 			}
 			

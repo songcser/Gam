@@ -114,7 +114,7 @@ public interface IArticleManager {
 
 	public int getPublishCount();
 
-	public List<Map<String, Object>> getArticlePicturesByUserId(int userId, int page,int maxPictureResult);
+	public Map<String, Object> getArticlePicturesByUserId(int userId, int page,int maxPictureResult);
 
 	public List<ArticleInfo> getAllListByActivityId(int activityId, int page, int maxResults);
 
@@ -147,5 +147,7 @@ public interface IArticleManager {
 	public List<ArticleInfo> getAllArticleByUserId(int followId);
 
 	public void addSetArticleId(String key, int score, String member);
+
+	List<Map<String, Object>> articlesToPictureList(List<ArticleInfo> articles);
 
 }

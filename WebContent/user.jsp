@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Uha 用户管理</title>
+<title>友哈-用户管理</title>
 <link rel="stylesheet" href="../css/bootstrap.css">
 
 <style type="text/css">
@@ -53,6 +53,7 @@ body{
 	<%@ include file="noticeDialog.jsp"%>
 	<%@ include file="commentDialog.jsp"%>
 	<%@ include file="sliderShow.jsp" %>
+	<%@ include file="selectUserList.jsp" %>
 	<script src="../js/jquery-1.11.2.min.js"></script>
 	<script src="../js/bootstrap.min.js"></script>
 	<script src="../js/main.js"></script>

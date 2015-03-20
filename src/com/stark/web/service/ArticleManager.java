@@ -177,6 +177,7 @@ public class ArticleManager implements IArticleManager {
 	public List<ArticleInfo> getArticleByUserId(int uid, int page, int maxCount) {
 		List<String> ids = articleDao.getRedisArticleIds(RedisInfo.USERARTICLELIST+uid,page,maxCount);
 		List<ArticleInfo> alist = new ArrayList<ArticleInfo>();
+		UserInfo user = userManager.getUser(uid);
 		int size = 0;
 		if(ids!=null&&!ids.isEmpty()){
 			size=ids.size();
@@ -186,7 +187,7 @@ public class ArticleManager implements IArticleManager {
 					alist.add(article);
 				}
 			}
-			if(size==maxCount)
+			if(size==maxCount||user.getArticleCount()==page*maxCount+size)
 				return alist;
 		}
 		List<Integer> list = getCommonArticleTypeList();
@@ -930,10 +931,22 @@ public class ArticleManager implements IArticleManager {
 	}
 
 	@Override
-	public List<Map<String, Object>> getArticlePicturesByUserId(int userId, int page,int maxPictureResult) {
+	public Map<String, Object> getArticlePicturesByUserId(int userId, int page,int maxPictureResult) {
 		List<ArticleInfo> articles = getArticleByUserId(userId,page,maxPictureResult);  
-		
+		Map<String,Object> map = new HashMap<String,Object>();
+		if(articles==null){
+			map.put("result", 0);
+			return map;
+		}
+		map.put("result", 1);
+		List<Map<String, Object>> list = articlesToPictureList(articles);
+		map.put("pictures", list);
 		//articleDao.getRedisArticlePicByUserId(userId,page,maxPictureResult);
+		return map;
+	}
+
+	@Override
+	public List<Map<String, Object>> articlesToPictureList(List<ArticleInfo> articles) {
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 //		List<Object[]> picList = getArticlePicByUserId(userId, page, maxPictureResult);
 		for(ArticleInfo article:articles){
@@ -945,16 +958,6 @@ public class ArticleManager implements IArticleManager {
 			
 			list.add(picMap);
 		}
-//		for (Iterator<Object[]> iterator = picList.iterator(); iterator.hasNext();) {
-//			Object[] objects = iterator.next();
-//			Map<String, Object> picMap = new HashMap<String, Object>();
-//			int articleId = (int)objects[0];
-//			picMap.put("articleId", articleId);
-//			String path = (String)objects[1];
-//			picMap.put("url", FileManager.getArticlePictureUrl(articleId, path));
-//
-//			list.add(picMap);
-//		}
 		return list;
 	}
 
@@ -1168,7 +1171,6 @@ public class ArticleManager implements IArticleManager {
 		return aMap;
 	}
 	
-	
 	@Override
 	public Map<String, Object> getShowArticleList(int showId, int userId, int page, int maxResults) {
 		List<ArticleInfo> articles = new ArrayList<ArticleInfo>();
@@ -1183,14 +1185,12 @@ public class ArticleManager implements IArticleManager {
 		
 		return articlesToMap(articles,userId);
 	}
-
 	
 	@Override
 	public Map<String, Object> getArticleInfo(int articleId, int userId) {
 		ArticleInfo article = getArticle(articleId);
 		return articleToMap(article,userId);
 	}
-
 	
 	@Override
 	public boolean collectArticle(int userId, int articleId) {
@@ -1201,7 +1201,6 @@ public class ArticleManager implements IArticleManager {
 		}
 		return result;
 	}
-
 	
 	@Override
 	public boolean browseArticle(int articleId) {
@@ -1211,7 +1210,6 @@ public class ArticleManager implements IArticleManager {
 		}
 		return result;
 	}
-
 	
 	@Override
 	public Map<String, Object> getFollowArticleList(int userId, int page, int maxResults) {
@@ -1233,7 +1231,6 @@ public class ArticleManager implements IArticleManager {
 		
 		return articlesToMap(articles,userId);
 	}
-
 	
 	private boolean listToZSetAndAddRedisId(String key, List<ArticleInfo> fromList, List<ArticleInfo> toList) {
 		if(fromList==null){
@@ -1271,19 +1268,29 @@ public class ArticleManager implements IArticleManager {
 	@Override
 	public Map<String, Object> getCollectionPictures(int userId, int page, int maxResults) {
 		List<ArticleInfo> articles = new ArrayList<ArticleInfo>();
+		Map<String, Object> map = new HashMap<String,Object>();
 		String key = RedisInfo.USERCOLLECTIONLIST+userId;
 		List<String> ids = articleDao.getRedisArticleIds(key, page, maxResults);
 		int size = idsToArticleList(ids,articles);
-		if(size==maxResults)
-			return articlesToMap(articles,userId);
-		
+		UserInfo user = userManager.getUser(userId);
+		if(size==maxResults||user.getArticleCount()>page*maxResults+size){
+			List<Map<String, Object>> list = articlesToPictureList(articles);
+			map.put("result", 1);
+			map.put("pictures", list);
+			return map;
+		}
+			
 		List<ArticleInfo> alist = articleDao.getCollectionList(userId,page*maxResults+size,maxResults-size);
+		if(alist!=null&&!alist.isEmpty()){
+			
+			listToListAndAddRedisId(key,alist,articles);
+		}
+		map.put("result", 1);
+		List<Map<String, Object>> list = articlesToPictureList(articles);
+		map.put("pictures", list);
+		return map;
 		
-		listToListAndAddRedisId(key,alist,articles);
-		
-		return articlesToMap(articles,userId);
 	}
-
 	
 	@Override
 	public List<ArticleInfo> getAllArticleByUserId(int userId) {

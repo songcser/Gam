@@ -6,7 +6,7 @@
     <ul class="nav navbar-nav ">
        <li ><a href="toMain.do">首页</a></li>
        <li ><a href="operatorManage.do">账号管理</a></li>
-      <li><a href="articleManage.do">推荐管理</a></li>
+      <li><a href="recommend.do">推荐管理</a></li>
       <li><a href="activityManage.do">节目单管理</a></li>
       <li><a href="##">瞬间管理</a></li>
       <li><a href="##">贴图管理</a></li>

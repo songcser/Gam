@@ -223,14 +223,8 @@ public class ArticleController {
 	@ResponseBody
 	public Map<String, Object> getArticlePictures(int userId, int page) {
 		System.out.println("==> /article/getArticlePictures.do?userId="+userId+"&page="+page);
-		Map<String,Object> map = new HashMap<String, Object>();
-		List<Map<String, Object>> list = articleManager.getArticlePicturesByUserId(userId, page, maxPictureResult);
-		if(list==null){
-			map.put("result", 0);
-			return map;
-		}
-		map.put("result", 1);
-		map.put("pictures", list);
+		Map<String, Object> map = articleManager.getArticlePicturesByUserId(userId, page, maxPictureResult);
+		
 		return map;
 	}
 
@@ -580,9 +574,11 @@ public class ArticleController {
 		for (Iterator<ArticleInfo> iterator = aList.iterator(); iterator.hasNext();) {
 			ArticleInfo article = iterator.next();
 			Map<String, Object> map = articleToMap(article);
+			if(userId!=0){
+				boolean flag = articleManager.isPraise(userId, article.getArticleId());
+				map.put("praiseStatus", flag ? 1 : 0);
+			}
 			
-			boolean flag = articleManager.isPraise(userId, article.getArticleId());
-			map.put("praiseStatus", flag ? 1 : 0);
 			
 			list.add(map);
 		}
@@ -1332,7 +1328,6 @@ public class ArticleController {
 	@RequestMapping("/getArticlesByDate.do")
 	@ResponseBody
 	public Map<String, Object> getArticlesByDate(String date,int type,int userId,int page,HttpServletRequest request){
-		System.out.println("==> /article/getArticlesByDate.do?date="+date+"&userId="+userId+"&type="+type+"&page="+page);
 		//SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 		Map<String, Object> map = new HashMap<String, Object>();
 		//Date startDate = sdf.parse(date+" 00:00:00");

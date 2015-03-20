@@ -33,14 +33,14 @@
 				<div class="field">
 					<select id="role" name="role" class="form-control">
 						<c:if test="${!empty roles }">
-							<c:if test="${userRole=='1'}">
+							<c:if test="${user.role=='1'}">
 								<c:forEach items="${roles }" var="o">
-									<c:if test="${o.index=='3'||o.index=='2'||o.index=='6' }">
+									<c:if test="${o.index=='3'||o.index=='2'||o.index=='6'||o.index=='8' }">
 										<option value="${o.index}">${o.name}</option>
 									</c:if>
 								</c:forEach>
 							</c:if>
-							<c:if test="${userRole=='2'}">
+							<c:if test="${user.role=='2'}">
 								<c:forEach items="${roles }" var="o">
 									<c:if test="${o.index=='3'||o.index=='6' }">
 										<option value="${o.index}">${o.name}</option>

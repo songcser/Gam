@@ -10,7 +10,7 @@
 				<h4 class="modal-title" id="myModalLabel">评论</h4>
 			</div>
 			<div class="modal-body" id="noticeDiologId">
-				<div id="commentDiv" >
+				<div id="commentDiv">
 					<div id="createCommentDiv">
 						<input type="hidden" id="commentArticleId">
 						<div class="field margin-left">
@@ -20,7 +20,7 @@
 							<button class="btn bg-green" type="submit" onclick="publishComments()">发布</button>
 						</div>
 					</div>
-					<div id="commentListDiv" class="bg-back margin-top padding radius">fdsfdsfds</div>
+					<div id="commentListDiv" class="bg-back margin-top padding radius" style="overflow:auto">fdsfdsfds</div>
 				</div>
 			</div>
 			<div class="modal-footer">

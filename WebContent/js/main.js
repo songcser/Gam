@@ -114,6 +114,10 @@ function createMediaDiv(art){
 	return mediaDiv;
 }
 
+function praiseArticle(articleId){
+	selectUserList();
+}
+
 function typeChangeStr(type){
 	var typeStr = "";
     
@@ -152,6 +156,7 @@ function typeChangeStr(type){
     
     return typeStr;
 }
+
 function strToDate(str){
 	var year=str.substr(0,4);
 	var month = parseInt(str.substr(4,2));
@@ -165,20 +170,6 @@ function strToDate(str){
 
 function calculateDate(date){
 	var current = new Date();
-//	var dateDiff = getDateDiff(date,current,"day");
-//	var hourDiff = getDateDiff(date,current,"hour");
-//	if(dateDiff==0&&hourDiff>0){
-//		
-//	}
-//	if(dateDiff<2*24&&dateDiff>=24){
-//		return "前天 "+date.format("hh:mm");
-//	}
-//	if(dateDiff==1){
-//		return "昨天 "+date.format("hh:mm:ss");
-//	}
-//	if(dateDiff==0){
-//		return "今天 "+date.format("hh:mm:ss");
-//	}
 	var yearDiff = current.getFullYear()-date.getFullYear();
 	var monthDiff = current.getMonth()-date.getMonth();
 	var dayDiff = current.getDate()-date.getDate();

@@ -108,41 +108,15 @@ public class BackstageController {
 	public String operationManage(HttpServletRequest request) {
 		System.out.println("==> /backstage/operatorManage");
 		//List<UserInfo> operators = userManager.getOperatiors();
-		Cookie cookies[]=request.getCookies();
 		String view = request.getParameter("view");
 		
-		int userId = 0;
-		int role=-1;
-		boolean isLogin = false;
-		if(cookies==null){
+		UserInfo user = getLoginUser(request);
+		
+		if(user==null){
 			return "/adminLogin";
 		}
-		for(Cookie cookie : cookies){
-			//System.out.println("Cookie: "+cookie.getName());
-			
-			if(cookie.getName().equals("userId")){
-				userId =Integer.parseInt(cookie.getValue());
-				request.setAttribute("userId", userId);
-				isLogin = true;
-			}
-			else if(cookie.getName().equals("userName")){
-				try {
-					request.setAttribute("userName", URLDecoder.decode(cookie.getValue(),"UTF-8"));
-				} catch (UnsupportedEncodingException e) {
-					e.printStackTrace();
-				}
-			}
-			else if(cookie.getName().equals("userRole")){
-				String userRole = cookie.getValue();
-				request.setAttribute("userRole", userRole);
-				role = Integer.parseInt(userRole);
-				
-				
-			}
-		}
-		if(!isLogin){
-			return "/adminLogin";
-		}
+		int userId = user.getUserId();
+		int role = user.getRole();
 		List<UserInfo> operators = null;
 		if(view!=null&&view.equals("all")){
 			operators = userManager.getOperatiors();
@@ -287,8 +261,6 @@ public class BackstageController {
 	
 	@RequestMapping("/toMain.do")
 	public String toMain(HttpServletRequest request) {
-		System.out.println("==> /backstage/toMain.do");
-		//javax.servlet.http.HttpSession session = request.getSession(true);
 		Cookie cookies[]=request.getCookies();
 		if(cookies==null){
 			return "/adminLogin";
@@ -382,5 +354,33 @@ public class BackstageController {
 		request.setAttribute("webIcon", FileManager.getWebIcon());
 		request.setAttribute("roles", UserRole.values());
 		return "user";
+	}
+	
+	@RequestMapping("recommend.do")
+	public String recommend(HttpServletRequest request){
+		
+		if(getLoginUser(request)==null){
+			return "/adminLogin";
+		}
+		
+		return "recommend";
+	}
+	
+	private UserInfo getLoginUser(HttpServletRequest request){
+		Cookie cookies[]=request.getCookies();
+		if(cookies==null){
+			return null;
+		}
+		UserInfo user = null;
+		for(Cookie cookie : cookies){
+			if(cookie.getName().equals("userId")){
+				int userId = Integer.parseInt(cookie.getValue());
+				user = userManager.getUser(userId);
+				request.setAttribute("user", user);
+			}
+			
+		}
+		
+		return user;
 	}
 }

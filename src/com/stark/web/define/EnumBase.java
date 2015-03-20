@@ -571,7 +571,8 @@ public class EnumBase {
 		MustFollow("必须关注", 4),
 		Recommend("推荐关注", 5),
 		Important("重要用户",6),
-		Mark("标记用户",7);
+		Mark("标记用户",7),
+		Organization("机构用户",8);
 
 		private String name;
 		private int index;
