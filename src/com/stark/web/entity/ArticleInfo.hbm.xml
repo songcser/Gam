@@ -66,7 +66,7 @@
         
          <set name="collectors" table="RelArticleCollection" inverse="true" lazy="true" cascade="delete">
             <key>
-                <column name="ArticleId" unique-key="multicolumn_unique_key_name"/>
+                <column name="ArticleId" unique-key="unique_key_id"/>
             </key>
             <many-to-many class="UserInfo" column="UserId" />
         </set>

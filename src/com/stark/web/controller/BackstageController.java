@@ -330,8 +330,14 @@ public class BackstageController {
 	
 	@RequestMapping("publishManage.do")
 	public String publishManage(HttpServletRequest request){
+		UserInfo user = getLoginUser(request);
+		if(user==null){
+			return "adminLogin";
+		}
 		request.setAttribute("webIcon", FileManager.getWebIcon());
-		return "publishManage";
+		List<UserInfo> operators = userManager.getOperatiors();
+		request.setAttribute("operations", operators);
+		return "publish";
 	}
 	
 	@RequestMapping("searchByName.do")

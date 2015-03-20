@@ -78,7 +78,7 @@ public class ArticleManager implements IArticleManager {
 			articleDao.addRedisArticleId(RedisInfo.ARTICLEDATELIST+sdf.format(aInfo.getDate()), id);
 			
 			int userId = aInfo.getUser().getUserId();
-			addFansArticleZSet(userId);
+			
 			
 			int type = aInfo.getType();
 			if(type==ArticleType.Publish.getIndex()){
@@ -132,6 +132,7 @@ public class ArticleManager implements IArticleManager {
 			else if(type == ArticleType.Delete.getIndex()){
 				articleDao.addRedisArticleCount(RedisInfo.ARTICLEDELETECOUNT);
 			}
+			addFansArticleZSet(userId);
 		}
 
 		return id;
@@ -1273,7 +1274,7 @@ public class ArticleManager implements IArticleManager {
 		List<String> ids = articleDao.getRedisArticleIds(key, page, maxResults);
 		int size = idsToArticleList(ids,articles);
 		UserInfo user = userManager.getUser(userId);
-		if(size==maxResults||user.getArticleCount()>page*maxResults+size){
+		if(size==maxResults||user.getArticleCount()==page*maxResults+size){
 			List<Map<String, Object>> list = articlesToPictureList(articles);
 			map.put("result", 1);
 			map.put("pictures", list);

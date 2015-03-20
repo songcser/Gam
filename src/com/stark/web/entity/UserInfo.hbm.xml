@@ -80,7 +80,7 @@
         
           <set name="collectArticles" table="RelArticleCollection" inverse="true" lazy="true" cascade="delete">
             <key>
-                <column name="UserId" unique-key="multicolumn_unique_key_name"/>
+                <column name="UserId" unique-key="unique_key_id"/>
             </key>
             <many-to-many class="ArticleInfo" column="ArticleId" />
         </set>
