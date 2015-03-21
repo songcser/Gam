@@ -1,0 +1,113 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<div style="height: 50px" class="margin-left">
+    
+	<div class="margin-bottom" id="addPictureId">
+		<a class="btn bg-green btn-lg " style="" href="javascript:addPicture();" id="addArticlePicture">
+		<span class="glyphicon glyphicon-picture text-big"></span> </a>
+	</div>
+	<div class="row " style="width:100%" id="previewDivId">
+		
+	</div>
+</div>
+<script type="text/javascript">
+var index = 0;
+function addPicture(){
+	$("#previewDivId").append('<div id="preview'+index+'" class=" pull-left " style="width:165px;"></div>');
+	$('#addPictureId').append('<input type="file" style="display:none" name="picture'+index+'" onchange="previewArticleImage(this)" id="articlePictureInput'+index+'" />')
+	$("#articlePictureInput"+index).click();
+}
+
+function previewArticleImage(file) {
+    previewImage(file, index);
+}
+
+function removePicture(t) {
+    //var div = document.getElementById('preview' + t);
+    $("#preview"+t).remove();
+    $("#articlePictureInput"+t).remove();
+    //var divObj = document.getElementById('articlePictureInput'+t);
+    //$("#previewDivId").remove(div);
+    //$('#addPictureId').remove(divObj)
+}
+
+function previewImage(file, i) {
+    var MAXWIDTH = 160;
+    var MAXHEIGHT = 160;
+    var div = document.getElementById('preview'+i);
+    if (file.files && file.files[0]) {
+        div.innerHTML ='<div ><a style="position:relative" href="javascript:removePicture(' + i
+                + ')" title="#"><span  class="glyphicon glyphicon-remove-sign" style="position:absolute;left:145px;top:-15px;"></span></a>'
+                +'<a style="width:160px;height:160px;" class="thumbnail"><img id=imghead'
+                + i + '></a></div>';
+        var img = document.getElementById('imghead' + i);
+        
+        img.onload = function() {
+            
+            var rect = clacImgZoomParam(MAXWIDTH, MAXHEIGHT, img.offsetWidth, img.offsetHeight);
+            img.width = rect.width;
+            img.height = rect.height;
+            //img.width = MAXWIDTH;
+            //img.height= MAXHEIGHT;
+            //img.style.marginLeft = rect.left + 'px';
+            // img.style.marginTop = rect.top + 'px';
+            img.className = "img-border radius padding-small";
+            var fileSize = file.files[0].size;
+            if(fileSize>1024*800){
+                alert("图片大小尽量小于800kb");
+                
+            }
+            file.name+="?"+img.naturalWidth+"&"+img.naturalHeight;
+            index++;
+        }
+        var reader = new FileReader();
+        reader.onload = function(evt) {
+            var quality =  80;
+            img.src = evt.target.result;
+            //img.src = jic.compress(img,quality).src
+            //
+        }
+        reader.readAsDataURL(file.files[0]);
+        
+        //var width=img.naturalWidth;
+        //var height=img.naturalHeight;
+    } else {
+        var sFilter = 'filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale,src="';
+        file.select();
+        var src = document.selection.createRange().text;
+        div.innerHTML = '<img id=imghead>';
+        var img = document.getElementById('imghead');
+        img.filters.item('DXImageTransform.Microsoft.AlphaImageLoader').src = src;
+        var rect = clacImgZoomParam(MAXWIDTH, MAXHEIGHT, img.offsetWidth,
+                img.offsetHeight);
+        status = ('rect:' + rect.top + ',' + rect.left + ',' + rect.width + ',' + rect.height);
+        div.innerHTML = "<div id=divhead style='width:" + rect.width
+                + "px;height:" + rect.height + "px;margin-top:" + rect.top
+                + "px;margin-left:" + rect.left + "px;" + sFilter + src
+                + "\"'></div>";
+    }
+}
+function clacImgZoomParam(maxWidth, maxHeight, width, height) {
+    var param = {
+        top : 0,
+        left : 0,
+        width : width,
+        height : height
+    };
+    if (width > maxWidth || height > maxHeight) {
+        rateWidth = width / maxWidth;
+        rateHeight = height / maxHeight;
+
+        if (rateWidth > rateHeight) {
+            param.width = maxWidth;
+            param.height = Math.round(height / rateWidth);
+        } else {
+            param.width = Math.round(width / rateHeight);
+            param.height = maxHeight;
+        }
+    }
+
+    param.left = Math.round((maxWidth - param.width) / 2);
+    param.top = Math.round((maxHeight - param.height) / 2);
+    return param;
+}
+</script>
