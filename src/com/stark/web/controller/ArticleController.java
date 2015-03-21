@@ -38,6 +38,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import com.stark.web.define.EnumBase;
+import com.stark.web.define.RedisInfo;
 import com.stark.web.define.EnumBase.ArticleType;
 import com.stark.web.define.EnumBase.ChartletStatus;
 import com.stark.web.define.EnumBase.ChartletType;
@@ -135,6 +136,7 @@ public class ArticleController {
 	
 				return map;
 			}
+			addFansArticleZSet(userId);
 			map.put("articleId", articleId);
 			map.put("outShareUrl", ourShareUrl+articleId);
 			Iterator<String> iter = multiRequest.getFileNames();
@@ -212,7 +214,17 @@ public class ArticleController {
 		//out.close();
 		return map;
 	}
-
+	private void addFansArticleZSet(int userId) {
+		List<UserInfo> fans = userManager.getAllFansList(userId);
+		String key = RedisInfo.USERFOLLOWARTICLEZSET+userId;
+		for(UserInfo user :fans){
+			List<ArticleInfo> articles = articleManager.getAllArticleByUserId(user.getUserId());
+			for(ArticleInfo article:articles){
+				int articleId = article.getArticleId();
+				articleManager.addSetArticleId(key,articleId,articleId+"");
+			}
+		}
+	}
 	private String filterContent(String content) {
 		WordFilter filter = new WordFilter();
 		
@@ -863,7 +875,8 @@ public class ArticleController {
 		article.setType(EnumBase.ArticleType.Forward.getIndex());
 		article.setUrl("");
 		article.setTitle("");
-		article.setAbbreviation("");
+		//article.setAbbreviation("");
+		article.setRichText("");
 		article.setOriginalArticle(new ArticleInfo(articleId));
 
 		int result = articleManager.addArticle(article);
@@ -987,6 +1000,11 @@ public class ArticleController {
 				article.setContent(content);
 				article.setDate(new Date());
 				article.setReference(multiRequest.getParameter("reference"));
+				article.setTitle(multiRequest.getParameter("title"));
+				String richText = multiRequest.getParameter("richText");
+				if(richText!=null){
+					article.setRichText(richText);
+				}
 				int articleId = articleManager.addArticle(article);
 				if(articleId<1){
 					//map.put("result", 0);
@@ -996,6 +1014,7 @@ public class ArticleController {
 					out.close();
 					return ;
 				}
+				addFansArticleZSet(userId);
 				Iterator<String> iter = multiRequest.getFileNames();
 				int i=0;
 				while (iter.hasNext()) {

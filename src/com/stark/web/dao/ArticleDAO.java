@@ -324,6 +324,15 @@ public class ArticleDAO implements IArticleDAO {
 		if(aInfo.getActivity()!=null){
 			map.put(ArticleInfo.ACTIVITYID, aInfo.getActivity().getActivityId()+"");
 		}
+		
+		if(aInfo.getTitle()!=null){
+			map.put(ArticleInfo.TITLE, aInfo.getTitle());
+		}
+		
+		if(aInfo.getRichText()!=null){
+			map.put(ArticleInfo.RICHTEXT, aInfo.getRichText());
+		}
+		
 		boolean result = redisDao.hmset(aInfo.getKey(),map)!=null;
 		setKeyExpire(aInfo.getKey(),60*60*24*30);
 		return result;
@@ -615,6 +624,22 @@ public class ArticleDAO implements IArticleDAO {
 					article.setActivity(new ActivityInfo(Integer.parseInt(activityId)));
 				}
 				
+				String title = aMap.get(ArticleInfo.TITLE);
+				if(title!=null){
+					article.setTitle(title);
+				}
+				else{
+					article.setTitle("");
+				}
+				
+				String richText = aMap.get(ArticleInfo.RICHTEXT);
+				if(richText!=null){
+					article.setRichText(richText);
+				}
+				else {
+					article.setRichText("");
+				}
+				
 				list.add(article);
 			}
 		}else{
@@ -713,6 +738,22 @@ public class ArticleDAO implements IArticleDAO {
 		String activityId = aMap.get(ArticleInfo.ACTIVITYID);
 		if(activityId!=null){
 			article.setActivity(new ActivityInfo(Integer.parseInt(activityId)));
+		}
+		
+		String title = aMap.get(ArticleInfo.TITLE);
+		if(title!=null){
+			article.setTitle(title);
+		}
+		else {
+			article.setTitle("");
+		}
+		
+		String richText = aMap.get(ArticleInfo.RICHTEXT);
+		if(richText!=null){
+			article.setRichText(richText);
+		}
+		else {
+			article.setRichText("");
 		}
 		
 		return article;

@@ -101,15 +101,15 @@ function createMediaDiv(art){
 	var mediaDate = $('<div class="margin-left text-small text-muted">'+ strDate +'  来自: '+art.reference+ '</div>');
 	mediaDiv.append(mediaDate);
 	var mediaOper = $('<div class="btn-group btn-group-justified border" role="group" aria-label="..."></div>');
-	var mediaOperExt = $('<div class="btn-group" role="group"></div>');
-	mediaOper.append('<div class="btn-group" role="group"><a href="javascript:getComments('+art.articleId+','+art.userId+')" class="btn">评论 <span class="badge bg-white-light" id="commentCount'+art.articleId+'">'+art.commentCount+'</span></a></button>');
-	mediaOper.append('<div class="btn-group" role="group"><a href="javascript:praiseArticle('+art.articleId+')" class="btn">赞<span class="badge bg-white-light" id="praiseCount'+art.articleId+'">'+art.praiseCount+'</span></a></button>');
+	var mediaOperExt = $('<div class="btn-group" role="button"></div>');
+	mediaOper.append('<div class="btn-group" role="button"><a href="javascript:getComments('+art.articleId+','+art.userId+')" class="btn">评论 <span class="badge bg-white-light" id="commentCount'+art.articleId+'">'+art.commentCount+'</span></a></button>');
+	mediaOper.append('<div class="btn-group" role="button"><a href="javascript:praiseArticle('+art.articleId+')" class="btn">赞<span class="badge bg-white-light" id="praiseCount'+art.articleId+'">'+art.praiseCount+'</span></a></button>');
 	
 	 var type=art.type;
      var typeStr = typeChangeStr(type);
 	
-	mediaOper.append('<div class="btn-group" role="group"><a href="javascript:changeArticleType('+art.articleId+')" class="btn" id="articleType'+art.articleId+'">'+typeStr+' </a></button>');
-	mediaOper.append('<div class="btn-group" role="group"><a href="javascript:deleteArticle('+art.articleId+')" class="btn">删除 </a></button>');
+	mediaOper.append('<div class="btn-group" role="button"><a href="javascript:changeArticleType('+art.articleId+')" class="btn" id="articleType'+art.articleId+'">'+typeStr+' </a></button>');
+	mediaOper.append('<div class="btn-group" role="button"><a href="javascript:deleteArticle('+art.articleId+')" class="btn">删除 </a></button>');
 	mediaDiv.append(mediaOper);
 	
 	return mediaDiv;

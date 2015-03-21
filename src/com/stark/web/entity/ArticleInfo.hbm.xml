@@ -26,7 +26,15 @@
 		<property lazy="false" name="reference" type="java.lang.String">
             <column name="Reference" not-null="true" default="''" />
         </property>
+        
+        <property lazy="false" name="title" type="java.lang.String">
+            <column name="Title" not-null="true" default="''" />
+        </property>
 
+        <property lazy="false" name="richText" type="java.lang.String">
+            <column name="RichText" not-null="true" default="''" />
+        </property>
+        
 		<property generated="never" lazy="false" name="date" type="java.util.Date">
 			<column name="Date" not-null="true" />
 		</property>

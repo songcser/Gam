@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
-<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+<div class="navbar navbar-inverse navbar-fixed-top " role="navigation">
   　<div class="navbar-header">
   　    <a href="##" class="navbar-brand">友哈</a>
   　</div>

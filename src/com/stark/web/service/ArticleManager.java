@@ -77,8 +77,7 @@ public class ArticleManager implements IArticleManager {
 			SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
 			articleDao.addRedisArticleId(RedisInfo.ARTICLEDATELIST+sdf.format(aInfo.getDate()), id);
 			
-			int userId = aInfo.getUser().getUserId();
-			
+			//int userId = aInfo.getUser().getUserId();
 			
 			int type = aInfo.getType();
 			if(type==ArticleType.Publish.getIndex()){
@@ -132,23 +131,13 @@ public class ArticleManager implements IArticleManager {
 			else if(type == ArticleType.Delete.getIndex()){
 				articleDao.addRedisArticleCount(RedisInfo.ARTICLEDELETECOUNT);
 			}
-			addFansArticleZSet(userId);
+			
 		}
 
 		return id;
 	}
 	
-	private void addFansArticleZSet(int userId) {
-		List<UserInfo> fans = userManager.getAllFansList(userId);
-		String key = RedisInfo.USERFOLLOWARTICLEZSET+userId;
-		for(UserInfo user :fans){
-			List<ArticleInfo> articles = getAllArticleByUserId(user.getUserId());
-			for(ArticleInfo article:articles){
-				int articleId = article.getArticleId();
-				addSetArticleId(key,articleId,articleId+"");
-			}
-		}
-	}
+	
 
 	public IUserDAO getUserDao() {
 		return userDao;

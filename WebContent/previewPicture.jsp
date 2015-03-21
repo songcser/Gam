@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<div style="height: 50px" class="margin-left">
-    
+<div style="" class="margin-left">
 	<div class="margin-bottom" id="addPictureId">
 		<a class="btn bg-green btn-lg " style="" href="javascript:addPicture();" id="addArticlePicture">
 		<span class="glyphicon glyphicon-picture text-big"></span> </a>
@@ -12,7 +11,7 @@
 <script type="text/javascript">
 var index = 0;
 function addPicture(){
-	$("#previewDivId").append('<div id="preview'+index+'" class=" pull-left " style="width:165px;"></div>');
+	$("#previewDivId").append('<div id="preview'+index+'" class="col-xs-6 col-sm-4 col-md-3 col-lg-2" style=""></div>');
 	$('#addPictureId').append('<input type="file" style="display:none" name="picture'+index+'" onchange="previewArticleImage(this)" id="articlePictureInput'+index+'" />')
 	$("#articlePictureInput"+index).click();
 }
@@ -30,15 +29,20 @@ function removePicture(t) {
     //$('#addPictureId').remove(divObj)
 }
 
+function resetPreviewPicture(){
+	$("#previewDivId").html("");
+	$('#addPictureId').html('<a class="btn bg-green btn-lg " style="" href="javascript:addPicture();" id="addArticlePicture"><span class="glyphicon glyphicon-picture text-big"></span> </a>');
+}
+
 function previewImage(file, i) {
-    var MAXWIDTH = 160;
-    var MAXHEIGHT = 160;
+    var MAXWIDTH = 130;
+    var MAXHEIGHT = 130;
     var div = document.getElementById('preview'+i);
     if (file.files && file.files[0]) {
-        div.innerHTML ='<div ><a style="position:relative" href="javascript:removePicture(' + i
-                + ')" title="#"><span  class="glyphicon glyphicon-remove-sign" style="position:absolute;left:145px;top:-15px;"></span></a>'
-                +'<a style="width:160px;height:160px;" class="thumbnail"><img id=imghead'
-                + i + '></a></div>';
+        div.innerHTML ='<a style="position:relative" href="javascript:removePicture(' + i
+                + ')" title="删除"><span  class="glyphicon glyphicon-remove-sign" style="position:absolute;left:123px;top:-5px;"></span></a>'
+                +'<a style="width:130px;height:130px;" class="thumbnail"><img id=imghead'
+                + i + '></a>';
         var img = document.getElementById('imghead' + i);
         
         img.onload = function() {

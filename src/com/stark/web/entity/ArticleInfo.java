@@ -24,6 +24,8 @@ public class ArticleInfo {
 	public static String ACTIVITYID = "ActivityId";
 	public static String REFERENCE = "Reference";
 	public static String BROWSECOUNT = "BrowseCount";
+	public static String TITLE = "Title";
+	public static String RICHTEXT = "RichText";
 
 	private int articleId;
 
@@ -37,7 +39,7 @@ public class ArticleInfo {
 	private String reference;
 	private String url;
 	private String title;
-	private String abbreviation;
+	private String richText;
 	private int type;
 	private ArticleInfo originalArticle;
 	private Set<String> picSet = new HashSet<String>();
@@ -132,14 +134,6 @@ public class ArticleInfo {
 
 	public void setTitle(String title) {
 		this.title = title;
-	}
-
-	public String getAbbreviation() {
-		return abbreviation;
-	}
-
-	public void setAbbreviation(String abbreviation) {
-		this.abbreviation = abbreviation;
 	}
 
 	public Set<String> getPicSet() {
@@ -269,6 +263,14 @@ public class ArticleInfo {
 
 	public void setCollectors(Set<UserInfo> collectors) {
 		this.collectors = collectors;
+	}
+
+	public String getRichText() {
+		return richText;
+	}
+
+	public void setRichText(String richText) {
+		this.richText = richText;
 	}
 
 	
