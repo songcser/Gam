@@ -21,9 +21,10 @@ public class WebManager {
 	private final static String masterSecret = "adec968251666c5982c3cce3";
 	private final static String appKey = "408183a3a7fd461efc860cda";
 	private final static String ALERT = "hello world";
+	
 	public static void JPush(){
 		JPushClient jpushClient = new JPushClient(masterSecret, appKey, 3);
-		 PushPayload payload = buildPushObject_all_all_alert();
+		PushPayload payload = test();
 		 
 		 try {
 	            PushResult result = jpushClient.sendPush(payload);
@@ -45,6 +46,25 @@ public class WebManager {
 	public static PushPayload buildPushObject_all_all_alert() {
         return PushPayload.alertAll(ALERT);
     }
+	
+	public static PushPayload test(){
+		return PushPayload.newBuilder()
+				.setPlatform(Platform.ios())
+				.setAudience(Audience.alias("93"))
+				.setNotification(Notification.newBuilder()
+                        .addPlatformNotification(IosNotification.newBuilder()
+                                .setAlert(ALERT)
+                                .setBadge(5)
+                                .setSound("happy")
+                                .addExtra("from", "JPush")
+                                .build())
+                        .build())
+                 .setMessage(Message.content(""))
+                 .setOptions(Options.newBuilder()
+                         .setApnsProduction(true)
+                         .build())
+                 .build();
+	}
 	
 	public static PushPayload buildPushObject_ios_tagAnd_alertWithExtrasAndMessage() {
         return PushPayload.newBuilder()

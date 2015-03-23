@@ -9,7 +9,7 @@
 
 <style type="text/css">
 body{
-    margin-top:80px;
+    margin-top:60px;
 }
 </style>
 </head>
@@ -43,7 +43,6 @@ body{
                 <%@ include file="createUser.jsp"%>
                 </div>
                 <div id="articlesDiv" style="display: none">
-                    <input type="hidden" id="articleUserId" name="userId"> 
                     <div id="articleListDiv"  ></div>
                     <div id="paginationDiv" ></div>
                 </div>
@@ -58,7 +57,7 @@ body{
 	<script src="../js/bootstrap.min.js"></script>
 	<script src="../js/main.js"></script>
 	<script type="text/javascript">
-	var total = document.documentElement.clientHeight-90;
+	var total = document.documentElement.clientHeight-80;
 	document.getElementById("mainBody").style.height=total+"px";
 	
 	function searchByName(){

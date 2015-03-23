@@ -16,7 +16,7 @@ public class RedisInfo {
 	public static final String ARTICLEDATELIST = "Article:Date:List:";							//推文按日期列表
 	public static final String ARTICLECOMMENTLIST = "Article:Comment:List:";						//推文评论列表
 	public static final String ARTICLERECOMMENDLIST = "Article:Recommend:List";					//推文推荐列表
-	
+	public static final String ARTICLENOAUDITINGRECOMMENDLIST = "Article:NoAuditing:Recommend:List"; //未审核推荐推文列表
 	
 	public static final String USERARTICLELIST = "User:Article:List:";							//用户发布推文列表
 	public static final String USEROSLIST = "User:OS:List";										//运营人员和模拟用户列表

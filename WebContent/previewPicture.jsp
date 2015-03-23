@@ -10,7 +10,9 @@
 </div>
 <script type="text/javascript">
 var index = 0;
+var picCount = 0;
 function addPicture(){
+	picCount++;
 	$("#previewDivId").append('<div id="preview'+index+'" class="col-xs-6 col-sm-4 col-md-3 col-lg-2" style=""></div>');
 	$('#addPictureId').append('<input type="file" style="display:none" name="picture'+index+'" onchange="previewArticleImage(this)" id="articlePictureInput'+index+'" />')
 	$("#articlePictureInput"+index).click();
@@ -21,12 +23,17 @@ function previewArticleImage(file) {
 }
 
 function removePicture(t) {
+	picCount--;
     //var div = document.getElementById('preview' + t);
     $("#preview"+t).remove();
     $("#articlePictureInput"+t).remove();
     //var divObj = document.getElementById('articlePictureInput'+t);
     //$("#previewDivId").remove(div);
     //$('#addPictureId').remove(divObj)
+}
+
+function getPicCount(){
+	return picCount;
 }
 
 function resetPreviewPicture(){

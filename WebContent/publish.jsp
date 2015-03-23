@@ -35,7 +35,7 @@ body {
 						<div class="form-group" style="height:90px">
 							<div class="pull-left"><a style="width:80px;height:80px" class="thumbnail" href="javascript:selectUser()">
 							 <img id="headImg" style="width:70px;height:70px" src="${operations.get(0).getHeadUrl() }" alt="" class="img-circle" >
-							 </a></div><div id="userName" class="pull-left margin-left margin-top text-gray">dddd</div>
+							 </a></div><div id="userName" class="pull-left margin-left margin-top text-gray">${operations.get(0).name }</div>
 							<!-- 
 							 <select name="userId" class="form-control">
 								<c:if test="${!empty operations }">
@@ -46,6 +46,7 @@ body {
 							</select>
 							 -->
 						</div>
+						
 						 <div id="showDiv" class="form-group collapse">
                         <label for="activityId">节目单</label>
                             <select name="activityId" class="form-control">
@@ -56,6 +57,7 @@ body {
                                 </c:if>
                             </select>
                         </div>
+                       
 						<div class="form-group">
 							<label for="title">标题</label> <input type="text" class="form-control" name="title">
 						</div>
@@ -71,10 +73,12 @@ body {
 						<div >
                             <%@ include file="previewPicture.jsp"%>
                         </div>
+                        
 						<div id="richTextDiv" class="form-group collapse" >
                             <label for="content">富文本</label>
                             <%@ include file="ueditor.jsp"%>
                         </div>
+                        
 						<div style="width: 100%; clear: both">
 							<div class="form-group  padding-bottom">
 								<input class="btn bg-blue pull-right" type="button" onclick="publishArticle()" value="发布">
@@ -90,6 +94,7 @@ body {
 	<script src="../js/jquery-1.11.2.min.js"></script>
 	<script src="../js/bootstrap.min.js"></script>
 	<script type="text/javascript">
+	var isClick = false;
 		function selectCommonMode() {
 			$('input[type="radio"]').parent('label').removeClass('active');
 			$('input[type="radio"]:checked').parent('label').addClass('active');
@@ -99,14 +104,20 @@ body {
 		function selectRecommendMode() {
 			$('input[type="radio"]').parent('label').removeClass('active');
             $('input[type="radio"]:checked').parent('label').addClass('active');
-            $('#richTextDiv').collapse('show');
-            $('#showDiv').collapse('hide');
+            
+           $('#richTextDiv').collapse('show');
+           if(isClick){
+        	   $('#showDiv').collapse('hide');
+           } 
+           isClick = true;
+           
 		}
 
 		function selectShowMode() {
 			$('input[type="radio"]').parent('label').removeClass('active');
             $('input[type="radio"]:checked').parent('label').addClass('active');
-            $('#showDiv').collapse('show');
+            $('.collapse').collapse('show');
+            isClick = true;
 		}
 		function selectUser(){
 			selectUserList();
@@ -118,9 +129,15 @@ body {
 		}
 		
 		function publishArticle(){
-			 
+			 if($("#articleContent").val()==""){
+				 alert("请输入内容");
+				 return;
+			 }
+			 if(getPicCount()<1){
+				 alert("请添加封面图片");
+				 return;
+			 }
 			 setRichTextContent();
-			 
 			$("#articleFormFile").submit();
 		}
 		function callback(str, userId) {

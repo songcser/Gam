@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!-- Modal -->
 <div class="modal fade" id="commentDialog" tabindex="-1" role="dialog" aria-labelledby="commentLabel" aria-hidden="true">
 	<div class="modal-dialog" style="width: 900px">
@@ -7,13 +8,22 @@
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
-				<h4 class="modal-title" id="myModalLabel">评论</h4>
+				<h4 class="modal-title" id="myCommentLabel">评论</h4>
 			</div>
 			<div class="modal-body" id="noticeDiologId">
 				<div id="commentDiv">
 					<div id="createCommentDiv">
 						<input type="hidden" id="commentArticleId">
-						<div class="field margin-left">
+						<div id="commentUserId" class="margin-left margin-bottom">
+						 <select id="selectUserId" name="userId" class="form-control ">
+                                <c:if test="${!empty operations }">
+                                    <c:forEach items="${operations }" var="u">
+                                        <option value="${u.userId }">${u.name }</option>
+                                    </c:forEach>
+                                </c:if>
+                            </select>
+                         </div>
+						<div class=" margin-left">
 							<textarea id="commentContent" name="content" class="form-control" rows="3" cols="30" placeholder="500字以内"></textarea>
 						</div>
 						<div class="form-button text-right padding-top">
@@ -30,25 +40,48 @@
 	</div>
 </div>
 <script type="text/javascript">
+var atUserList = [];
+var isReply = false;
+
+function setReply(){
+	isReply = true;
+	$("#myCommentLabel").html("回复评论");
+	$("#commentUserId").css({
+        display : "none"
+    });
+}
+
 function publishComments(){
-    var auId = $("#articleUserId").val();
-    var name = $("#articleUserName").val();
+	var userId = 0;
+	var name = "";
+	if(isReply){
+		userId = currentUser.userId;
+		name = currentUser.name;
+	}
+	else {
+		userId = $("#selectUserId").val();
+		name = $("#selectUserId").find("option:selected").text();
+	}
+	//alert(userId);
+	//alert(name);
+    //var auId = $("#articleUserId").val();
+    //var name = $("#articleUserName").val();
     if($("#commentContent").val()==""){
         alert("请输入内容");
         return;
     }
-    publishComment(auId,name);
+    publishComment(userId,name);
     var articleId = $("#commentArticleId").val();
     var pObj = document.getElementById("commentCount"+articleId);
     var count = pObj.innerHTML;
     pObj.innerHTML = parseInt(count)+1;
 }
 
-var atUserList = [];
 function publishComment(userId,userName){
     var content = $("#commentContent").val();
-    var articleId = $("#commentArticleId").val();
-    var auId = $("#articleUserId").val();
+    //var articleId = $("#commentArticleId").val();
+    var articleId = currentArticle.Id;
+    var auId = currentArticle.userId;
     //alert(content+"==="+articleId+"==="+userId);
     
     var comment = {
@@ -89,8 +122,10 @@ function publishComment(userId,userName){
 
 function getComments(articleId,userId){
 	$('#commentDialog').modal('show');
-	$("#commentArticleId").val(articleId);
-    $("#articleUserId").val(userId);
+	//$("#commentArticleId").val(articleId);
+	currentArticle.Id = articleId;
+	currentArticle.userId = userId;
+    //$("#articleUserId").val(userId);
     $.ajax({
         url : "/StarkPet/comment/getByArticleId.do?articleId=" + articleId + "&page=0",
         type : "post",

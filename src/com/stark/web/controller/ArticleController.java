@@ -760,13 +760,13 @@ public class ArticleController {
 
 	@RequestMapping("/getArticlesByUserId.do")
 	@ResponseBody
-	public List<Map<String, Object>> getArticlesByUserId(int userId, int page) {
+	public Map<String, Object> getArticlesByUserId(int userId, int page) {
 		System.out.println("==> /article/getArticlesByUserId?userId=" + userId + "&page=" + page);
-		List<ArticleInfo> articles = articleManager.getArticleByUserId(userId, page, maxResults);
+		List<ArticleInfo> articles = articleManager.getArticleByUserId(userId, page, maxResults2);
 		if (articles == null)
 			return null;
 		
-		return articlesToList(userId, articles);
+		return articleManager.articlesToMap( articles,userId);
 		
 	}
 
@@ -978,17 +978,20 @@ public class ArticleController {
 				MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
 				
 				ArticleInfo article = new ArticleInfo();
+				String articleType = request.getParameter("articleType");
+				int type=Integer.parseInt(articleType);
+				article.setType(type);
 				if(activityId!=null){
 					article.setActivity(new ActivityInfo(Integer.parseInt(activityId)));
-					article.setType(ArticleType.NoAuditingActivity.getIndex());
+					//article.setType(ArticleType.NoAuditingActivity.getIndex());
 				}else{
-					String articleType = request.getParameter("articleType");
-					if(articleType!=null){
-						article.setType(Integer.parseInt(articleType));
-					}
-					else {
-						article.setType(EnumBase.ArticleType.Publish.getIndex());
-					}
+					
+					//if(articleType!=null){
+					//	article.setType(Integer.parseInt(articleType));
+					//}
+					//else {
+					//	article.setType(EnumBase.ArticleType.Publish.getIndex());
+					//}
 				}
 				
 				UserInfo user = userManager.getUser(userId);
@@ -1466,6 +1469,13 @@ public class ArticleController {
 	@ResponseBody
 	public Map<String,Object> getCollectionPictures2(int userId,int page){
 		Map<String,Object> map = articleManager.getCollectionPictures(userId,page,maxPictureResult);
+		return map;
+	}
+	
+	@RequestMapping("getNoAuditingRecommendList2.0.do")
+	@ResponseBody
+	public Map<String,Object> getNoAuditingRecommendList2(int userId,int page){
+		Map<String,Object> map = articleManager.getNoAuditingRecommendList(userId,page,maxResults2);
 		return map;
 	}
 }

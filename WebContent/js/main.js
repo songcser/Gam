@@ -1,3 +1,7 @@
+var maxResults = 20;
+var isShowHeader = false;
+var currentUser = new Object();
+var currentArticle = new Object();
 function selectUser(userId,userName,page){
 	page = parseInt(page);
 	if(page<0)
@@ -8,28 +12,26 @@ function selectUser(userId,userName,page){
 	$("#articlesDiv").css({
 		display : "block"
 	});
-
-	$("#createArticleDiv").css({
-		display : "block"
-	});
 	
-	
+	setReply();
 	//$("#secondDiv").scrollTop = 0;
-	var div = document.getElementById('articleList'); 
-	div.scrollTop = 0; 
+	currentUser.userId = userId;
+	currentUser.name = userName;
 	
 	$("#articleUserId").val(userId);
     $("#articleUserName").val(userName);
-    var url = "/StarkPet/article/getArticlesByUserId.do?userId="+ userId;
+    var url = "/StarkPet/article/getArticlesByUserId.do?userId="+ userId+"&";
 	showArticleList(url,page);
 }
-
 function showArticleList(url,page){
+	var div = document.getElementById('articleList'); 
+	div.scrollTop = 0; 
 	$.ajax({
-		url : url + "&page="+page,
+		url : url + "page="+page,
 		type : "post",
 		//data:"userId="+id+"",
-		success : function(list) {
+		success : function(result) {
+			var list = result.articles;
 			if (list.length < 1) {
 				$("#articleListDiv")[0].innerHTML = "";
 				$("#paginationDiv").css({
@@ -44,7 +46,7 @@ function showArticleList(url,page){
 				var mediaDiv = createMediaDiv(art);
 				$("#articleListDiv").append(mediaDiv);
 			}
-		    if(list.length==10||page>0){
+		    if(list.length==maxResults||page>0){
 		    	var ination = createInation(url,list,page);
 		    	$("#paginationDiv")[0].innerHTML=ination;
 		    }
@@ -69,7 +71,7 @@ function createInation(url,list,page){
 	}else {
 		ination += '<li><a disabled="false" href="javascript:void(0);">上一页</a></li>';
 	}
-	if(list.length==10){
+	if(list.length==maxResults){
 		ination += '<li><a href="javascript:showArticleList('+url+','+nextPage+')">下一页</a></li></ul>';
 	}else {
 		ination += '<li><a disabled="false" href="javascript:void(0);">下一页</a></li></ul>';
@@ -82,24 +84,29 @@ function createMediaDiv(art){
 	
 	var mediaDiv = $('<div class="media bg-white radius" ></div>');
 	var mediaHeader = $('<div class="media-left"></div>');
+	mediaHeader.append('<a href="#"> <img class="media-object margin-top margin-left img-circle" style="height:50px;width:50px" src="'+art.headPic+'" alt="..."> </a>');
+	if(isShowHeader){
+		mediaDiv.append(mediaHeader);
+	}
+	
 	var mediaBody = $('<div class="media-body padding-left padding-top"></div>');
-	mediaBody.append('<h4 class="media-heading">'+ art.userName+'</h4>');
+	mediaBody.append('<h4 class="media-heading">'+ art.name+'</h4>');
 	mediaBody.append('<p>'+art.content+'</p>');
 	mediaDiv.append(mediaBody);
-	mediaHeader.append('<a href="#"> <img class="media-object" src="" alt="..."> </a>');
+	
 	var picList = art.pictures;
-	var mediaPic = $('<div class="padding-left padding-small-bottom">');
+	var mediaPic = $('<div class=" padding-small-bottom">');
 	for (var j = 0; j < picList.length; j++) {
 		var picstr = "'"+picList[j]+"'";
 		mediaPic.append('<a href="javascript:viewPicture('+art.articleId+')"><img src="'+picList[j]+'" width="100px" height="100px" class="img-border radius-small" name="sliderPicture'+art.articleId+'" /> </a>');
 	}
-	mediaDiv.append(mediaPic);
+	mediaBody.append(mediaPic);
 	
 	var date = strToDate(art.date);
 	var strDate = calculateDate(date);
 	
-	var mediaDate = $('<div class="margin-left text-small text-muted">'+ strDate +'  来自: '+art.reference+ '</div>');
-	mediaDiv.append(mediaDate);
+	var mediaDate = $('<div class=" text-small text-muted">'+ strDate +'  来自: '+art.reference+ '</div>');
+	mediaBody.append(mediaDate);
 	var mediaOper = $('<div class="btn-group btn-group-justified border" role="group" aria-label="..."></div>');
 	var mediaOperExt = $('<div class="btn-group" role="button"></div>');
 	mediaOper.append('<div class="btn-group" role="button"><a href="javascript:getComments('+art.articleId+','+art.userId+')" class="btn">评论 <span class="badge bg-white-light" id="commentCount'+art.articleId+'">'+art.commentCount+'</span></a></button>');
@@ -125,7 +132,7 @@ function typeChangeStr(type){
     if(type=="0"){
         typeStr = "普通";
     }else if(type=="2"){
-        typeStr = "每日精选";
+        typeStr = "推荐";
     }
     else if(type=="3"){
         typeStr = "杂志";
@@ -137,7 +144,7 @@ function typeChangeStr(type){
         typeStr = "举报";
     }
     else if(type=="6"){
-        typeStr = "每日精选被举报";
+        typeStr = "推荐被举报";
     }
     else if(type=="7"){
         typeStr = "杂志被举报";
@@ -154,7 +161,18 @@ function typeChangeStr(type){
     else if(type=="11"){
         typeStr = "已删除";
     }
-    
+    else if(type=="12"){
+    	typeStr="未审核";
+    }
+    else if(type=="13"){
+    	typeStr="普通";
+    }
+    else if(type="14"){
+    	typeStr="节目单";
+    }
+    else if(type="15"){
+    	typeStr="未审核";
+    }
     return typeStr;
 }
 

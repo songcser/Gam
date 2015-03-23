@@ -30,6 +30,7 @@ import com.stark.web.hunter.FileManager;
 import com.stark.web.service.IArticleManager;
 import com.stark.web.service.INoticeManager;
 import com.stark.web.service.IUserManager;
+import com.stark.web.service.WebManager;
 
 @Controller
 @RequestMapping("notice")
@@ -239,5 +240,11 @@ public class NoticeController {
 			}
 
 		}
+	}
+	
+	@RequestMapping("test.do")
+	public void test(int page){
+		System.out.println("test.do");
+		WebManager.JPush();
 	}
 }

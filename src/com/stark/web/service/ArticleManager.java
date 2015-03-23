@@ -9,8 +9,10 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -130,6 +132,9 @@ public class ArticleManager implements IArticleManager {
 			}
 			else if(type == ArticleType.Delete.getIndex()){
 				articleDao.addRedisArticleCount(RedisInfo.ARTICLEDELETECOUNT);
+			}
+			else if(type == ArticleType.ExquisiteNoAuditing.getIndex()){
+				articleDao.addRedisArticleId(RedisInfo.ARTICLENOAUDITINGRECOMMENDLIST, aInfo.getArticleId());
 			}
 			
 		}
@@ -923,6 +928,7 @@ public class ArticleManager implements IArticleManager {
 	@Override
 	public Map<String, Object> getArticlePicturesByUserId(int userId, int page,int maxPictureResult) {
 		List<ArticleInfo> articles = getArticleByUserId(userId,page,maxPictureResult);  
+		System.out.println(articles.size());
 		Map<String,Object> map = new HashMap<String,Object>();
 		if(articles==null){
 			map.put("result", 0);
@@ -941,6 +947,9 @@ public class ArticleManager implements IArticleManager {
 //		List<Object[]> picList = getArticlePicByUserId(userId, page, maxPictureResult);
 		for(ArticleInfo article:articles){
 			List<String> pList = getPicListById(article.getArticleId());
+			if(pList.size()<=0){
+				continue;
+			}
 			Map<String, Object> picMap = new HashMap<String, Object>();
 			int articleId = article.getArticleId();
 			picMap.put("articleId", articleId);
@@ -1064,7 +1073,7 @@ public class ArticleManager implements IArticleManager {
 	@Override
 	public Map<String, Object> getRecommendList(int userId,int page, int maxResults) {
 		List<ArticleInfo> articles = new ArrayList<ArticleInfo>();
-		List<String> ids = articleDao.getRedisArticleIds(RedisInfo.ARTICLECOMMENTLIST, page, maxResults);
+		List<String> ids = articleDao.getRedisArticleIds(RedisInfo.ARTICLERECOMMENDLIST, page, maxResults);
 		int size = idsToArticleList(ids,articles);
 		if(size==maxResults)
 			return articlesToMap(articles,userId);
@@ -1107,7 +1116,8 @@ public class ArticleManager implements IArticleManager {
 		return 0;
 	}
 
-	private Map<String, Object> articlesToMap(List<ArticleInfo> articles, int userId) {
+	@Override
+	public Map<String, Object> articlesToMap(List<ArticleInfo> articles, int userId) {
 		Map<String, Object> map = new HashMap<String,Object>();
 		List<Map<String,Object>> aList = new ArrayList<Map<String,Object>>();
 		for(ArticleInfo article:articles){
@@ -1126,10 +1136,17 @@ public class ArticleManager implements IArticleManager {
 		aMap.put("articleId", articleId);
 		aMap.put("type", article.getType());
 		aMap.put("userId", user.getUserId());
+		DateFormat df = WebManager.getDateFormat();
+		Date date = article.getDate();
+		if(date!=null){
+			aMap.put("date", df.format(date));
+		}
+		
 		aMap.put("name", user.getName());
 		aMap.put("headPic", user.getHeadUrl());
 		aMap.put("title", article.getTitle());
 		aMap.put("content", article.getContent());
+		aMap.put("reference", article.getReference());
 		ActivityInfo act = article.getActivity();
 		if(act!=null){
 			aMap.put("showId", act.getActivityId());
@@ -1141,13 +1158,19 @@ public class ArticleManager implements IArticleManager {
 			aMap.put("showTitle", "");
 			aMap.put("showType", 0);
 		}
-		boolean flag = articleDao.isCollection(userId,articleId);
-		aMap.put("collection", flag?1:0);
-		flag = false;
+		
+		
 		if(userId>0){
+			boolean flag = articleDao.isCollection(userId,articleId);
+			aMap.put("collection", flag?1:0);
+			flag = false;
 			flag = isPraise(userId, articleId);
+			aMap.put("praiseStatus", flag ? 1 : 0);
 		}
-		aMap.put("praiseStatus", flag ? 1 : 0);
+		else{
+			aMap.put("collection", 0);
+			aMap.put("praiseStatus",  0);
+		}
 		
 		aMap.put("praiseCount", article.getPraiseCount());
 		aMap.put("commentCount", article.getCommentCount());
@@ -1317,5 +1340,26 @@ public class ArticleManager implements IArticleManager {
 		list.add(ArticleType.Activity.getIndex());
 		
 		return list;
+	}
+
+	@Override
+	public Map<String, Object> getNoAuditingRecommendList(int userId, int page, int maxResults) {
+		String key = RedisInfo.ARTICLENOAUDITINGRECOMMENDLIST;
+		List<ArticleInfo> articles = new ArrayList<ArticleInfo>();
+		List<String> ids = articleDao.getRedisArticleIds(key, page, maxResults);
+		int size = idsToArticleList(ids,articles);
+		if(size==maxResults)
+			return articlesToMap(articles,userId);
+		
+		List<Integer> types = new ArrayList<Integer>();
+		//types.add(ArticleType.DayExquisite.getIndex());
+		//types.add(ArticleType.DayExquisiteReport.getIndex());
+		//types.add(ArticleType.CommonExquisite.getIndex());
+		types.add(ArticleType.ExquisiteNoAuditing.getIndex());
+		List<ArticleInfo> tlist = articleDao.getArticleByType(types, page*maxResults+size, maxResults-size);
+		
+		listToListAndAddRedisId(key,tlist,articles);
+		
+		return articlesToMap(articles,userId);
 	}
 }

@@ -150,4 +150,8 @@ public interface IArticleManager {
 
 	List<Map<String, Object>> articlesToPictureList(List<ArticleInfo> articles);
 
+	Map<String, Object> articlesToMap(List<ArticleInfo> articles, int userId);
+
+	public Map<String, Object> getNoAuditingRecommendList(int userId, int page, int maxResults2);
+
 }
