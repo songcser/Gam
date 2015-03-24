@@ -809,6 +809,9 @@ public class ArticleManager implements IArticleManager {
 				articleDao.removeRedisArticleList(RedisInfo.ACTIVITYARTICLEALLLIST+article.getActivity().getActivityId(), articleId);
 				articleDao.removeRedisArticleList(RedisInfo.ACTIVITYARTICLEAUDITINGLIST+article.getActivity().getActivityId(), articleId);
 			}
+			else if(oldType==ArticleType.ExquisiteNoAuditing.getIndex()){
+				articleDao.removeRedisArticleList(RedisInfo.ARTICLENOAUDITINGRECOMMENDLIST,articleId);
+			}
 			
 			if(type==ArticleType.Publish.getIndex()){
 				articleDao.addRedisArticleCount(RedisInfo.ARTICLEPUBLISHCOUNT);
@@ -1145,7 +1148,13 @@ public class ArticleManager implements IArticleManager {
 		
 		aMap.put("name", user.getName());
 		aMap.put("headPic", user.getHeadUrl());
-		aMap.put("title", article.getTitle());
+		String title = article.getTitle();
+		if(title!=null){
+			aMap.put("title", title);
+		}
+		else{
+			aMap.put("title", "");
+		}
 		aMap.put("content", article.getContent());
 		aMap.put("reference", article.getReference());
 		ActivityInfo act = article.getActivity();

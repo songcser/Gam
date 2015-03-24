@@ -91,7 +91,12 @@ function createMediaDiv(art){
 	}
 	
 	var mediaBody = $('<div class="media-body padding-left padding-top"></div>');
-	mediaBody.append('<h4 class="media-heading">'+ art.name+'</h4>');
+	mediaBody.append('<h4 class="media-heading"><strong>'+ art.name+'</strong></h4>');
+	var title = art.title;
+	
+	if(title!=""){
+		mediaBody.append('<a href="#"><p class="text-big text-muted">'+title+'</p></a>');
+	}
 	mediaBody.append('<p>'+art.content+'</p>');
 	mediaDiv.append(mediaBody);
 	
@@ -311,4 +316,24 @@ function selectUserSubmit(){
         contentType: "application/json",
     });
 	
+}
+
+function changeArticleType(articleId){
+	if(isAuditing)
+		return;
+	currentArticle.Id = articleId;
+	showAuditingDialog("精选推文通过审核");
+}
+
+function ajaxRequest(url,handle){
+	 $.ajax({
+         url : url,
+         type : "get",
+         //data:JSON.stringify(chartlet),
+         success : function(data){    
+        	 handle(data);
+         },
+         dataType : "json",
+         contentType : "application/json",
+     });
 }

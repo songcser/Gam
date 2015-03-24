@@ -19,13 +19,13 @@ body{
         <div style="width:80%;height:5%" class="center-block margin-bottom" >
              <button class="btn bg-blue radius-rounded " onclick="getAuditedRecommend()">已审核</button>
              <button class="btn bg-blue radius-rounded" onclick="getNoAuditedRecommend()">未审核</button>
-             <button class="btn bg-blue radius-rounded" onclick="Test()">未审核</button>
         </div>
         <div style="width:80%;height:95%;overflow:auto" id="articleList" class="center-block ">
             <div id="articleListDiv"  ></div>
             <div id="paginationDiv" ></div>
         </div>
     </div>
+    <%@ include file="auditingDialog.jsp" %>
     <%@ include file="commentDialog.jsp"%>
     <%@ include file="sliderShow.jsp" %>
     <%@ include file="selectUserList.jsp" %>
@@ -33,15 +33,18 @@ body{
     <script src="../js/bootstrap.min.js"></script>
     <script src="../js/main.js"></script>
     <script type="text/javascript">
+    var isAuditing = true;
     var total = document.documentElement.clientHeight-70;
     document.getElementById("mainBody").style.height=total+"px";
     
     function getNoAuditedRecommend(){
+    	isAuditing = false;
     	var url = "/StarkPet/article/getNoAuditingRecommendList2.0.do?userId=0&";
     	getArticleList(url)
     }
     
     function getAuditedRecommend(){
+    	isAuditing = true;
     	init();
     }
     
@@ -66,6 +69,17 @@ body{
     
     function selectBack(){
     	selectUserSubmit();
+    }
+    
+    function auditingBack(){
+
+    	var articleId = currentArticle.Id;
+    	var url = "/StarkPet/article/changeArticleType.do?articleId="+articleId+"&type="+2;
+    	ajaxRequest(url,response);
+    }
+    
+    function response(data){
+    	//alert(data);
     }
     </script>
 </body>
