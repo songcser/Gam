@@ -71,7 +71,7 @@ function publishComments(){
         return;
     }
     publishComment(userId,name);
-    var articleId = $("#commentArticleId").val();
+    var articleId = currentArticle.Id;
     var pObj = document.getElementById("commentCount"+articleId);
     var count = pObj.innerHTML;
     pObj.innerHTML = parseInt(count)+1;

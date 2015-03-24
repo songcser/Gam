@@ -28,6 +28,7 @@ body{
     </div>
     <%@ include file="commentDialog.jsp"%>
     <%@ include file="sliderShow.jsp" %>
+    <%@ include file="selectUserList.jsp" %>
     <script src="../js/jquery-1.11.2.min.js"></script>
     <script src="../js/bootstrap.min.js"></script>
     <script src="../js/main.js"></script>
@@ -36,7 +37,7 @@ body{
     document.getElementById("mainBody").style.height=total+"px";
     
     function getNoAuditedRecommend(){
-    	var url = "/StarkPet/article/getNoAuditingRecommendList2.0.do?userId=0";
+    	var url = "/StarkPet/article/getNoAuditingRecommendList2.0.do?userId=0&";
     	getArticleList(url)
     }
     
@@ -61,6 +62,10 @@ body{
     function Test(){
     	 var url = "/StarkPet/notice/test.do?";
     	 getArticleList(url);
+    }
+    
+    function selectBack(){
+    	selectUserSubmit();
     }
     </script>
 </body>

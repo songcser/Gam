@@ -1,5 +1,6 @@
 var maxResults = 20;
 var isShowHeader = false;
+var selectUserFlag = "";
 var currentUser = new Object();
 var currentArticle = new Object();
 function selectUser(userId,userName,page){
@@ -123,6 +124,9 @@ function createMediaDiv(art){
 }
 
 function praiseArticle(articleId){
+	currentArticle.Id = articleId;
+	selectUserFlag = "praise";
+	setMultiSelect();
 	selectUserList();
 }
 
@@ -265,3 +269,44 @@ function getDateDiff(startTime, endTime, diffType) {
     } 
     return parseInt((endTime.getTime() - startTime.getTime()) / parseInt(divNum)); 
 }  
+
+function selectUserSubmit(){
+	
+	var objectId;
+	var url = "";
+	if(selectUserFlag == "praise"){
+		url = "/StarkPet/article/addPraises.do";
+		objectId = currentArticle.Id;
+	}
+	else if(selectUserFlag=="follow"){
+		url = "/StarkPet/user/addFollows.do";
+		objectId = selectUserId;
+	}
+	var user ={
+            objectId:objectId,
+            usersId:selectUserId,
+        }
+    $.ajax({
+        url:url,
+        type:"post",
+        data:JSON.stringify(user),
+        success:function(a){
+        	if(a.result==1){
+        		if(selectUserFlag == "praise"){
+        			 var pObj = document.getElementById("praiseCount"+objectId);
+                     var count = pObj.innerHTML;
+                     pObj.innerHTML = parseInt(count)+a.count;
+                }
+                else if(selectUserFlag=="follow"){
+                    alert("关注成功");
+                }
+        	}
+        	else {
+        		alert("失败了");
+        	}
+        },
+        dataType: "json",
+        contentType: "application/json",
+    });
+	
+}

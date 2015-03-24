@@ -33,24 +33,66 @@
 	</div>
 </div>
 <script type="text/javascript">
+
 var selectUserId = [];
 var selectUserName = [];
 var selectUserHeadUrl=[];
+
+var multiSelect = false;
 
 function selectUserList(){
 	$('#selectDialog').modal('show');
 }
 
+function setMultiSelect(){
+	multiSelect = true;
+}
+
 function clickUserHead(userId,name,headUrl){
-	selectUserId[0] = userId;
-	selectUserName[0]= name;
-	selectUserHeadUrl[0]=headUrl;
+	if(multiSelect){
+		var length = selectUserId.length;
+		var isSelect = false;
+		for(var i=0;i<length;i++){
+			if(selectUserId[i]==userId){
+				$("#userHeadImg"+userId).removeClass("bg-blue");
+				isSelect = true;
+			}
+			if(isSelect){
+				selectUserId[i]=selectUserId[i+1];
+				length--;
+			}
+		}
+		if(isSelect){
+			selectUserId.length = length;
+		}
+		else{
+			selectUserId[selectUserId.length] = userId;
+	        $("#userHeadImg"+userId).addClass("bg-blue");
+		}
+		
+	}
+	else{
+		selectUserId[0] = userId;
+	    selectUserName[0]= name;
+	    selectUserHeadUrl[0]=headUrl;
+	    $(".thumbnail").removeClass("bg-blue");
+	    $("#userHeadImg"+userId).addClass("bg-blue");
+	}
+	//alert(selectUserId);
+}
+
+function resetSelectUser(){
+	selectUserId.length = 0;
+	selectUserName.length = 0;
+	selectUserHeadUrl.length = 0;
+	multiSelect = false;
 	$(".thumbnail").removeClass("bg-blue");
-	$("#userHeadImg"+userId).addClass("bg-blue");
 }
 
 function selectUserOk(){
+	
 	$('#selectDialog').modal('hide')
 	selectBack();
+	resetSelectUser();
 }
 </script>
