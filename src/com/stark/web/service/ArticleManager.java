@@ -1076,7 +1076,8 @@ public class ArticleManager implements IArticleManager {
 	@Override
 	public Map<String, Object> getRecommendList(int userId,int page, int maxResults) {
 		List<ArticleInfo> articles = new ArrayList<ArticleInfo>();
-		List<String> ids = articleDao.getRedisArticleIds(RedisInfo.ARTICLERECOMMENDLIST, page, maxResults);
+		String key = RedisInfo.ARTICLERECOMMENDLIST;
+		List<String> ids = articleDao.getRedisArticleIds(key, page, maxResults);
 		int size = idsToArticleList(ids,articles);
 		if(size==maxResults)
 			return articlesToMap(articles,userId);
@@ -1087,7 +1088,7 @@ public class ArticleManager implements IArticleManager {
 		types.add(ArticleType.CommonExquisite.getIndex());
 		List<ArticleInfo> tlist = articleDao.getArticleByType(types, page*maxResults+size, maxResults-size);
 		
-		listToListAndAddRedisId(RedisInfo.ARTICLECOMMENTLIST,tlist,articles);
+		listToListAndAddRedisId(key,tlist,articles);
 		
 		return articlesToMap(articles,userId);
 	}
@@ -1213,7 +1214,13 @@ public class ArticleManager implements IArticleManager {
 	@Override
 	public Map<String, Object> getArticleInfo(int articleId, int userId) {
 		ArticleInfo article = getArticle(articleId);
-		return articleToMap(article,userId);
+		Map<String,Object> map = new HashMap<String,Object>();
+		if(article==null){
+			map.put("result", 0);
+		}
+		map = articleToMap(article,userId);
+		map.put("result", 1);
+		return map;
 	}
 	
 	@Override
@@ -1222,6 +1229,7 @@ public class ArticleManager implements IArticleManager {
 		if(result){
 			String key = RedisInfo.USERCOLLECTIONLIST+userId;
 			articleDao.addRedisArticleIdR(key, articleId);
+			articleDao.addRedisCollectionCount(articleId);
 		}
 		return result;
 	}
@@ -1372,5 +1380,16 @@ public class ArticleManager implements IArticleManager {
 		listToListAndAddRedisId(key,tlist,articles);
 		
 		return articlesToMap(articles,userId);
+	}
+
+	
+	@Override
+	public boolean setBrowseCount(int articleId, int count) {
+		boolean result = articleDao.setBrowseCount(articleId,count);
+		if(result){
+			String key = ArticleInfo.getKey(articleId);
+			articleDao.setRedisArticleCount(key,ArticleInfo.BROWSECOUNT,count);
+		}
+		return result;
 	}
 }

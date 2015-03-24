@@ -83,7 +83,7 @@ function createInation(url,list,page){
 
 function createMediaDiv(art){
 	
-	var mediaDiv = $('<div class="media bg-white radius" ></div>');
+	var mediaDiv = $('<div id="mediaMainId'+art.articleId+'" class="media bg-white radius" ></div>');
 	var mediaHeader = $('<div class="media-left"></div>');
 	mediaHeader.append('<a href="#"> <img class="media-object margin-top margin-left img-circle" style="height:50px;width:50px" src="'+art.headPic+'" alt="..."> </a>');
 	if(isShowHeader){
@@ -118,7 +118,7 @@ function createMediaDiv(art){
 	mediaOper.append('<div class="btn-group" role="group"><a href="javascript:getComments('+art.articleId+','+art.userId+')" class="btn btn-default">评论 <span class="badge bg-white-light" id="commentCount'+art.articleId+'">'+art.commentCount+'</span></a></div>');
 	mediaOper.append('<div class="btn-group" role="group"><a href="javascript:praiseArticle('+art.articleId+')" class="btn btn-default">赞 <span class="badge bg-white-light" id="praiseCount'+art.articleId+'">'+art.praiseCount+'</span></a></div>');
 	mediaOper.append('<div class="btn-group" role="group"><a  class="btn btn-default">收藏 <span class="badge bg-white-light" >'+art.collectionCount+'</span></a></div>');
-	
+	mediaOper.append('<div class="btn-group" role="group"><a href="javascript:browseArticle('+art.articleId+','+art.browseCount+')" class="btn btn-default">浏览 <span class="badge bg-white-light" id="browseCount'+art.articleId+'">'+art.browseCount+'</span></a></div>');
 	 var type=art.type;
      //var typeStr = typeChangeStr(type);
 	 var typeStr = art.typeStr;
@@ -336,4 +336,20 @@ function ajaxRequest(url,handle){
          dataType : "json",
          contentType : "application/json",
      });
+}
+
+function browseArticle(articleId,count){
+	currentArticle.Id = articleId;
+	showBrowseDialog(count);
+}
+function browseBack(count){
+	var articleId = currentArticle.Id;
+	var url = "/StarkPet/article/setBrowseCount.do?articleId="+articleId+"&count="+count;
+	ajaxRequest(url,browseResponse);
+}
+function browseResponse(data){
+	if(data.result==1){
+		 var pObj = document.getElementById("browseCount"+currentArticle.Id);
+         pObj.innerHTML = data.count;
+	}
 }

@@ -223,4 +223,10 @@ public interface IArticleDAO {
 
 	public void deleteRedisKey(String key);
 
+	public boolean setBrowseCount(int articleId, int count);
+
+	public void setRedisArticleCount(String key, String field, int count);
+
+	public long addRedisCollectionCount(int articleId);
+
 }

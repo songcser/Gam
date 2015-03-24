@@ -1478,4 +1478,14 @@ public class ArticleController {
 		Map<String,Object> map = articleManager.getNoAuditingRecommendList(userId,page,maxResults2);
 		return map;
 	}
+	
+	@RequestMapping("setBrowseCount.do")
+	@ResponseBody
+	public Map<String,Object> setBrowseCount(int articleId,int count){
+		Map<String,Object> map = new HashMap<String,Object>();
+		boolean result = articleManager.setBrowseCount(articleId,count);
+		map.put("result", result?1:0);
+		map.put("count", count);
+		return map;
+	}
 }

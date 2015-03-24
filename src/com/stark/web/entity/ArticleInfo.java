@@ -36,7 +36,7 @@ public class ArticleInfo {
 	private Date date;
 	private int praiseCount;
 	private int commentCount;
-	private int collectionCount = 0;
+	private int collectionCount;
 	private int status;
 	private String reference;
 	private String url;

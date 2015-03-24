@@ -14,10 +14,12 @@
 		<many-to-one class="ActivityInfo" fetch="join" name="activity">
 			<column name="ActivityId" />
 		</many-to-one>
-		<property generated="never" lazy="false" name="type" type="int">
+		<property lazy="false" name="type" type="int">
 			<column default="0" name="Type" not-null="true" />
 		</property>
-
+        <property  lazy="false" name="browseCount" type="int">
+            <column default="0" name="BrowseCount" not-null="true" />
+        </property>
 		<!-- <many-to-one name="originalArticle" class="ArticleInfo" fetch="join"> <column name="ARIGINALARTICLEID" /> </many-to-one> -->
 		<property lazy="false" name="content" type="java.lang.String">
 			<column name="Content" not-null="true" default="''" />

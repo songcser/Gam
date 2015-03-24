@@ -154,4 +154,6 @@ public interface IArticleManager {
 
 	public Map<String, Object> getNoAuditingRecommendList(int userId, int page, int maxResults2);
 
+	public boolean setBrowseCount(int articleId, int count);
+
 }

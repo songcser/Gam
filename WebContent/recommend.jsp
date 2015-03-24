@@ -25,6 +25,7 @@ body{
             <div id="paginationDiv" ></div>
         </div>
     </div>
+    <%@ include file="browseDialog.jsp"%>
     <%@ include file="auditingDialog.jsp" %>
     <%@ include file="commentDialog.jsp"%>
     <%@ include file="sliderShow.jsp" %>
@@ -80,7 +81,14 @@ body{
     
     function response(data){
     	//alert(data);
+    	if(data.result==1){
+    		$("#mediaMainId"+currentArticle.Id).remove();
+    	}
+    	else{
+    		alert("失败了!!!");
+    	}
     }
+    
     </script>
 </body>
 </html>

@@ -312,6 +312,7 @@ public class ArticleDAO implements IArticleDAO {
 		
 		int colCount = getCollectionCount(aInfo.getArticleId());
 		map.put(ArticleInfo.COLLECTIONCOUNT, ""+colCount);
+		aInfo.setCollectionCount(colCount);
 		
 		int pCount = getPraiseCount(aInfo.getArticleId());
 		map.put(ArticleInfo.PRAISECOUNT, ""+pCount);
@@ -1198,5 +1199,30 @@ public class ArticleDAO implements IArticleDAO {
 		if(redisDao==null)
 			return ;
 		redisDao.del(key);
+	}
+
+	@Override
+	public boolean setBrowseCount(int articleId, int count) {
+		String hql = "update ArticleInfo as a set a.browseCount =:count where a.articleId=:articleId";
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		query.setInteger("count", count);
+		query.setInteger("articleId", articleId);
+		
+		return query.executeUpdate()>0;
+	}
+
+	@Override
+	public void setRedisArticleCount(String key, String field, int count) {
+		if(redisDao==null)
+			return ;
+		//redisDao.hincrby(ArticleInfo.getKey(articleId),ArticleInfo.PRAISECOUNT,1);
+		redisDao.hset(key, field, ""+count);
+	}
+
+	@Override
+	public long addRedisCollectionCount(int articleId) {
+		if(redisDao==null)
+			return 0;
+		return redisDao.hincrby(ArticleInfo.getKey(articleId), ArticleInfo.COLLECTIONCOUNT, 1);
 	}
 }
