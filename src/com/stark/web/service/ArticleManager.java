@@ -27,6 +27,7 @@ import org.springframework.stereotype.Component;
 
 import com.stark.web.dao.IArticleDAO;
 import com.stark.web.dao.IUserDAO;
+import com.stark.web.define.EnumBase.UserRole;
 import com.stark.web.define.RedisInfo;
 import com.stark.web.define.EnumBase.ArticleType;
 import com.stark.web.entity.ActivityInfo;
@@ -1149,6 +1150,7 @@ public class ArticleManager implements IArticleManager {
 		
 		aMap.put("name", user.getName());
 		aMap.put("headPic", user.getHeadUrl());
+		aMap.put("userRole", UserRole.getName(user.getRole()));
 		String title = article.getTitle();
 		if(title!=null){
 			aMap.put("title", title);

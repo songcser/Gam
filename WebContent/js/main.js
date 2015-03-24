@@ -84,14 +84,16 @@ function createInation(url,list,page){
 function createMediaDiv(art){
 	
 	var mediaDiv = $('<div id="mediaMainId'+art.articleId+'" class="media bg-white radius" ></div>');
-	var mediaHeader = $('<div class="media-left"></div>');
-	mediaHeader.append('<a href="#"> <img class="media-object margin-top margin-left img-circle" style="height:50px;width:50px" src="'+art.headPic+'" alt="..."> </a>');
+	var mediaHeader = $('<div class="media-left text-center padding-left"></div>');
+	mediaHeader.append('<a href="#"> <img class="media-object margin-top img-circle" style="height:50px;width:50px" src="'+art.headPic+'" alt="..."> </a>');
+	var roleStr = art.userRole;
+	mediaHeader.append('<div class="padding-top center-block"><a href="javascript:followUser('+art.userId+')" ><span class="glyphicon glyphicon-check text-large text-green"></span></a></div>');
 	if(isShowHeader){
 		mediaDiv.append(mediaHeader);
 	}
 	
 	var mediaBody = $('<div class="media-body padding-left padding-top"></div>');
-	mediaBody.append('<h4 class="media-heading"><strong>'+ art.name+'</strong></h4>');
+	mediaBody.append('<h4 class="media-heading"><strong>'+ art.name+'</strong><small> ('+roleStr+')</small></h4>');
 	var title = art.title;
 	
 	if(title!=""){
@@ -128,6 +130,28 @@ function createMediaDiv(art){
 	mediaDiv.append(mediaOper);
 	
 	return mediaDiv;
+}
+
+function getUserRole(role){
+	//var  = art.userRole;
+    var roleStr;
+    if(role==0){
+    	roleStr="普通用户";
+    }
+    else if(role==1){
+    	roleStr = "管理员";
+    }
+    else if(role==2){
+    	roleStr = "运营人员";
+    }
+    else if(role==3){
+    	roleStr = "模拟用户";
+    }
+    else if(role==6){
+    	roleStr = "重要用户";
+    }
+    
+    return roleStr;
 }
 
 function praiseArticle(articleId){
@@ -287,7 +311,7 @@ function selectUserSubmit(){
 	}
 	else if(selectUserFlag=="follow"){
 		url = "/StarkPet/user/addFollows.do";
-		objectId = selectUserId;
+		objectId = currentUser.userId;
 	}
 	var user ={
             objectId:objectId,
@@ -352,4 +376,11 @@ function browseResponse(data){
 		 var pObj = document.getElementById("browseCount"+currentArticle.Id);
          pObj.innerHTML = data.count;
 	}
+}
+
+function followUser(userId){
+	currentUser.userId = userId;
+	selectUserFlag = "follow";
+	setMultiSelect();
+	selectUserList();
 }
