@@ -26,6 +26,7 @@ public class ArticleInfo {
 	public static String BROWSECOUNT = "BrowseCount";
 	public static String TITLE = "Title";
 	public static String RICHTEXT = "RichText";
+	public static String COLLECTIONCOUNT = "CollectionCount";
 
 	private int articleId;
 
@@ -35,6 +36,7 @@ public class ArticleInfo {
 	private Date date;
 	private int praiseCount;
 	private int commentCount;
+	private int collectionCount = 0;
 	private int status;
 	private String reference;
 	private String url;
@@ -271,6 +273,14 @@ public class ArticleInfo {
 
 	public void setRichText(String richText) {
 		this.richText = richText;
+	}
+
+	public int getCollectionCount() {
+		return collectionCount;
+	}
+
+	public void setCollectionCount(int collectionCount) {
+		this.collectionCount = collectionCount;
 	}
 
 	

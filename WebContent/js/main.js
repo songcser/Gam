@@ -108,16 +108,18 @@ function createMediaDiv(art){
 	
 	var mediaDate = $('<div class=" text-small text-muted">'+ strDate +'  来自: '+art.reference+ '</div>');
 	mediaBody.append(mediaDate);
-	var mediaOper = $('<div class="btn-group btn-group-justified border" role="group" aria-label="..."></div>');
+	var mediaOper = $('<div class="btn-group btn-group-justified " role="group" aria-label="..."></div>');
 	var mediaOperExt = $('<div class="btn-group" role="button"></div>');
-	mediaOper.append('<div class="btn-group" role="button"><a href="javascript:getComments('+art.articleId+','+art.userId+')" class="btn">评论 <span class="badge bg-white-light" id="commentCount'+art.articleId+'">'+art.commentCount+'</span></a></button>');
-	mediaOper.append('<div class="btn-group" role="button"><a href="javascript:praiseArticle('+art.articleId+')" class="btn">赞<span class="badge bg-white-light" id="praiseCount'+art.articleId+'">'+art.praiseCount+'</span></a></button>');
+	mediaOper.append('<div class="btn-group" role="group"><a href="javascript:getComments('+art.articleId+','+art.userId+')" class="btn btn-default">评论 <span class="badge bg-white-light" id="commentCount'+art.articleId+'">'+art.commentCount+'</span></a></div>');
+	mediaOper.append('<div class="btn-group" role="group"><a href="javascript:praiseArticle('+art.articleId+')" class="btn btn-default">赞 <span class="badge bg-white-light" id="praiseCount'+art.articleId+'">'+art.praiseCount+'</span></a></div>');
+	mediaOper.append('<div class="btn-group" role="group"><a  class="btn btn-default">收藏 <span class="badge bg-white-light" >'+art.collectionCount+'</span></a></div>');
 	
 	 var type=art.type;
-     var typeStr = typeChangeStr(type);
+     //var typeStr = typeChangeStr(type);
+	 var typeStr = art.typeStr;
 	
-	mediaOper.append('<div class="btn-group" role="button"><a href="javascript:changeArticleType('+art.articleId+')" class="btn" id="articleType'+art.articleId+'">'+typeStr+' </a></button>');
-	mediaOper.append('<div class="btn-group" role="button"><a href="javascript:deleteArticle('+art.articleId+')" class="btn">删除 </a></button>');
+	mediaOper.append('<div class="btn-group" role="button"><a href="javascript:changeArticleType('+art.articleId+')" class="btn btn-default" id="articleType'+art.articleId+'">'+typeStr+' </a></div>');
+	mediaOper.append('<div class="btn-group" role="button"><a href="javascript:deleteArticle('+art.articleId+')" class="btn btn-default">删除 </a></div>');
 	mediaDiv.append(mediaOper);
 	
 	return mediaDiv;
@@ -166,7 +168,7 @@ function typeChangeStr(type){
         typeStr = "已删除";
     }
     else if(type=="12"){
-    	typeStr="未审核";
+    	typeStr="推荐未审核";
     }
     else if(type=="13"){
     	typeStr="普通";
@@ -175,7 +177,7 @@ function typeChangeStr(type){
     	typeStr="节目单";
     }
     else if(type="15"){
-    	typeStr="未审核";
+    	typeStr="普通未审核";
     }
     return typeStr;
 }

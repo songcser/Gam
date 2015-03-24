@@ -74,7 +74,9 @@ body{
             }
         });
     }
-	
+	function selectBack(){
+		selectUserSubmit();
+	}
 	</script>
 </body>
 </html>

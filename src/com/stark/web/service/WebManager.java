@@ -24,7 +24,7 @@ public class WebManager {
 	
 	public static void JPush(){
 		JPushClient jpushClient = new JPushClient(masterSecret, appKey, 3);
-		PushPayload payload = test();
+		PushPayload payload = buildPushObject_android_tag_alertWithTitle();
 		 
 		 try {
 	            PushResult result = jpushClient.sendPush(payload);
@@ -59,7 +59,7 @@ public class WebManager {
                                 .addExtra("from", "JPush")
                                 .build())
                         .build())
-                 .setMessage(Message.content(""))
+                 .setMessage(Message.content("hello world"))
                  .setOptions(Options.newBuilder()
                          .setApnsProduction(true)
                          .build())
@@ -88,8 +88,8 @@ public class WebManager {
 	public static PushPayload buildPushObject_android_tag_alertWithTitle() {
         return PushPayload.newBuilder()
                 .setPlatform(Platform.ios())
-                .setAudience(Audience.tag("tag1"))
-                .setNotification(Notification.android(ALERT, "dddd", null))
+                .setAudience(Audience.alias("93"))
+                .setNotification(Notification.ios("hello", null))
                 .build();
     }
 	

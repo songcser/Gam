@@ -186,6 +186,7 @@ public class ActivityController {
 			am.put("showId", act.getActivityId());
 			am.put("showTitle", act.getSubject());
 			am.put("showPic", act.getBannerPicUrl());
+			am.put("showType", act.getType());
 		}
 		
 		return map;

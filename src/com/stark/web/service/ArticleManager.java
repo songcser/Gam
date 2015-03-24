@@ -1135,6 +1135,7 @@ public class ArticleManager implements IArticleManager {
 		int articleId = article.getArticleId();
 		aMap.put("articleId", articleId);
 		aMap.put("type", article.getType());
+		aMap.put("typeStr", ArticleType.getName(article.getType()));
 		aMap.put("userId", user.getUserId());
 		DateFormat df = WebManager.getDateFormat();
 		Date date = article.getDate();
@@ -1172,6 +1173,7 @@ public class ArticleManager implements IArticleManager {
 			aMap.put("praiseStatus",  0);
 		}
 		
+		aMap.put("collectionCount", article.getCollectionCount());
 		aMap.put("praiseCount", article.getPraiseCount());
 		aMap.put("commentCount", article.getCommentCount());
 		

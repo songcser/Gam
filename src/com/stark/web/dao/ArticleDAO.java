@@ -310,6 +310,9 @@ public class ArticleDAO implements IArticleDAO {
 		//System.out.println(sdf.format(aInfo.getDate()));
 		map.put(ArticleInfo.DATE, sdf.format(aInfo.getDate()));
 		
+		int colCount = getCollectionCount(aInfo.getArticleId());
+		map.put(ArticleInfo.COLLECTIONCOUNT, ""+colCount);
+		
 		int pCount = getPraiseCount(aInfo.getArticleId());
 		map.put(ArticleInfo.PRAISECOUNT, ""+pCount);
 		aInfo.setPraiseCount(pCount);
@@ -338,6 +341,14 @@ public class ArticleDAO implements IArticleDAO {
 		return result;
 	}
 	
+	private int getCollectionCount(int articleId) {
+		String sql = "select count(r.UserId) from RelArticleCollection as r where r.ArticleId=?";
+		Query query = sessionFactory.getCurrentSession().createSQLQuery(sql);
+		query.setInteger(0, articleId);
+		String result = query.uniqueResult()+"";
+		return Integer.parseInt(result);
+	}
+
 	@Override
 	public int getCommentCount(int articleId) {
 		String hql = "select count(c.commentId) from CommentInfo as c where c.article.articleId=?";
@@ -608,6 +619,13 @@ public class ArticleDAO implements IArticleDAO {
 				} catch (ParseException e) {
 					e.printStackTrace();
 				}
+				String collectionCount = aMap.get(ArticleInfo.COLLECTIONCOUNT);
+				if(collectionCount!=null&&!collectionCount.equals("")){
+					article.setCollectionCount(Integer.parseInt(collectionCount));
+				}
+				else{
+					article.setCollectionCount(0);
+				}
 				article.setPraiseCount(Integer.parseInt(aMap.get(ArticleInfo.PRAISECOUNT)));
 				article.setCommentCount(Integer.parseInt(aMap.get(ArticleInfo.COMMENTCOUNT)));
 				
@@ -725,6 +743,14 @@ public class ArticleDAO implements IArticleDAO {
 			article.setDate(sdf.parse(aMap.get(ArticleInfo.DATE)));
 		} catch (ParseException e) {
 			e.printStackTrace();
+		}
+		
+		String collectionCount = aMap.get(ArticleInfo.COLLECTIONCOUNT);
+		if(collectionCount!=null&&!collectionCount.equals("")){
+			article.setCollectionCount(Integer.parseInt(collectionCount));
+		}
+		else{
+			article.setCollectionCount(0);
 		}
 		article.setPraiseCount(Integer.parseInt(aMap.get(ArticleInfo.PRAISECOUNT)));
 		article.setCommentCount(Integer.parseInt(aMap.get(ArticleInfo.COMMENTCOUNT)));
