@@ -790,6 +790,7 @@ public class ArticleManager implements IArticleManager {
 			else if(oldType==ArticleType.DayExquisite.getIndex()||oldType==ArticleType.DayExquisiteReport.getIndex()){
 				articleDao.decRedisArticleCount(RedisInfo.ARTICLEEXQUISITECOUNT);
 				articleDao.removeRedisArticleList(RedisInfo.ARTICLEDAYEXQUISITELIST, articleId);
+				articleDao.removeRedisArticleList(RedisInfo.ARTICLERECOMMENDLIST, articleId);
 			}
 			else if(oldType==ArticleType.FashionMagazine.getIndex()||oldType==ArticleType.FashionMagazineReport.getIndex()){
 				articleDao.decRedisArticleCount(RedisInfo.ARTICLEMAGAZINECOUNT);
@@ -932,7 +933,7 @@ public class ArticleManager implements IArticleManager {
 	@Override
 	public Map<String, Object> getArticlePicturesByUserId(int userId, int page,int maxPictureResult) {
 		List<ArticleInfo> articles = getArticleByUserId(userId,page,maxPictureResult);  
-		System.out.println(articles.size());
+		//System.out.println(articles.size());
 		Map<String,Object> map = new HashMap<String,Object>();
 		if(articles==null){
 			map.put("result", 0);

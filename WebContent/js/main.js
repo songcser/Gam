@@ -388,3 +388,18 @@ function followUser(userId){
 function showUser(userId){
 	window.location.href="showUser.do?userId="+userId; 
 }
+
+function deleteArticle(articleId){
+	currentArticle.Id = articleId;
+	var url = "/StarkPet/article/changeArticleType.do?articleId="+articleId+"&type="+11;
+	ajaxRequest(url,deleteResponse);
+}
+
+function deleteResponse(data){
+	if(data.result==1){
+		$("#mediaMainId"+currentArticle.Id).remove();
+	}
+	else{
+		alert("失败了!!!");
+	}
+}
