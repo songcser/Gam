@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -94,21 +95,26 @@ public class ActivityController {
 
 	@RequestMapping("/addActivity.do")
 	public void addActivity(HttpServletRequest request,HttpServletResponse response) throws ParseException, IOException{
-		System.out.println("==> /activity/addActivity?");
 		PrintWriter out = response.getWriter();
 		CommonsMultipartResolver multipartResolver  = new CommonsMultipartResolver(request.getSession().getServletContext());
 		if(multipartResolver.isMultipart(request)){
 			MultipartHttpServletRequest  multiRequest = (MultipartHttpServletRequest)request;
 			
 			ActivityInfo activity = new ActivityInfo();
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			
 			String offDate = multiRequest.getParameter("offlineDate");
 			String subject = multiRequest.getParameter("subject");
 			int type = Integer.parseInt(multiRequest.getParameter("activityType"));
 			
 			activity.setBannerPic("");
 			activity.setContentPic("");
-			activity.setOffDate(sdf.parse(offDate));
+			if(offDate!=null){
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				activity.setOffDate(sdf.parse(offDate));
+			}
+			else {
+				activity.setOffDate(new Date());
+			}
 			activity.setSubject(subject);
 			activity.setType(type);
 			Iterator<String>  iter = multiRequest.getFileNames();
@@ -137,9 +143,9 @@ public class ActivityController {
 						//System.out.println(name);
 					}
 					
-					if(name.equals("bnner")){
+					if(name.equals("cover")){
 						//activity.setBannerPic(fileName);
-						fileName ="bnner"+fileName;
+						fileName ="cover"+fileName;
 						path = FileManager.getActivityPicturePath(activityId,fileName);
 						activityManager.addBannerPic(activityId,fileName+filepix);
 						//System.out.println("Path"+path);

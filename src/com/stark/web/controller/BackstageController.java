@@ -405,4 +405,18 @@ public class BackstageController {
 		request.setAttribute("operations", list);
 		return "user";
 	}
+	
+	@RequestMapping("showManage.do")
+	public String showManage(HttpServletRequest request){
+		if(getLoginUser(request)==null){
+			return "/adminLogin";
+		}
+		List<ActivityInfo> acList = activityManager.getAllShowList();
+		List<ActivityType> types = new ArrayList<ActivityType>();
+		types.add(ActivityType.Join);
+		types.add(ActivityType.NoJoin);
+		request.setAttribute("showList", acList);
+		request.setAttribute("types", types);
+		return "show";
+	}
 }

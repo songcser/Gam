@@ -42,7 +42,7 @@ body {
 	<script src="../js/bootstrap.min.js"></script>
 	<script src="../js/main.js"></script>
 	<script type="text/javascript">
-		var isAuditing = true;
+		var isAuditing = false;
 		var total = document.documentElement.clientHeight - 70;
 		document.getElementById("mainBody").style.height = total + "px";
 
@@ -53,7 +53,7 @@ body {
 		}
 
 		function getAuditedRecommend() {
-			isAuditing = true;
+			isAuditing = false;
 			init();
 		}
 
@@ -90,14 +90,19 @@ body {
 		function response(data) {
 			//alert(data);
 			if (data.result == 1) {
-				$("#mediaMainId" + currentArticle.Id).remove();
+				if(isAuditing){
+					$("#articleType"+currentArticle.Id).html(data.type);
+				}
+				else{
+					$("#mediaMainId" + currentArticle.Id).remove();
+				}
 			} else {
 				alert("失败了!!!");
 			}
 		}
 		
 		function getByDate(){
-			
+			isAuditing = true;
 			var time = Date.parse($("#dateSearchId").val());
 			
 			if(!isNaN(time)){
