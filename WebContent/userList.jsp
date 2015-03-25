@@ -13,11 +13,11 @@
 		<c:if test="${!empty operations }">
 			<c:forEach items="${operations }" var="u">
 				<tr>
-					<td style="text-align: center; vertical-align: middle;width:10%">${u.userId }</td>
+					<td style="text-align: center; vertical-align: middle;width:8%">${u.userId }</td>
 					<td style="text-align: center; vertical-align: middle;width:15%"><a href="javascript:selectUser('${u.userId }','${u.name }','0')"> <img src="${u.getHeadUrl()}"
 							style="height: 50px; width: 50px" class="img-circle " />
 					</a></td>
-					<td style="text-align: center; vertical-align: middle;width:20%">${u.name }</td>
+					<td style="text-align: center; vertical-align: middle;width:22%">${u.name }</td>
 					<c:if test="${u.role==2 }">
 						<td style="text-align: center; vertical-align: middle;width:15%">运营</td>
 					</c:if>

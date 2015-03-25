@@ -69,22 +69,14 @@
 	        $("#addOperationDiv").css({
 	            display : "block"
 	        });
-	        $("#articleListDiv").css({
-	            display : "none"
-	        });
-	        $("#paginationDiv").css({
+	        $("#articlesDiv").css({
 	            display : "none"
 	        });
 
 	        $("#createArticleDiv").css({
 	            display : "none"
 	        });
-	        $("#commentDiv").css({
-	            display : "none"
-	        });
-	        $("#noticeListDiv").css({
-	            display : "none"
-	        });
+	       
 	        editUserId = id;
 	        //$("input[name^='type']").each(function(index, o) {
 	        //  o.checked = false;

@@ -85,7 +85,7 @@ function createMediaDiv(art){
 	
 	var mediaDiv = $('<div id="mediaMainId'+art.articleId+'" class="media bg-white radius" ></div>');
 	var mediaHeader = $('<div class="media-left text-center padding-left"></div>');
-	mediaHeader.append('<a href="#"> <img class="media-object margin-top img-circle" style="height:50px;width:50px" src="'+art.headPic+'" alt="..."> </a>');
+	mediaHeader.append('<a href="javascript:showUser('+art.userId+')"> <img class="media-object margin-top img-circle" style="height:50px;width:50px" src="'+art.headPic+'" alt="..."> </a>');
 	var roleStr = art.userRole;
 	mediaHeader.append('<div class="padding-top center-block"><a href="javascript:followUser('+art.userId+')" ><span class="glyphicon glyphicon-check text-large text-green"></span></a></div>');
 	if(isShowHeader){
@@ -383,4 +383,8 @@ function followUser(userId){
 	selectUserFlag = "follow";
 	setMultiSelect();
 	selectUserList();
+}
+
+function showUser(userId){
+	window.location.href="showUser.do?userId="+userId; 
 }

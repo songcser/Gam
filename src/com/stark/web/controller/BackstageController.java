@@ -3,6 +3,7 @@ package com.stark.web.controller;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -364,10 +365,11 @@ public class BackstageController {
 	
 	@RequestMapping("recommend.do")
 	public String recommend(HttpServletRequest request){
-		List<UserInfo> operators = userManager.getOperatiors();
 		if(getLoginUser(request)==null){
 			return "/adminLogin";
 		}
+		List<UserInfo> operators = userManager.getOperatiors();
+		
 		request.setAttribute("operations", operators);
 		
 		return "recommend";
@@ -389,5 +391,18 @@ public class BackstageController {
 		}
 		
 		return user;
+	}
+	
+	@RequestMapping("showUser.do")
+	public String showUser(int userId,HttpServletRequest request){
+		if(getLoginUser(request)==null){
+			return "/adminLogin";
+		}
+		UserInfo user = userManager.getUser(userId);
+		List<UserInfo> list = new ArrayList<UserInfo>();
+		list.add(user);
+		
+		request.setAttribute("operations", list);
+		return "user";
 	}
 }
