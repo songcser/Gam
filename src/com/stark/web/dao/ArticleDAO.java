@@ -3,13 +3,16 @@ package com.stark.web.dao;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 
 import com.stark.web.define.RedisInfo;
 import com.stark.web.define.EnumBase.ArticleType;
@@ -313,7 +316,6 @@ public class ArticleDAO implements IArticleDAO {
 		int colCount = getCollectionCount(aInfo.getArticleId());
 		map.put(ArticleInfo.COLLECTIONCOUNT, ""+colCount);
 		aInfo.setCollectionCount(colCount);
-		
 		int pCount = getPraiseCount(aInfo.getArticleId());
 		map.put(ArticleInfo.PRAISECOUNT, ""+pCount);
 		aInfo.setPraiseCount(pCount);
@@ -440,17 +442,30 @@ public class ArticleDAO implements IArticleDAO {
 
 	@Override
 	public List<ArticleInfo> getArticlesByDate(String startDate, String endDate, int start, int maxResults) {
-		String hql = "from ArticleInfo as a where a.date>? and a.date<? order by a.date desc";
-		//String sql = "select a.* from ArticleInfo as a where a.Date>? and a.Date<?";
-		//System.out.println(startDate);
-		//System.out.println(endDate);
-		Query query = sessionFactory.getCurrentSession().createQuery(hql);
-		query.setString(0, startDate);
-		query.setString(1, endDate);
-		query.setFirstResult(start);
-		query.setMaxResults(maxResults);
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Criteria  criteria = sessionFactory.getCurrentSession().createCriteria(ArticleInfo.class);
+		try {
+			criteria.add(Restrictions.ge("date",sdf.parse(startDate)))
+				.add(Restrictions.le("date",sdf.parse(endDate)))
+				.setFirstResult(start)
+				.setMaxResults(maxResults);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+//		String hql = "from ArticleInfo as a where a.date>:startDate and a.date<:endDate order by a.date desc";
+//		//String sql = "select a.* from ArticleInfo as a where a.Date>? and a.Date<?";
+//		System.out.println(startDate);
+//		System.out.println(endDate);
+//		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+//		query.setString("startDate", "'"+startDate+"'");
+//		query.setString("endDate", "'"+endDate+"'");
+//		query.setFirstResult(start);
+//		query.setMaxResults(maxResults);
 		
-		return query.list();
+		//return query.list();
+		
+		return criteria.list();
 		
 	}
 

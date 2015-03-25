@@ -1358,26 +1358,26 @@ public class ArticleController {
 		String endDate = date+" 23:59:59";
 		List<ArticleInfo> articleInfos = new ArrayList<ArticleInfo>();
 		if(type==100){
-			articleInfos = articleManager.getArticlesByDate(startDate,endDate, page, maxResults);
+			articleInfos = articleManager.getArticlesByDate(startDate,endDate, page, maxResults2);
 		}else {
-			articleInfos = articleManager.getArticlesByDate(startDate, endDate,type, page, maxResults);
+			articleInfos = articleManager.getArticlesByDate(startDate, endDate,type, page, maxResults2);
 		}
-		
+		//System.out.println(articleInfos.size());
 		if(articleInfos==null){
 			map.put("result", 0);
 			return map;
 		}
 
-		if(userId>0){
-			List<Map<String, Object>> list = articlesToList(userId, articleInfos);
+		//if(userId>0){
+		map = articleManager.articlesToMap(articleInfos,userId);
 			//System.out.println(list.size());
-			map.put("result", 1);
-			map.put("articles", list);
+			//map.put("result", 1);
+			//map.put("articles", list);
 			//System.out.println("userId:"+userId);
-		}
-		else {
-			map.put("result", 0);
-		}
+		//}
+		//else {
+		//	map.put("result", 0);
+		//}
 		return map;
 	}
 

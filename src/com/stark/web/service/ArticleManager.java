@@ -698,7 +698,8 @@ public class ArticleManager implements IArticleManager {
 	@Override
 	public List<ArticleInfo> getArticlesByDate(String startDate, String endDate, int page, int maxResults) {
 		String date = startDate.substring(0,10);
-		List<String> ids = articleDao.getRedisArticleIds(RedisInfo.ARTICLEDATELIST+date, page, maxResults);
+		String key = RedisInfo.ARTICLEDATELIST+date;
+		List<String> ids = articleDao.getRedisArticleIds(key, page, maxResults);
 		List<ArticleInfo> list = new ArrayList<ArticleInfo>();
 		int size=0;
 		if(ids!=null&&!ids.isEmpty()){
@@ -713,15 +714,16 @@ public class ArticleManager implements IArticleManager {
 				return list;
 		}
 		List<ArticleInfo> tlist = articleDao.getArticlesByDate(startDate, endDate,page*maxResults+size, maxResults-size);
+		System.out.println(tlist.size());
 		if(tlist!=null&&!tlist.isEmpty()){
 			for(int i=0;i<tlist.size();i++){
 				ArticleInfo article = tlist.get(i);
 				articleDao.addRedisArticle(article);
 				//setArticleCount(article);
 				list.add(article);
-				long len = articleDao.addRedisArticleIdR(RedisInfo.ARTICLEDATELIST+date, article.getArticleId());
+				long len = articleDao.addRedisArticleIdR(key, article.getArticleId());
 				if(len == 1){
-					articleDao.setKeyExpire(RedisInfo.ARTICLEDATELIST+date,60*60*24*10);
+					articleDao.setKeyExpire(key,60*60*24*10);
 				}
 			}
 		}
@@ -731,6 +733,7 @@ public class ArticleManager implements IArticleManager {
 	@Override
 	public List<ArticleInfo> getArticlesByDate(String startDate, String endDate, int type, int page, int maxResults) {
 		String date = startDate.substring(0,10);
+		List<Integer> types = getTypeList(type);
 		List<String> ids = articleDao.getRedisArticleIds(RedisInfo.ARTICLEDATELIST+date, page, maxResults);
 		List<ArticleInfo> list = new ArrayList<ArticleInfo>();
 		int size=0;
@@ -738,8 +741,13 @@ public class ArticleManager implements IArticleManager {
 			size = ids.size();
 			for(String id:ids){
 				ArticleInfo article = getArticle(Integer.parseInt(id));
-				if(article!=null&&article.getType()==type){
-					list.add(article);
+				if(article!=null){
+					int atype = article.getType();
+					for(int t:types){
+						if(t==atype){
+							list.add(article);
+						}
+					}
 				}
 			}
 			if(size==maxResults)
@@ -751,8 +759,13 @@ public class ArticleManager implements IArticleManager {
 				ArticleInfo article = tlist.get(i);
 				//setArticleCount(article);
 				articleDao.addRedisArticle(article);
-				if(article!=null&&article.getType()==type){
-					list.add(article);
+				if(article!=null){
+					int atype = article.getType();
+					for(int t:types){
+						if(t==atype){
+							list.add(article);
+						}
+					}
 				}
 				long len = articleDao.addRedisArticleIdR(RedisInfo.ARTICLEDATELIST+date, article.getArticleId());
 				if(len == 1){
@@ -768,6 +781,21 @@ public class ArticleManager implements IArticleManager {
 		return list;
 	}
 	
+	private List<Integer> getTypeList(int type) {
+		List<Integer> types = new ArrayList<Integer>();
+		types.add(type);
+		if(type==ArticleType.DayExquisite.getIndex()){
+			types.add(ArticleType.ExquisiteMagazine.getIndex());
+			types.add(ArticleType.DayExquisiteReport.getIndex());
+			types.add(ArticleType.ExquisiteMagazineReport.getIndex());
+			types.add(ArticleType.ExquisiteNoAuditing.getIndex());
+			types.add(ArticleType.CommonExquisite.getIndex());
+			types.add(ArticleType.ActivityExquisite.getIndex());
+		}
+		
+		return types;
+	}
+
 	@Override
 	public int getPraiseCount(int articleId) {
 		return articleDao.getPraiseCount(articleId);
@@ -821,6 +849,7 @@ public class ArticleManager implements IArticleManager {
 			else if(type==ArticleType.DayExquisite.getIndex()||type==ArticleType.DayExquisiteReport.getIndex()){
 				articleDao.addRedisArticleCount(RedisInfo.ARTICLEEXQUISITECOUNT);
 				articleDao.addRedisExquisitesList(articleId);
+				articleDao.addRedisArticleId(RedisInfo.ARTICLERECOMMENDLIST, articleId);
 			}
 			else if(type==ArticleType.FashionMagazine.getIndex()||type==ArticleType.FashionMagazineReport.getIndex()){
 				articleDao.addRedisArticleCount(RedisInfo.ARTICLEMAGAZINECOUNT);
@@ -1173,13 +1202,16 @@ public class ArticleManager implements IArticleManager {
 			aMap.put("showType", 0);
 		}
 		
-		
 		if(userId>0){
 			boolean flag = articleDao.isCollection(userId,articleId);
 			aMap.put("collection", flag?1:0);
 			flag = false;
 			flag = isPraise(userId, articleId);
 			aMap.put("praiseStatus", flag ? 1 : 0);
+			
+			flag = false;
+			flag = userManager.isFollow(userId, user.getUserId());
+			aMap.put("followStatus", flag ? 1 : 0);
 		}
 		else{
 			aMap.put("collection", 0);

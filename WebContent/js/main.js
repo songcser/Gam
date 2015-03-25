@@ -32,6 +32,13 @@ function showArticleList(url,page){
 		type : "post",
 		//data:"userId="+id+"",
 		success : function(result) {
+			if(result.result==0){
+				$("#articleListDiv")[0].innerHTML = "";
+				$("#paginationDiv").css({
+                    display : "none"
+                });
+				return;
+			}
 			var list = result.articles;
 			if (list.length < 1) {
 				$("#articleListDiv")[0].innerHTML = "";
@@ -93,11 +100,16 @@ function createMediaDiv(art){
 	}
 	
 	var mediaBody = $('<div class="media-body padding-left padding-top"></div>');
-	mediaBody.append('<h4 class="media-heading"><strong>'+ art.name+'</strong><small> ('+roleStr+')</small></h4>');
+	if(roleStr=="普通用户"||roleStr=="运营"){
+		mediaBody.append('<h4 class="media-heading"><strong>'+ art.name+'</strong><small> ('+roleStr+') <a href="#"><span class="glyphicon glyphicon-tag"></span></a></small></h4>');
+	}
+	else{
+		mediaBody.append('<h4 class="media-heading"><strong>'+ art.name+'</strong><small> ('+roleStr+')</small></h4>');
+	}
 	var title = art.title;
 	
 	if(title!=""){
-		mediaBody.append('<a href="#"><p class="text-big text-muted">'+title+'</p></a>');
+		mediaBody.append('<a href="#"><p class="text-big text-muted">标题: '+title+'</p></a>');
 	}
 	mediaBody.append('<p>'+art.content+'</p>');
 	mediaDiv.append(mediaBody);
@@ -125,7 +137,7 @@ function createMediaDiv(art){
      //var typeStr = typeChangeStr(type);
 	 var typeStr = art.typeStr;
 	
-	mediaOper.append('<div class="btn-group" role="button"><a href="javascript:changeArticleType('+art.articleId+')" class="btn btn-default" id="articleType'+art.articleId+'">'+typeStr+' </a></div>');
+	mediaOper.append('<div class="btn-group" role="button"><a href="javascript:changeArticleType('+art.articleId+','+art.type+')" class="btn btn-default" id="articleType'+art.articleId+'">'+typeStr+' </a></div>');
 	mediaOper.append('<div class="btn-group" role="button"><a href="javascript:deleteArticle('+art.articleId+')" class="btn btn-default">删除 </a></div>');
 	mediaDiv.append(mediaOper);
 	
@@ -342,9 +354,10 @@ function selectUserSubmit(){
 	
 }
 
-function changeArticleType(articleId){
-	if(isAuditing)
+function changeArticleType(articleId,type){
+	if(type==2){
 		return;
+	}
 	currentArticle.Id = articleId;
 	showAuditingDialog("精选推文通过审核");
 }

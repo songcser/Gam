@@ -563,7 +563,7 @@ public class EnumBase {
 	}
 
 	public enum UserRole {
-		Normal("普通", 0), 
+		Normal("普通用户", 0), 
 		Admin("管理员", 1), 
 		//mustFollow("必须关注", 2),
 		Operatior("运营", 2),
