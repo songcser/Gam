@@ -1,6 +1,7 @@
 package com.stark.web.dao;
 
 import java.util.List;
+import java.util.Set;
 
 import com.stark.web.define.EnumBase.ActivityStatus;
 import com.stark.web.entity.ActivityInfo;
@@ -52,4 +53,10 @@ public interface IActivityDAO {
 	public void removeRedisTopList(int activityId);
 
 	public List<ActivityInfo> getActivityByType(List<Integer> types);
+
+	public Set<String> getRedisActivityZSet(String key);
+
+	public void addRedisActivityZSet(String key, int activityId);
+
+	public void addRedisActivityZSet(String key, int order, int activityId);
 }

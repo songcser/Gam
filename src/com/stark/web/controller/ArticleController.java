@@ -499,20 +499,21 @@ public class ArticleController {
 	@ResponseBody
 	public Map<String, Object> getAllListByActivityId(int activityId, int userId, int page) {
 		System.out.println("==> /article/getAllListByActivityId.do?activityId=" + activityId + "&userId="+userId+"&page=" + page);
-		List<ArticleInfo> articleInfos = articleManager.getAllListByActivityId(activityId, page, maxResults);
+		List<ArticleInfo> articleInfos = articleManager.getAllListByActivityId(activityId, page, maxResults2);
 		Map<String, Object> map = new HashMap<String, Object>();
 		if(articleInfos==null){
 			map.put("result", 0);
 			return map;
 		}
-		map.put("result", 1);
+		//map.put("result", 1);
+		
+		map = articleManager.articlesToMap( articleInfos,userId);
 		if (page == 0) {
 			ActivityInfo act = activityManager.getActivity(activityId);
 			map.put("activityPic", act.getContentPicUrl());
 		}
-		List<Map<String, Object>> list = articlesToList(userId, articleInfos);
 		//System.out.println(list.size());
-		map.put("articles", list);
+		//map.put("articles", list);
 		return map;
 	}
 
@@ -984,14 +985,6 @@ public class ArticleController {
 				if(activityId!=null){
 					article.setActivity(new ActivityInfo(Integer.parseInt(activityId)));
 					//article.setType(ArticleType.NoAuditingActivity.getIndex());
-				}else{
-					
-					//if(articleType!=null){
-					//	article.setType(Integer.parseInt(articleType));
-					//}
-					//else {
-					//	article.setType(EnumBase.ArticleType.Publish.getIndex());
-					//}
 				}
 				
 				UserInfo user = userManager.getUser(userId);
@@ -1017,6 +1010,7 @@ public class ArticleController {
 					out.close();
 					return ;
 				}
+				
 				addFansArticleZSet(userId);
 				Iterator<String> iter = multiRequest.getFileNames();
 				int i=0;

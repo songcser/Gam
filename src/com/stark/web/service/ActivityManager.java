@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.stark.web.dao.ActivityDAO;
 import com.stark.web.dao.IActivityDAO;
@@ -32,6 +33,7 @@ public class ActivityManager implements IActivityManager{
 			else if(activity.getType()==ActivityType.TopRecommend.getIndex()){
 				activityDao.addRedisTopList(activity.getActivityId());
 			}
+			activityDao.addRedisActivityZSet(RedisInfo.ACTIVITYORDERZSET,activity.getOrder(),activity.getActivityId());
 		}
 		return activityId;
 	}
@@ -144,10 +146,26 @@ public class ActivityManager implements IActivityManager{
 
 	@Override
 	public List<ActivityInfo> getAllShowList() {
+		String key = RedisInfo.ACTIVITYORDERZSET;
+		Set<String> acIds = activityDao.getRedisActivityZSet(key);
+		List<ActivityInfo> acList = new ArrayList<ActivityInfo>();
+		if(acIds!=null&&!acIds.isEmpty()){
+			for(String id:acIds){
+				ActivityInfo ac = getActivity(Integer.parseInt(id));
+				acList.add(ac);
+			}
+			return acList;
+		}
+		
 		List<Integer> types = new ArrayList<Integer>();
 		types.add(ActivityType.Join.getIndex());
 		types.add(ActivityType.NoJoin.getIndex());
 		List<ActivityInfo> list = activityDao.getActivityByType(types);
+		if(list!=null){
+			for(ActivityInfo ac:list){
+				activityDao.addRedisActivityZSet(key,ac.getOrder(),ac.getActivityId());
+			}
+		}
 		return list;
 	}
 	

@@ -596,10 +596,10 @@ public class ArticleDAO implements IArticleDAO {
 
 	@Override
 	public List<ArticleInfo> getAllListByActivityId(int activityId, int start, int maxResults) {
-		String hql = "select a from ArticleInfo as a  where a.activity.activityId = ? order by a.date desc";
+		String hql = "select a from ArticleInfo as a  where a.activity.activityId = ? and a.type!=? order by a.date desc";
 		Query query = sessionFactory.getCurrentSession().createQuery(hql);
 		query.setInteger(0, activityId);
-		query.setInteger(0, ArticleType.Delete.getIndex());
+		query.setInteger(1, ArticleType.Delete.getIndex());
 		query.setFirstResult(start);
 		query.setMaxResults(maxResults);
 		return query.list();
@@ -1114,7 +1114,7 @@ public class ArticleDAO implements IArticleDAO {
 
 	@Override
 	public List<ArticleInfo> getListByShowId(int showId, int start, int maxResults) {
-		String hql = "select a from ArticleInfo as a join a.activities as act where act.activityId =: showId";
+		String hql = "select a from ArticleInfo as a join a.activities as act where act.activityId =:showId";
 		
 		Query query = sessionFactory.getCurrentSession().createQuery(hql);
 		query.setInteger("showId", showId);
@@ -1137,7 +1137,7 @@ public class ArticleDAO implements IArticleDAO {
 
 	@Override
 	public boolean browseArticle(int articleId) {
-		String hql = "update ArticleInfo as a set a.browseCount = a.browseCount+1 where a.articleId =: articleId";
+		String hql = "update ArticleInfo as a set a.browseCount = a.browseCount+1 where a.articleId=:articleId";
 		Query query = sessionFactory.getCurrentSession().createQuery(hql);
 		query.setInteger("articleId", articleId);
 		
@@ -1239,5 +1239,15 @@ public class ArticleDAO implements IArticleDAO {
 		if(redisDao==null)
 			return 0;
 		return redisDao.hincrby(ArticleInfo.getKey(articleId), ArticleInfo.COLLECTIONCOUNT, 1);
+	}
+
+	@Override
+	public boolean addActivityArticleId(int activityId, int articleid) {
+		String sql = "insert into RelActivityArticle(ActivityId,ArticleId) values(?,?)";
+		Query query = sessionFactory.getCurrentSession().createSQLQuery(sql);
+		query.setInteger(0, activityId);
+		query.setInteger(1, articleid);
+		
+		return query.executeUpdate()>0;
 	}
 }

@@ -229,4 +229,6 @@ public interface IArticleDAO {
 
 	public long addRedisCollectionCount(int articleId);
 
+	public boolean addActivityArticleId(int activityId, int id);
+
 }

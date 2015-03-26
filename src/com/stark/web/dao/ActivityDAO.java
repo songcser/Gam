@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
@@ -305,6 +306,21 @@ public class ActivityDAO implements IActivityDAO{
 			query.setInteger(i, type);
 		}
 		return query.list();
+	}
+
+	@Override
+	public Set<String> getRedisActivityZSet(String key) {
+		return redisDao.zrange(key, 0, -1);
+	}
+
+	@Override
+	public void addRedisActivityZSet(String key, int activityId) {
+		redisDao.zadd(key, activityId, activityId+"");
+	}
+
+	@Override
+	public void addRedisActivityZSet(String key, int order, int activityId) {
+		redisDao.zadd(key, order, activityId+"");
 	}
 
 }

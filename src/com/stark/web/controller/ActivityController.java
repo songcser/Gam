@@ -106,6 +106,11 @@ public class ActivityController {
 			String subject = multiRequest.getParameter("subject");
 			int type = Integer.parseInt(multiRequest.getParameter("activityType"));
 			
+			String order = multiRequest.getParameter("order");
+			if(order!=null){
+				activity.setOrder(Integer.parseInt(order));
+			}
+			
 			activity.setBannerPic("");
 			activity.setContentPic("");
 			if(offDate!=null){

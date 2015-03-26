@@ -48,6 +48,7 @@ public class RedisInfo {
 	public static final String ACTIVITYARTICLEALLLIST = "Activity:Article:All:List:";				//活动所有推文列表
 	public static final String ACTIVITYARTICLEAUDITINGLIST = "Activity:Article:Auditing:List:"; 	//活动中审核通过的推文列表
 	public static final String ACTIVITYALLLIST = "Activity:All:List";								//所有活动列表
+	public static final String ACTIVITYORDERZSET = "Activity:Order:ZSet";								//节目有序集
 	
 	public static final String CHARTLETALLLIST = "Chartlet:All:List";								//贴图列表
 	public static final String CHARTLETPICTURELIST = "Chartlet:Picture:List:";					//贴图图片列表

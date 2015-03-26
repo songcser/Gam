@@ -337,6 +337,8 @@ public class BackstageController {
 		}
 		request.setAttribute("webIcon", FileManager.getWebIcon());
 		List<UserInfo> operators = userManager.getOperatiors();
+		List<ActivityInfo> acList = activityManager.getAllShowList();
+		request.setAttribute("showList", acList);
 		request.setAttribute("operations", operators);
 		return "publish";
 	}

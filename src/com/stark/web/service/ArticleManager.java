@@ -73,6 +73,11 @@ public class ArticleManager implements IArticleManager {
 		if (id > 0) {
 			aInfo.setArticleId(id);
 			aInfo.setBrowseCount(0);
+			
+			if(aInfo.getActivity()!=null){
+				articleDao.addActivityArticleId(aInfo.getActivity().getActivityId(),id);
+			}
+			
 			articleDao.addRedisArticle(aInfo);
 			articleDao.addRedisUserArticleList(aInfo.getUser().getUserId(),aInfo.getArticleId());
 			articleDao.addRedisUpdateList(id);
@@ -124,11 +129,12 @@ public class ArticleManager implements IArticleManager {
 			}
 			else if(type == ArticleType.NoAuditingActivity.getIndex()){
 				articleDao.addRedisArticleCount(RedisInfo.ARTICLENOAUDITINGCOUNT);
-				articleDao.addRedisActivityAllList(aInfo.getActivity().getActivityId(),aInfo.getArticleId());
+				articleDao.addRedisActivityAllList(aInfo.getActivity().getActivityId(),id);
+				
 			}
 			else if(type == ArticleType.Activity.getIndex()){
 				articleDao.addRedisArticleCount(RedisInfo.ARTICLEACTIVITYCOUNT);
-				articleDao.addRedisActivityAllList(aInfo.getActivity().getActivityId(),aInfo.getArticleId());
+				articleDao.addRedisActivityAllList(aInfo.getActivity().getActivityId(),id);
 				articleDao.addRedisActivityAuditingList(aInfo.getActivity().getActivityId(),aInfo.getArticleId());
 			}
 			else if(type == ArticleType.Delete.getIndex()){
