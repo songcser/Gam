@@ -1240,14 +1240,15 @@ public class ArticleManager implements IArticleManager {
 	@Override
 	public Map<String, Object> getShowArticleList(int showId, int userId, int page, int maxResults) {
 		List<ArticleInfo> articles = new ArrayList<ArticleInfo>();
-		List<String> ids = articleDao.getRedisArticleIds(RedisInfo.ACTIVITYARTICLEALLLIST+showId, page, maxResults);
+		String key = RedisInfo.ACTIVITYARTICLEALLLIST+showId;
+		List<String> ids = articleDao.getRedisArticleIds(key, page, maxResults);
 		int size = idsToArticleList(ids,articles);
 		if(size==maxResults)
 			return articlesToMap(articles,userId);
 		
 		List<ArticleInfo> alist = articleDao.getListByShowId(showId,page*maxResults+size,maxResults-size);
 		
-		listToListAndAddRedisId(RedisInfo.ARTICLECOMMENTLIST,alist,articles);
+		listToListAndAddRedisId(key,alist,articles);
 		
 		return articlesToMap(articles,userId);
 	}

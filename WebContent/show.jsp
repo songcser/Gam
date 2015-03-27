@@ -24,8 +24,9 @@ body {
 						<c:forEach items="${showList }" var="o">
 							<div class="border bg-red-light radius media padding-top" style="overflow: auto">
 								<div class="media-left padding-small">
-									<a style="width: 400px; height: 250px" href="javascript:showArticles(${o.activityId })" class="thumbnail"> <img class="media-object" style="width: 100%; height: 100%"
-										src="${o.getBannerPicUrl() }" alt=""></a>
+									<a style="width: 400px; height: 250px" href="javascript:showArticles(${o.activityId })" class="thumbnail"> 
+									<img class="media-object" style="width: 100%; height: 100%" src="${o.getBannerPicUrl() }" alt="" id="activityBannerPic${o.activityId }">
+									</a>
 								</div>
 								<div class="media-body padding-top">
 									<button style="width: 170px; height: 30px; margin-left: -15px; display: block" class="bg-green radius-rounded margin-bottom ">${o.subject }</button>
@@ -35,30 +36,41 @@ body {
 									<c:if test="${o.type==3 }">
 										<button style="width: 140px; height: 30px; margin-left: -15px; display: block" class="bg-green radius-rounded margin-bottom ">不可参加</button>
 									</c:if>
-									<button style="width: 110px; height: 30px; margin-left: -15px; display: block" class="bg-green radius-rounded margin-bottom ">${o.order }</button>
-									<button style="width: 70px; height: 30px; margin-left: -15px; display: block" class="bg-green radius-rounded margin-bottom ">
+									<button style="width: 110px; height: 30px; margin-left: -15px; display: block" class="bg-green radius-rounded margin-bottom ">序号: ${o.order }</button>
+									<button style="width: 80px; height: 30px; margin-left: -15px; display: block" class="bg-green radius-rounded margin-bottom" onclick="uploadBannerPic(${o.activityId })">
 										<span class="padding-small-left glyphicon glyphicon-picture"></span>
 									</button>
-									<button style="width: 50px; height: 30px; margin-left: -15px" class="bg-green radius-rounded margin-bottom ">
-										<span class="padding-small-left glyphicon glyphicon-trash"></span>
+									<button style="width: 60px; height: 30px; margin-left: -15px; display: block" class="bg-green radius-rounded margin-bottom ">
+										<span class="padding-small-left glyphicon glyphicon-eye-close"></span>
 									</button>
+									<button style="width: 50px; height: 30px; margin-left: -15px; display: block" class="bg-green radius-rounded margin-bottom ">
+                                        <span class="padding-small-left glyphicon glyphicon-trash"></span>
+                                    </button>
 								</div>
 							</div>
 						</c:forEach>
 					</c:if>
 				</div>
 			</div>
-			<div class="col-lg-7">
+			<div class="col-lg-7"  style="height: 100%;">
 				<div id="createShowId" style="width: 85%;  overflow: auto;"  class="center-block ">
 					<%@ include file="createShow.jsp"%>
 				</div>
-				<div style="width: 85%; height: 95%; overflow: auto;" id="articleList" class="center-block ">
-					<div id="articleListDiv"></div>
+				<div style="width: 85%; height: 100%; overflow: auto;display:none;" id="articleList" class="center-block ">
+				    <div class="radius " >
+				        <a href="javascript:uploadContentPic()" style="height:250px;"  class="thumbnail"><img style="height:100%;" id="ActivityContentPicId" alt="" src=""></a>
+				    </div>
+					<div id="articleListDiv" class="padding-top"></div>
 					<div id="paginationDiv"></div>
 				</div>
 			</div>
 		</div>
 	</div>
+	<form id='formFileUpload' name='formFile' method="post" action="../activity/uploadPicture.do" target='frameFile' enctype="multipart/form-data">
+        <input size="100" type="file" name="file" id="uploadFileId" style="display:none" onchange="addFile(this)"/>
+        <input type="hidden" name="activityType"  id="activityFormType">
+        <input type="hidden" name="activityId" id="activityId">
+   </form>
 	<script src="../js/jquery-1.11.2.min.js"></script>
 	<script src="../js/bootstrap.min.js"></script>
     <script src="../js/main.js"></script>
@@ -78,17 +90,81 @@ body {
 
 		}
 		function showArticles(activityId) {
+			selectActivityId = activityId;
 			$("#createShowId").css({
                 display : "none"
             });
 			
-			$("#articlesDiv").css({
+			$("#articleList").css({
 				display : "block"
 			});
 			var url = "/StarkPet/article/getShowArticleList2.0.do?showId=" + activityId + "&userId=0&";
 			showArticleList(url, 0);
 			isShowHeader = true;
 		}
+		
+		function createShow(){
+			$("#createShowId").css({
+                display : "block"
+            });
+			$("#articleList").css({
+                display : "none"
+            });
+		}
+		var type = 0;
+	    var selectActivityId = 0;
+	    function uploadBannerPic(id){
+	        type=0;
+	        selectActivityId=id;
+	        $("#activityId").val(id);
+	        $("#activityFormType").val("banner");
+	        $("#uploadFileId").click();
+	    }
+	    
+	    function uploadContentPic(){
+	        type=1;
+	        //activityId=selectActivityId;
+	        $("#activityId").val(selectActivityId);
+	        $("#activityFormType").val("content");
+	        $("#uploadFileId").click();
+	    }
+	    
+	    var flagCount = 0;
+	    function addFile(file) {
+	        
+	        if (file.files && file.files[0]) {
+	            var img ;
+	            if(type==0){
+	                img =  $("#activityBannerPic"+selectActivityId)[0];
+	            }
+	            else {
+	                img = $("#ActivityContentPicId")[0];
+	            }
+	            img.onload = function() {
+	                var w = img.width;
+	                var h = img.height;
+	                var fileSize = file.files[0].size;
+	                if(flagCount==0){
+	                    file.name+="?"+img.naturalWidth+"&"+img.naturalHeight;
+	                    document.getElementById("formFileUpload").submit();
+	                }
+	                else {
+	                    flagCount=0;
+	                }
+	                flagCount++;
+	                
+	            }
+	            var reader = new FileReader();
+	            reader.onload = function(evt) {
+	                img.src = evt.target.result;
+	            }
+	            reader.readAsDataURL(file.files[0]);
+	            
+	        }
+	    }
+	    function callbackUpload(str){
+	        $("#formFileUpload").reset();
+	    }
 	</script>
 </body>
 </html>

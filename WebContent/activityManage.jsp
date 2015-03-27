@@ -308,7 +308,6 @@
         }
 		$("#articleId").val(articleId);
         $("#dialogBtn").click();
-       
 	}
 	function okDialog(){
 		var articleId=$("#articleId").val();
@@ -421,11 +420,6 @@
 	
 	var flagCount = 0;
 	function addFile(file) {
-		//var img = new Image();
-		
-		//var file = $("#uploadFileId");
-		//img.src = objImg[0].getAsDataUrl();
-		
 		if (file.files && file.files[0]) {
 			var img ;
 			if(type==0){

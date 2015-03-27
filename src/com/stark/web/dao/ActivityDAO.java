@@ -154,6 +154,7 @@ public class ActivityDAO implements IActivityDAO{
 		SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMddHHmmss");
 		map.put(ActivityInfo.OFFDATE, sdf.format(activity.getOffDate()));
 		map.put(ActivityInfo.TYPE,activity.getType()+"");
+		map.put(ActivityInfo.ORDER, activity.getOrder()+"");
 		
 		redisDao.hmset(activity.getKey(), map);
 	}
@@ -184,6 +185,11 @@ public class ActivityDAO implements IActivityDAO{
 		ac.setSubject(acMap.get(ActivityInfo.SUBJECT));
 		ac.setBannerPic(acMap.get(ActivityInfo.BANNERPIC));
 		ac.setContentPic(acMap.get(ActivityInfo.CONTENTPIC));
+		String order = acMap.get(ActivityInfo.ORDER);
+		if(order!=null&&!order.equals("")){
+			ac.setOrder(Integer.parseInt(order));
+		}
+		
 		SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMddHHmmss");
 		try {
 			ac.setOffDate(sdf.parse(acMap.get(ActivityInfo.OFFDATE)));
@@ -222,7 +228,10 @@ public class ActivityDAO implements IActivityDAO{
 				ac.setSubject(acMap.get(ActivityInfo.SUBJECT));
 				ac.setBannerPic(acMap.get(ActivityInfo.BANNERPIC));
 				ac.setContentPic(acMap.get(ActivityInfo.CONTENTPIC));
-				
+				String order = acMap.get(ActivityInfo.ORDER);
+				if(order!=null&&!order.equals("")){
+					ac.setOrder(Integer.parseInt(order));
+				}
 				try {
 					Date date =sdf.parse(acMap.get(ActivityInfo.OFFDATE));
 					

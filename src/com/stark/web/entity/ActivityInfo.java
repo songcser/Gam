@@ -18,6 +18,8 @@ public class ActivityInfo {
 	public static String CONTENTPIC = "ContentPic";
 	public static String OFFDATE = "OffDate";
 	public static String TYPE = "Type";
+	public static String ORDER = "Order";
+	
 	
 	private int activityId;
 	private String subject;

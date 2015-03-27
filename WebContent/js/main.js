@@ -39,6 +39,12 @@ function showArticleList(url,page){
                 });
 				return;
 			}
+			
+			var activityPic = result.activityPic;
+			if(activityPic){
+				$("#ActivityContentPicId").attr("src",activityPic);
+			}
+			
 			var list = result.articles;
 			if (list.length < 1) {
 				$("#articleListDiv")[0].innerHTML = "";
@@ -47,7 +53,6 @@ function showArticleList(url,page){
                 });
 				return;
 			}
-			var articles = "";
 			$("#articleListDiv")[0].innerHTML = "";
 			for (var i = 0; i < list.length; i++) {
 				var art = list[i];

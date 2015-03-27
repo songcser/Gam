@@ -213,19 +213,16 @@ public class ActivityController {
 			MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
 			// System.out.println(user);
 			Iterator<String> iter = multiRequest.getFileNames();
-			// String name = (String)multiRequest.getAttribute("name");
-			//String name = multiRequest.getParameter("name");
 			//int userId = Integer.parseInt(multiRequest.getParameter("userId"));
 			int activityId = Integer.parseInt(multiRequest.getParameter("activityId"));
 			String activityType = multiRequest.getParameter("activityType");
-			//userManager.updateUserName(userId, name);
-			// System.out.println(name);
 			while (iter.hasNext()) {
 				MultipartFile file = multiRequest.getFile((String) iter.next());
 				if (file != null) {
 					String fileName = file.getOriginalFilename();
 					String name = file.getName();
 					System.out.println(name);
+					System.out.println(fileName);
 					if (fileName.equals("")||"".equals(name))
 						continue;
 					// System.out.println("File Name:"+file.getOriginalFilename());
@@ -235,19 +232,17 @@ public class ActivityController {
 						filepix = name.substring(index);
 					}
 					String path = FileManager.getActivityPicturePath(activityId, fileName);
-					
+					System.out.println(path);
 					try {
 					FileManager.upload(path, file);
+					System.out.println(activityType);
 					if("banner".equals(activityType)){
 						activityManager.addBannerPic(activityId, fileName+filepix);
-						//activityManager.uploadBannerPic(activityId,fileName);
 					}
 					else if("content".equals(activityType)){
 						activityManager.addContentPic(activityId, fileName+filepix);
 					}
-					//userManager.addUserHeadPic(userId, fileName);
 					picUrl = FileManager.getActivityPictureUrl(activityId, fileName+filepix);
-					//headUrl = FileManager.getUserPictureUrl(userId, fileName);
 					} catch (IllegalStateException e) {
 						e.printStackTrace();
 					}
