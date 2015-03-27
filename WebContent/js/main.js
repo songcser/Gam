@@ -114,7 +114,7 @@ function createMediaDiv(art){
 	var title = art.title;
 	
 	if(title!=""){
-		mediaBody.append('<a href="#"><p class="text-big text-muted">标题: '+title+'</p></a>');
+		mediaBody.append('<p ><a href="#" class="text-big text-muted">标题: '+title+'</a></p>');
 	}
 	mediaBody.append('<p>'+art.content+'</p>');
 	mediaDiv.append(mediaBody);
@@ -141,6 +141,9 @@ function createMediaDiv(art){
 	 var type=art.type;
      //var typeStr = typeChangeStr(type);
 	 var typeStr = art.typeStr;
+	 if(type==14){
+		 typeStr = "节目单: "+art.showTitle;
+	 }
 	
 	mediaOper.append('<div class="btn-group" role="button"><a href="javascript:changeArticleType('+art.articleId+','+art.type+')" class="btn btn-default" id="articleType'+art.articleId+'">'+typeStr+' </a></div>');
 	mediaOper.append('<div class="btn-group" role="button"><a href="javascript:deleteArticle('+art.articleId+')" class="btn btn-default">删除 </a></div>');
@@ -364,7 +367,16 @@ function changeArticleType(articleId,type){
 		return;
 	}
 	currentArticle.Id = articleId;
-	showAuditingDialog("精选推文通过审核");
+	
+	if(type==12){
+		showAuditingDialog("精选推文通过审核",type);
+	}
+	if(type==9){
+		showAuditingDialog("节目单推文通过审核",type);
+	}
+	if(type==10){
+		showAuditingDialog("将推文选入推荐",type);
+	}
 }
 
 function ajaxRequest(url,handle){

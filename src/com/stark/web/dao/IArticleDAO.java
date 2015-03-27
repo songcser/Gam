@@ -203,7 +203,7 @@ public interface IArticleDAO {
 
 	public boolean isCollection(int userId, int articleId);
 
-	public List<ArticleInfo> getListByShowId(int showId, int start, int maxResults);
+	public List<ArticleInfo> getListByShowId(int showId,int type, int start, int maxResults);
 
 	public boolean collectArticle(int userId, int articleId);
 

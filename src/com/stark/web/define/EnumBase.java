@@ -670,19 +670,19 @@ public class EnumBase {
 	public enum ArticleType {
 		Publish("普通", 0),
 		Forward("转发", 1), 
-		DayExquisite("每日精选", 2), 
+		DayExquisite("推荐", 2), 
 		FashionMagazine("杂志", 3), 
 		ExquisiteMagazine("精选杂志", 4), 
 		Report("举报", 5),
-		DayExquisiteReport("每日精选被举报",6),
+		DayExquisiteReport("推荐被举报",6),
 		FashionMagazineReport("杂志被举报",7),
-		ExquisiteMagazineReport("精选杂志被举报",8),
+		ExquisiteMagazineReport("推荐杂志被举报",8),
 		NoAuditingActivity("未审核活动推文",9),
 		Activity("活动推文",10),
 		Delete("已删除",11),
-		ExquisiteNoAuditing("精选未审核",12),
-		CommonExquisite("普通精选",13),
-		ActivityExquisite("活动精选",14),
+		ExquisiteNoAuditing("推荐未审核",12),
+		CommonExquisite("普通推荐",13),
+		ActivityExquisite("活动推荐",14),
 		CommonNoAuditing("普通未审核",15);
 		
 

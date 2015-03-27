@@ -417,8 +417,11 @@ public class BackstageController {
 		List<ActivityType> types = new ArrayList<ActivityType>();
 		types.add(ActivityType.Join);
 		types.add(ActivityType.NoJoin);
+		List<UserInfo> operators = userManager.getOperatiors();
 		request.setAttribute("showList", acList);
 		request.setAttribute("types", types);
+		request.setAttribute("operations", operators);
+		
 		return "show";
 	}
 }

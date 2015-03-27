@@ -156,4 +156,6 @@ public interface IArticleManager {
 
 	public boolean setBrowseCount(int articleId, int count);
 
+	public Map<String, Object> getNoAuditingShowArticles(int showId, int userId, int page, int maxResults2);
+
 }

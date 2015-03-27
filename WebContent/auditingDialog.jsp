@@ -19,13 +19,15 @@
     </div>
 </div>
 <script type="text/javascript">
-function showAuditingDialog(content){
+var dialogType = 0;
+function showAuditingDialog(content,type){
+	dialogType = type;
 	$("#auditingContent").html(content);
 	$('#auditingDialog').modal('show');
 }
 
 function auditingOk(){
 	$('#auditingDialog').modal('hide');
-	auditingBack();
+	auditingBack(dialogType);
 }
 </script>

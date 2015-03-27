@@ -1486,4 +1486,15 @@ public class ArticleController {
 		map.put("count", count);
 		return map;
 	}
+	
+	@RequestMapping("getNoAutitingShowArticles.do")
+	@ResponseBody
+	public Map<String,Object> getNoAutitingShowArticles(int showId,int userId,int page){
+		Map<String,Object> map = articleManager.getNoAuditingShowArticles(showId,userId,page,maxResults2);
+		if (page == 0) {
+			ActivityInfo act = activityManager.getActivity(showId);
+			map.put("activityPic", act.getContentPicUrl());
+		}
+		return map;
+	}
 }

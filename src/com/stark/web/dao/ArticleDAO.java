@@ -1113,11 +1113,12 @@ public class ArticleDAO implements IArticleDAO {
 	}
 
 	@Override
-	public List<ArticleInfo> getListByShowId(int showId, int start, int maxResults) {
-		String hql = "select a from ArticleInfo as a join a.activities as act where act.activityId =:showId";
+	public List<ArticleInfo> getListByShowId(int showId,int type, int start, int maxResults) {
+		String hql = "select a from ArticleInfo as a join a.activities as act where act.activityId =:showId and a.type=:type";
 		
 		Query query = sessionFactory.getCurrentSession().createQuery(hql);
 		query.setInteger("showId", showId);
+		query.setInteger("type", type);
 		query.setFirstResult(start);
 		query.setMaxResults(maxResults);
 		

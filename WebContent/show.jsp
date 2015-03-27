@@ -40,7 +40,7 @@ body {
 									<button style="width: 80px; height: 30px; margin-left: -15px; display: block" class="bg-green radius-rounded margin-bottom" onclick="uploadBannerPic(${o.activityId })">
 										<span class="padding-small-left glyphicon glyphicon-picture"></span>
 									</button>
-									<button style="width: 60px; height: 30px; margin-left: -15px; display: block" class="bg-green radius-rounded margin-bottom ">
+									<button style="width: 60px; height: 30px; margin-left: -15px; display: block" class="bg-green radius-rounded margin-bottom" onclick="getNoAutitingShowArticles(${o.activityId})">
 										<span class="padding-small-left glyphicon glyphicon-eye-close"></span>
 									</button>
 									<button style="width: 50px; height: 30px; margin-left: -15px; display: block" class="bg-green radius-rounded margin-bottom ">
@@ -56,8 +56,8 @@ body {
 				<div id="createShowId" style="width: 85%;  overflow: auto;"  class="center-block ">
 					<%@ include file="createShow.jsp"%>
 				</div>
-				<div style="width: 90%; height: 100%; overflow: auto;display:none;" id="articleList" class="center-block ">
-				    <div class="radius row bg" style="width:95%">
+				<div style="width: 90%; height: 100%; overflow: auto;display:none;" id="articleList" class="center-block">
+				    <div class="radius row bg border" style="width:99%">
 				        <div class="col-md-offset-2 col-lg-8">
 				        <a href="javascript:uploadContentPic()" style="height:300px;"  class="thumbnail "><img style="height:100%;width:100%" id="ActivityContentPicId" alt="" src=""></a>
 				        </div>
@@ -73,11 +73,15 @@ body {
         <input type="hidden" name="activityType"  id="activityFormType">
         <input type="hidden" name="activityId" id="activityId">
    </form>
+   <%@ include file="commentDialog.jsp" %>
+   <%@ include file="selectUserList.jsp"%>
+   <%@ include file="browseDialog.jsp"%>
+   <%@ include file="auditingDialog.jsp"%>
 	<script src="../js/jquery-1.11.2.min.js"></script>
 	<script src="../js/bootstrap.min.js"></script>
     <script src="../js/main.js"></script>
 	<script type="text/javascript">
-		var isAuditing = true;
+		var isAuditing = false;
 		var total = document.documentElement.clientHeight - 70;
 		document.getElementById("mainBody").style.height = total + "px";
 		function callback(str) {
@@ -101,8 +105,9 @@ body {
 				display : "block"
 			});
 			var url = "/StarkPet/article/getShowArticleList2.0.do?showId=" + activityId + "&userId=0&";
-			showArticleList(url, 0);
 			isShowHeader = true;
+			showArticleList(url, 0);
+			
 		}
 		
 		function createShow(){
@@ -190,6 +195,49 @@ body {
 	    }
 	    function orderResponse(){
 	    	
+	    }
+	    
+	    function getNoAutitingShowArticles(activityId){
+	    	selectActivityId = activityId;
+            $("#createShowId").css({
+                display : "none"
+            });
+            
+            $("#articleList").css({
+                display : "block"
+            });
+	    	var url = "/StarkPet/article/getNoAutitingShowArticles.do?showId=" + activityId + "&userId=0&";
+            isShowHeader = true;
+            showArticleList(url, 0);
+	    }
+	    function selectBack() {
+            selectUserSubmit();
+        }
+	    
+	    function auditingBack(type){
+	    	var articleId = currentArticle.Id;
+	    	if(type==9){
+	    		
+	            var url = "/StarkPet/article/changeArticleType.do?articleId="+ articleId + "&type=" + 10;
+	            ajaxRequest(url, response);
+	    	}
+	    	else if(type==10){
+	    		isAuditing = true;
+	    		 var url = "/StarkPet/article/changeArticleType.do?articleId="+ articleId + "&type=" + 14;
+	             ajaxRequest(url, response);
+	    	}
+	    }
+	    function response(data){
+	    	if (data.result == 1) {
+                if(isAuditing){
+                    $("#articleType"+currentArticle.Id).html(data.type);
+                }
+                else{
+                    $("#mediaMainId" + currentArticle.Id).remove();
+                }
+            } else {
+                alert("失败了!!!");
+            }
 	    }
 	</script>
 </body>
