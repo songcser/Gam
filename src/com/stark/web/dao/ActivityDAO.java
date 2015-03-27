@@ -332,4 +332,18 @@ public class ActivityDAO implements IActivityDAO{
 		redisDao.zadd(key, order, activityId+"");
 	}
 
+	@Override
+	public boolean setActivityOrder(int activityId, int order) {
+		String hql = "update ActivityInfo as a set a.order=:order where a.activityId=:activityId";
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		query.setInteger("order", order);
+		query.setInteger("activityId", activityId);
+		return query.executeUpdate()>0;
+	}
+
+	@Override
+	public void setRedisActivity(String key, String field, String value) {
+		redisDao.hset(key, field, value);
+	}
+
 }

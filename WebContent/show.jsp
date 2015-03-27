@@ -36,7 +36,7 @@ body {
 									<c:if test="${o.type==3 }">
 										<button style="width: 140px; height: 30px; margin-left: -15px; display: block" class="bg-green radius-rounded margin-bottom ">不可参加</button>
 									</c:if>
-									<button style="width: 110px; height: 30px; margin-left: -15px; display: block" class="bg-green radius-rounded margin-bottom ">序号: ${o.order }</button>
+									<input value="序号: ${o.order }" type="button" style="width: 110px; height: 30px; margin-left: -15px; display: block" class="bg-green radius-rounded margin-bottom" onclick="orderSort(this,${o.activityId })">
 									<button style="width: 80px; height: 30px; margin-left: -15px; display: block" class="bg-green radius-rounded margin-bottom" onclick="uploadBannerPic(${o.activityId })">
 										<span class="padding-small-left glyphicon glyphicon-picture"></span>
 									</button>
@@ -56,9 +56,11 @@ body {
 				<div id="createShowId" style="width: 85%;  overflow: auto;"  class="center-block ">
 					<%@ include file="createShow.jsp"%>
 				</div>
-				<div style="width: 85%; height: 100%; overflow: auto;display:none;" id="articleList" class="center-block ">
-				    <div class="radius " >
-				        <a href="javascript:uploadContentPic()" style="height:250px;"  class="thumbnail"><img style="height:100%;" id="ActivityContentPicId" alt="" src=""></a>
+				<div style="width: 90%; height: 100%; overflow: auto;display:none;" id="articleList" class="center-block ">
+				    <div class="radius row bg" style="width:95%">
+				        <div class="col-md-offset-2 col-lg-8">
+				        <a href="javascript:uploadContentPic()" style="height:300px;"  class="thumbnail "><img style="height:100%;width:100%" id="ActivityContentPicId" alt="" src=""></a>
+				        </div>
 				    </div>
 					<div id="articleListDiv" class="padding-top"></div>
 					<div id="paginationDiv"></div>
@@ -131,7 +133,6 @@ body {
 	    
 	    var flagCount = 0;
 	    function addFile(file) {
-	        
 	        if (file.files && file.files[0]) {
 	            var img ;
 	            if(type==0){
@@ -164,6 +165,31 @@ body {
 	    }
 	    function callbackUpload(str){
 	        $("#formFileUpload").reset();
+	    }
+	    
+	    function orderSort(obj,activityId){
+	    	selectActivityId=activityId;
+	    	$(obj).attr('type','text');
+	    	
+	    	var old = $(obj).val();
+	    	$(obj).val("");
+	    	$(obj).blur(function(){
+	    		$(obj).attr('type','button');
+	    		var value = parseInt($(obj).val(),10)
+	    		if(!isNaN(value)){
+	    			$(obj).val("序号:"+value);
+	    			var url = "/StarkPet/activity/setActivityOrder.do?activityId="+activityId+"&order="+value;
+	    			ajaxRequest(url,orderResponse);
+	    		}
+	    		else{
+	    			alert("请输入数字");
+	    			$(obj).val(old);
+	    		}
+	    		$(obj).unbind( "blur" );
+	    	});
+	    }
+	    function orderResponse(){
+	    	
 	    }
 	</script>
 </body>

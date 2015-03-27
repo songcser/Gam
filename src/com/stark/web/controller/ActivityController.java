@@ -256,4 +256,9 @@ public class ActivityController {
 		out.flush();
 		out.close();
 	}
+	
+	@RequestMapping("setActivityOrder.do")
+	public void setActivityOrder(int activityId,int order){
+		activityManager.setActivityOrder(activityId,order);
+	}
 }

@@ -49,7 +49,6 @@ public class CommentController {
 	@RequestMapping("/publish.do")
 	@ResponseBody
 	public Map<String, Object> publish(@RequestBody CommentInfo comment){
-		System.out.println("==> /comment/publish?"+comment);
 		comment.setDate(new Date());
 		int id = commentManager.addComment(comment);
 		articleManager.addCommentCount(comment.getArticle().getArticleId());

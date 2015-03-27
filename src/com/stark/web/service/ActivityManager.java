@@ -168,5 +168,15 @@ public class ActivityManager implements IActivityManager{
 		}
 		return list;
 	}
+
+	@Override
+	public void setActivityOrder(int activityId, int order) {
+		boolean result = activityDao.setActivityOrder(activityId,order);
+		if(result){
+			String key = ActivityInfo.getKey(activityId);
+			activityDao.setRedisActivity(key,ActivityInfo.ORDER,order+"");
+			activityDao.addRedisActivityZSet(RedisInfo.ACTIVITYORDERZSET,order,activityId);
+		}
+	}
 	
 }

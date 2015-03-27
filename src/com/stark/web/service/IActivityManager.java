@@ -29,5 +29,7 @@ public interface IActivityManager {
 
 	public List<ActivityInfo> getAllShowList();
 
+	public void setActivityOrder(int activityId, int order);
+
 
 }
