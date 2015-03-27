@@ -424,4 +424,15 @@ public class BackstageController {
 		
 		return "show";
 	}
+	
+	@RequestMapping("moment.do")
+	public String moment(HttpServletRequest request){
+		if(getLoginUser(request)==null){
+			return "/adminLogin";
+		}
+		List<UserInfo> operators = userManager.getOperatiors();
+		request.setAttribute("operations", operators);
+		
+		return "moment";
+	}
 }

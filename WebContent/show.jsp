@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -19,38 +19,7 @@ body {
 		<div class="row" style="height: 100%">
 			<div class="col-lg-5" style="height: 100%;">
 				<button class="btn bg-blue radius-rounded " onclick="createShow()">新建节目单</button>
-				<div id="showList" class="margin-top" style="height: 95%; overflow: auto">
-					<c:if test="${!empty showList }">
-						<c:forEach items="${showList }" var="o">
-							<div id="activity${o.activityId }" class="border bg-red-light radius media padding-top" style="overflow: auto">
-								<div class="media-left padding-small">
-									<a style="width: 400px; height: 250px" href="javascript:showArticles(${o.activityId })" class="thumbnail"> 
-									<img class="media-object" style="width: 100%; height: 100%" src="${o.getBannerPicUrl() }" alt="" id="activityBannerPic${o.activityId }">
-									</a>
-								</div>
-								<div class="media-body padding-top">
-									<button style="width: 170px; height: 30px; margin-left: -15px; display: block" class="bg-green radius-rounded margin-bottom ">${o.subject }</button>
-									<c:if test="${o.type==2 }">
-										<button style="width: 140px; height: 30px; margin-left: -15px; display: block" class="bg-green radius-rounded margin-bottom ">可参加</button>
-									</c:if>
-									<c:if test="${o.type==3 }">
-										<button style="width: 140px; height: 30px; margin-left: -15px; display: block" class="bg-green radius-rounded margin-bottom ">不可参加</button>
-									</c:if>
-									<input value="序号: ${o.order }" type="button" style="width: 110px; height: 30px; margin-left: -15px; display: block" class="bg-green radius-rounded margin-bottom" onclick="orderSort(this,${o.activityId })">
-									<button style="width: 80px; height: 30px; margin-left: -15px; display: block" class="bg-green radius-rounded margin-bottom" onclick="uploadBannerPic(${o.activityId })">
-										<span class="padding-small-left glyphicon glyphicon-picture"></span>
-									</button>
-									<button style="width: 60px; height: 30px; margin-left: -15px; display: block" class="bg-green radius-rounded margin-bottom" onclick="getNoAutitingShowArticles(${o.activityId})">
-										<span class="padding-small-left glyphicon glyphicon-eye-close"></span>
-									</button>
-									<button style="width: 50px; height: 30px; margin-left: -15px; display: block" class="bg-green radius-rounded margin-bottom" onclick="deleteActivity(${o.activityId})">
-                                        <span class="padding-small-left glyphicon glyphicon-trash"></span>
-                                    </button>
-								</div>
-							</div>
-						</c:forEach>
-					</c:if>
-				</div>
+				<%@ include file="showList.jsp" %>
 			</div>
 			<div class="col-lg-7 border-left"  style="height: 100%;">
 				<div id="createShowId" style="width: 85%;  overflow: auto;"  class="center-block ">
@@ -77,6 +46,7 @@ body {
    <%@ include file="selectUserList.jsp"%>
    <%@ include file="browseDialog.jsp"%>
    <%@ include file="auditingDialog.jsp"%>
+   <%@ include file="sliderShow.jsp"%>
 	<script src="../js/jquery-1.11.2.min.js"></script>
 	<script src="../js/bootstrap.min.js"></script>
     <script src="../js/main.js"></script>

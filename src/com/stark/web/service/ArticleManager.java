@@ -97,6 +97,7 @@ public class ArticleManager implements IArticleManager {
 			int type = aInfo.getType();
 			if(type==ArticleType.Publish.getIndex()){
 				articleDao.addRedisArticleCount(RedisInfo.ARTICLEPUBLISHCOUNT);
+				articleDao.addRedisArticleId(RedisInfo.ARTICLEMOMENTLIST, id);
 			}
 			else if(type==ArticleType.Forward.getIndex()){
 				
@@ -150,7 +151,9 @@ public class ArticleManager implements IArticleManager {
 			else if(type == ArticleType.ExquisiteNoAuditing.getIndex()){
 				articleDao.addRedisArticleId(RedisInfo.ARTICLENOAUDITINGRECOMMENDLIST, aInfo.getArticleId());
 			}
-			
+			else if(type== ArticleType.CommonNoAuditing.getIndex()){
+				articleDao.addRedisArticleId(RedisInfo.ARTICLENOAUDITINGMOMENTLIST, id);
+			}
 		}
 
 		return id;
@@ -805,7 +808,10 @@ public class ArticleManager implements IArticleManager {
 			types.add(ArticleType.CommonExquisite.getIndex());
 			types.add(ArticleType.ActivityExquisite.getIndex());
 		}
-		
+		else if(type==ArticleType.Publish.getIndex()){
+			types.add(ArticleType.Publish.getIndex());
+			types.add(ArticleType.CommonNoAuditing.getIndex());
+		}
 		return types;
 	}
 
@@ -827,6 +833,7 @@ public class ArticleManager implements IArticleManager {
 			
 			if(oldType==ArticleType.Publish.getIndex()){
 				articleDao.decRedisArticleCount(RedisInfo.ARTICLEPUBLISHCOUNT);
+				articleDao.removeRedisArticleList(RedisInfo.ARTICLEMOMENTLIST, articleId);
 			}
 			else if(oldType==ArticleType.DayExquisite.getIndex()||oldType==ArticleType.DayExquisiteReport.getIndex()){
 				articleDao.decRedisArticleCount(RedisInfo.ARTICLEEXQUISITECOUNT);
@@ -848,21 +855,23 @@ public class ArticleManager implements IArticleManager {
 				articleDao.removeRedisArticleList(RedisInfo.ACTIVITYNOAUDITINGLIST+article.getActivity().getActivityId(), articleId);
 			}
 			else if(oldType==ArticleType.Activity.getIndex()){
-				//ArticleInfo article = getArticle(articleId); 
-				
 				if(type==ArticleType.Delete.getIndex()){
 					articleDao.decRedisArticleCount(RedisInfo.ARTICLEACTIVITYCOUNT);
 					articleDao.removeRedisArticleList(RedisInfo.ACTIVITYARTICLEALLLIST+article.getActivity().getActivityId(), articleId);
 					articleDao.removeRedisArticleList(RedisInfo.ACTIVITYARTICLEAUDITINGLIST+article.getActivity().getActivityId(), articleId);
 				}
-				
 			}
 			else if(oldType==ArticleType.ExquisiteNoAuditing.getIndex()){
 				articleDao.removeRedisArticleList(RedisInfo.ARTICLENOAUDITINGRECOMMENDLIST,articleId);
 			}
+			else if(oldType==ArticleType.CommonNoAuditing.getIndex()){
+				articleDao.removeRedisArticleList(RedisInfo.ARTICLENOAUDITINGMOMENTLIST, articleId);
+			}
+			
 			
 			if(type==ArticleType.Publish.getIndex()){
 				articleDao.addRedisArticleCount(RedisInfo.ARTICLEPUBLISHCOUNT);
+				articleDao.addRedisArticleId(RedisInfo.ARTICLEMOMENTLIST, articleId);
 			}
 			else if(type==ArticleType.DayExquisite.getIndex()||type==ArticleType.DayExquisiteReport.getIndex()){
 				articleDao.addRedisArticleCount(RedisInfo.ARTICLEEXQUISITECOUNT);
@@ -891,6 +900,7 @@ public class ArticleManager implements IArticleManager {
 				articleDao.removeRedisArticleList(RedisInfo.ARTICLEUPDATELIST,articleId);
 				articleDao.removeRedisUserArticleList(article.getUser().getUserId(), articleId);
 				articleDao.decRedisUserArticleCount(article.getUser().getUserId());
+				articleDao.addRedisArticleId(RedisInfo.ARTICLEDELETELIST, articleId);
 			}
 			else if(type==ArticleType.ActivityExquisite.getIndex()){
 				articleDao.addRedisArticleId(RedisInfo.ARTICLERECOMMENDLIST, articleId);
@@ -1421,6 +1431,7 @@ public class ArticleManager implements IArticleManager {
 		return list;
 	}
 
+	
 	@Override
 	public Map<String, Object> getNoAuditingRecommendList(int userId, int page, int maxResults) {
 		String key = RedisInfo.ARTICLENOAUDITINGRECOMMENDLIST;
@@ -1467,5 +1478,59 @@ public class ArticleManager implements IArticleManager {
 		listToListAndAddRedisId(key,alist,articles);
 		
 		return articlesToMap(articles,userId);
+	}
+
+	@Override
+	public Map<String, Object> getMomentList(int userId, int page, int maxResults) {
+		List<ArticleInfo> articles = new ArrayList<ArticleInfo>();
+		String key = RedisInfo.ARTICLEMOMENTLIST;
+		List<String> ids = articleDao.getRedisArticleIds(key, page, maxResults);
+		int size = idsToArticleList(ids,articles);
+		if(size==maxResults)
+			return articlesToMap(articles,userId);
+		
+		List<Integer> types = new ArrayList<Integer>();
+		types.add(ArticleType.Publish.getIndex());
+		List<ArticleInfo> tlist = articleDao.getArticleByType(types, page*maxResults+size, maxResults-size);
+		
+		listToListAndAddRedisId(key,tlist,articles);
+		
+		return articlesToMap(articles,userId);
+	}
+
+	@Override
+	public Map<String, Object> getNoAuditingMomentList(int userId, int page, int maxResults) {
+		List<ArticleInfo> articles = new ArrayList<ArticleInfo>();
+		String key = RedisInfo.ARTICLENOAUDITINGMOMENTLIST;
+		List<String> ids = articleDao.getRedisArticleIds(key, page, maxResults);
+		int size = idsToArticleList(ids,articles);
+		if(size==maxResults)
+			return articlesToMap(articles,userId);
+		
+		List<Integer> types = new ArrayList<Integer>();
+		types.add(ArticleType.CommonNoAuditing.getIndex());
+		List<ArticleInfo> tlist = articleDao.getArticleByType(types, page*maxResults+size, maxResults-size);
+		
+		listToListAndAddRedisId(key,tlist,articles);
+		
+		return articlesToMap(articles,userId);
+	}
+
+	@Override
+	public Map<String, Object> getDeleteList(int page, int maxResults) {
+		List<ArticleInfo> articles = new ArrayList<ArticleInfo>();
+		String key = RedisInfo.ARTICLEDELETELIST;
+		List<String> ids = articleDao.getRedisArticleIds(key, page, maxResults);
+		int size = idsToArticleList(ids,articles);
+		if(size==maxResults)
+			return articlesToMap(articles,0);
+		
+		List<Integer> types = new ArrayList<Integer>();
+		types.add(ArticleType.Delete.getIndex());
+		List<ArticleInfo> tlist = articleDao.getArticleByType(types, page*maxResults+size, maxResults-size);
+		
+		listToListAndAddRedisId(key,tlist,articles);
+		
+		return articlesToMap(articles,0);
 	}
 }

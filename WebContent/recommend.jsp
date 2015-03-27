@@ -67,13 +67,9 @@ body {
 		}
 
 		function getArticleList(url) {
-			showArticleList(url, 0);
 			isShowHeader = true;
-		}
-
-		function Test() {
-			var url = "/StarkPet/notice/test.do?";
-			getArticleList(url);
+			showArticleList(url, 0);
+			
 		}
 
 		function selectBack() {

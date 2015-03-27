@@ -158,4 +158,10 @@ public interface IArticleManager {
 
 	public Map<String, Object> getNoAuditingShowArticles(int showId, int userId, int page, int maxResults2);
 
+	public Map<String, Object> getMomentList(int userId, int page, int maxResults);
+
+	public Map<String, Object> getNoAuditingMomentList(int userId, int page, int maxResults2);
+
+	public Map<String, Object> getDeleteList(int page, int maxResults);
+
 }

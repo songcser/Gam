@@ -122,12 +122,14 @@ public class ArticleController {
 			article.setContent(content);
 			article.setReference("");
 			article.setDate(new Date());
+			article.setTitle("");
+			article.setRichText("");
 			if(activityId!=null){
 				article.setActivity(new ActivityInfo(Integer.parseInt(activityId)));
 				article.setType(ArticleType.NoAuditingActivity.getIndex());
 			}
 			else {
-				article.setType(EnumBase.ArticleType.Publish.getIndex());
+				article.setType(EnumBase.ArticleType.CommonNoAuditing.getIndex());
 			}
 			
 			int articleId = articleManager.addArticle(article);
@@ -1495,6 +1497,27 @@ public class ArticleController {
 			ActivityInfo act = activityManager.getActivity(showId);
 			map.put("activityPic", act.getContentPicUrl());
 		}
+		return map;
+	}
+	
+	@RequestMapping("getMomentList2.0.do")
+	@ResponseBody
+	public Map<String,Object> getMoementList2(int userId,int page){
+		Map<String,Object> map = articleManager.getMomentList(userId,page,maxResults2);
+		return map;
+	}
+	
+	@RequestMapping("getNoAuditingMomentList2.0.do")
+	@ResponseBody
+	public Map<String,Object> getNoAuditingMomentList2(int userId,int page){
+		Map<String,Object> map = articleManager.getNoAuditingMomentList(userId,page,maxResults2);
+		return map;
+	}
+	
+	@RequestMapping("getDeleteList.do")
+	@ResponseBody
+	public Map<String,Object> getDeleteList(int page){
+		Map<String,Object>  map = articleManager.getDeleteList(page,maxResults2);
 		return map;
 	}
 }

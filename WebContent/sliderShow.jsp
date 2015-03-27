@@ -33,7 +33,7 @@ document.getElementById("sliderModalId").style.width=width+"px";
 		var picObjs = document.getElementsByName("sliderPicture"+articleId);
 		$("#carouselIndicators").append('<li class="active" data-target="#slidershow" data-slide-to="0"></li>');
 		var pic = picObjs[0].src;
-		var itemDiv = $('<div class="item active " style="" ><a  href="##"><img style="display:block; margin:0 auto;vertical-align:middle;" src="'+pic+'" alt="" ></a></div>');
+		var itemDiv = $('<div class="item active " style="height:100%"><a  href="##"><img style="display:block; margin:0 auto;max-height:100%" src="'+pic+'" alt="" ></a></div>');
 		$("#carouselinner").append(itemDiv);
 		for(var i=1;i<picObjs.length;i++){
 			//alert(picObjs[i].src);
@@ -41,7 +41,7 @@ document.getElementById("sliderModalId").style.width=width+"px";
 			var liObj = $('<li data-target="#slidershow" data-slide-to="'+i+'"></li>');
 			$("#carouselIndicators").append(liObj);
 			
-			itemDiv = $('<div class="item text-center"><a href="##"><img style="display:block; margin:0 auto" src="'+pic+'" alt="" ></a></div>');
+			itemDiv = $('<div class="item text-center" ><a href="##"><img style="display:block; margin:0 auto" src="'+pic+'" alt="" ></a></div>');
 			$("#carouselinner").append(itemDiv);
 		}
 	}

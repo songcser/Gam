@@ -17,6 +17,9 @@ public class RedisInfo {
 	public static final String ARTICLECOMMENTLIST = "Article:Comment:List:";						//推文评论列表
 	public static final String ARTICLERECOMMENDLIST = "Article:Recommend:List";					//推文推荐列表
 	public static final String ARTICLENOAUDITINGRECOMMENDLIST = "Article:NoAuditing:Recommend:List"; //未审核推荐推文列表
+	public static final String ARTICLEMOMENTLIST = "Article:Moment:List";							//瞬间推文列表
+	public static final String ARTICLENOAUDITINGMOMENTLIST = "Article:NoAuditing:Moment:List";			//未审核瞬间推文列表
+	public static final String ARTICLEDELETELIST = "Article:Delete:List";
 	
 	public static final String USERARTICLELIST = "User:Article:List:";							//用户发布推文列表
 	public static final String USEROSLIST = "User:OS:List";										//运营人员和模拟用户列表
@@ -53,6 +56,7 @@ public class RedisInfo {
 	
 	public static final String CHARTLETALLLIST = "Chartlet:All:List";								//贴图列表
 	public static final String CHARTLETPICTURELIST = "Chartlet:Picture:List:";					//贴图图片列表
+	
 	
 	
 	

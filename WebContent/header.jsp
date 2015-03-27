@@ -8,7 +8,7 @@
        <li ><a href="operatorManage.do">账号管理</a></li>
       <li><a href="recommend.do">推荐管理</a></li>
       <li><a href="showManage.do">节目单管理</a></li>
-      <li><a href="##">瞬间管理</a></li>
+      <li><a href="moment.do">瞬间管理</a></li>
       <li><a href="##">贴图管理</a></li>
       <li><a href="publishManage.do">发布管理</a></li>
      </ul>

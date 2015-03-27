@@ -19,7 +19,7 @@ body {
 			<form id='articleFormFile' name='formFile' method="post" action="../article/addArticle.do" target='frameFile' enctype="multipart/form-data">
 				<input type="hidden" id="userId" name="userId" value="${operations.get(0).userId }" />
 				<div class="btn-group margin-bottom">
-					<label class="btn btn-primary active"> <input type="radio" name="articleType" id="commonMode" autocomplete="off" value="1" checked onclick="selectCommonMode()">
+					<label class="btn btn-primary active"> <input type="radio" name="articleType" id="commonMode" autocomplete="off" value="0" checked onclick="selectCommonMode()">
 						普通
 					</label> <label class="btn btn-primary"> <input type="radio" name="articleType" id="recommendMode" autocomplete="off" value="12" onclick="selectRecommendMode()"> 推荐
 					</label> <label class="btn btn-primary"> <input type="radio" name="articleType" id="showMode" autocomplete="off" value="9" onclick="selectShowMode()"> 节目单

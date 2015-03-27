@@ -105,7 +105,7 @@ function createMediaDiv(art){
 	}
 	
 	var mediaBody = $('<div class="media-body padding-left padding-top"></div>');
-	if(roleStr=="普通用户"||roleStr=="运营"){
+	if(roleStr=="普通用户"){
 		mediaBody.append('<h4 class="media-heading"><strong>'+ art.name+'</strong><small> ('+roleStr+') <a href="#"><span class="glyphicon glyphicon-tag"></span></a></small></h4>');
 	}
 	else{
@@ -371,11 +371,14 @@ function changeArticleType(articleId,type){
 	if(type==12){
 		showAuditingDialog("精选推文通过审核",type);
 	}
-	if(type==9){
+	else if(type==9){
 		showAuditingDialog("节目单推文通过审核",type);
 	}
-	if(type==10){
+	else if(type==10){
 		showAuditingDialog("将推文选入推荐",type);
+	}
+	else if(type==15){
+		showAuditingDialog("普通推文通过审核",type);
 	}
 }
 
