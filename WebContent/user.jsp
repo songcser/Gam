@@ -38,7 +38,7 @@ body{
                  </form>
 				<%@ include file="userList.jsp"%>
 			</div>
-			<div class="col-sm-6 margin-left" id="articleList" style="height:100%;overflow:auto">
+			<div class="col-sm-6 margin-left border-left" id="articleList" style="height:100%;overflow:auto">
 				<div id="addOperationDiv" style="width:70%">
                 <%@ include file="createUser.jsp"%>
                 </div>

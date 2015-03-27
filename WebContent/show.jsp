@@ -52,7 +52,7 @@ body {
 					</c:if>
 				</div>
 			</div>
-			<div class="col-lg-7"  style="height: 100%;">
+			<div class="col-lg-7 border-left"  style="height: 100%;">
 				<div id="createShowId" style="width: 85%;  overflow: auto;"  class="center-block ">
 					<%@ include file="createShow.jsp"%>
 				</div>
