@@ -22,7 +22,7 @@ body {
 				<div id="showList" class="margin-top" style="height: 95%; overflow: auto">
 					<c:if test="${!empty showList }">
 						<c:forEach items="${showList }" var="o">
-							<div class="border bg-red-light radius media padding-top" style="overflow: auto">
+							<div id="activity${o.activityId }" class="border bg-red-light radius media padding-top" style="overflow: auto">
 								<div class="media-left padding-small">
 									<a style="width: 400px; height: 250px" href="javascript:showArticles(${o.activityId })" class="thumbnail"> 
 									<img class="media-object" style="width: 100%; height: 100%" src="${o.getBannerPicUrl() }" alt="" id="activityBannerPic${o.activityId }">
@@ -43,7 +43,7 @@ body {
 									<button style="width: 60px; height: 30px; margin-left: -15px; display: block" class="bg-green radius-rounded margin-bottom" onclick="getNoAutitingShowArticles(${o.activityId})">
 										<span class="padding-small-left glyphicon glyphicon-eye-close"></span>
 									</button>
-									<button style="width: 50px; height: 30px; margin-left: -15px; display: block" class="bg-green radius-rounded margin-bottom ">
+									<button style="width: 50px; height: 30px; margin-left: -15px; display: block" class="bg-green radius-rounded margin-bottom" onclick="deleteActivity(${o.activityId})">
                                         <span class="padding-small-left glyphicon glyphicon-trash"></span>
                                     </button>
 								</div>
@@ -237,6 +237,17 @@ body {
                 }
             } else {
                 alert("失败了!!!");
+            }
+	    }
+	    function deleteActivity(activityId){
+	    	selectActivityId = activityId;
+	    	var url ="/StarkPet/activity/delete.do?activityId="+activityId;
+	    	ajaxRequest(url, deleteResponse);
+	    }
+	    function deleteResponse(ret){
+	    	if (ret.result == "1") {
+                $("#activity"+selectActivityId).remove();
+                createShow();
             }
 	    }
 	</script>

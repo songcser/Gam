@@ -63,4 +63,6 @@ public interface IActivityDAO {
 	public boolean setActivityOrder(int activityId, int order);
 
 	public void setRedisActivity(String key, String field, String value);
+
+	public void removeRedisActivityZSet(String key, int activityId);
 }

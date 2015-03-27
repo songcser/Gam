@@ -123,6 +123,7 @@ public class ActivityManager implements IActivityManager{
 				activityDao.removeRedisAllActivity(activityId);
 				activityDao.removeRedisBannerList(activityId);
 				activityDao.removeRedisTopList(activityId);
+				activityDao.removeRedisActivityZSet(RedisInfo.ACTIVITYORDERZSET,activityId);
 			}
 		}
 		return result;

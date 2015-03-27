@@ -308,12 +308,13 @@ public class ActivityDAO implements IActivityDAO{
 				sb.append("a.type = ? or ");
 
 		}
-		String hql = "from ActivityInfo as a where "+sb+" order by a.order";
+		String hql = "from ActivityInfo as a where "+sb+" and a.status !=:status  order by a.order";
 		Query query = sessionFactory.getCurrentSession().createQuery(hql);
 		for (int i = 0; i < types.size(); i++) {
 			int type = types.get(i);
 			query.setInteger(i, type);
 		}
+		query.setInteger("status", ActivityStatus.Delete.getIndex());
 		return query.list();
 	}
 
@@ -344,6 +345,11 @@ public class ActivityDAO implements IActivityDAO{
 	@Override
 	public void setRedisActivity(String key, String field, String value) {
 		redisDao.hset(key, field, value);
+	}
+
+	@Override
+	public void removeRedisActivityZSet(String key, int activityId) {
+		redisDao.zrem(key, activityId+"");
 	}
 
 }
