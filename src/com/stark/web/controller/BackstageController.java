@@ -431,8 +431,9 @@ public class BackstageController {
 			return "/adminLogin";
 		}
 		List<UserInfo> operators = userManager.getOperatiors();
+		List<ActivityInfo> acList = activityManager.getAllShowList();
 		request.setAttribute("operations", operators);
-		
+		request.setAttribute("showList", acList);
 		return "moment";
 	}
 }

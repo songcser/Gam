@@ -143,13 +143,13 @@ public class ArticleManager implements IArticleManager {
 			else if(type == ArticleType.Activity.getIndex()){
 				articleDao.addRedisArticleCount(RedisInfo.ARTICLEACTIVITYCOUNT);
 				articleDao.addRedisActivityAllList(aInfo.getActivity().getActivityId(),id);
-				articleDao.addRedisActivityAuditingList(aInfo.getActivity().getActivityId(),aInfo.getArticleId());
+				articleDao.addRedisActivityAuditingList(aInfo.getActivity().getActivityId(),id);
 			}
 			else if(type == ArticleType.Delete.getIndex()){
 				articleDao.addRedisArticleCount(RedisInfo.ARTICLEDELETECOUNT);
 			}
 			else if(type == ArticleType.ExquisiteNoAuditing.getIndex()){
-				articleDao.addRedisArticleId(RedisInfo.ARTICLENOAUDITINGRECOMMENDLIST, aInfo.getArticleId());
+				articleDao.addRedisArticleId(RedisInfo.ARTICLENOAUDITINGRECOMMENDLIST, id);
 			}
 			else if(type== ArticleType.CommonNoAuditing.getIndex()){
 				articleDao.addRedisArticleId(RedisInfo.ARTICLENOAUDITINGMOMENTLIST, id);
@@ -807,10 +807,14 @@ public class ArticleManager implements IArticleManager {
 			types.add(ArticleType.ExquisiteNoAuditing.getIndex());
 			types.add(ArticleType.CommonExquisite.getIndex());
 			types.add(ArticleType.ActivityExquisite.getIndex());
+			types.add(ArticleType.CommonActivityExquisite.getIndex());
 		}
 		else if(type==ArticleType.Publish.getIndex()){
 			types.add(ArticleType.Publish.getIndex());
 			types.add(ArticleType.CommonNoAuditing.getIndex());
+			types.add(ArticleType.CommonActivity.getIndex());
+			types.add(ArticleType.CommonActivityExquisite.getIndex());
+			types.add(ArticleType.CommonExquisite.getIndex());
 		}
 		return types;
 	}
@@ -824,6 +828,10 @@ public class ArticleManager implements IArticleManager {
 	public boolean changeArticleType(int articleId, int type) {
 		ArticleInfo article = getArticle(articleId);
 		int oldType = article.getType();
+		int showId = 0;
+		if(article.getActivity()!=null){
+			showId = article.getActivity().getActivityId();
+		}
 		if(type==oldType){
 			return true;
 		}
@@ -833,7 +841,10 @@ public class ArticleManager implements IArticleManager {
 			
 			if(oldType==ArticleType.Publish.getIndex()){
 				articleDao.decRedisArticleCount(RedisInfo.ARTICLEPUBLISHCOUNT);
-				articleDao.removeRedisArticleList(RedisInfo.ARTICLEMOMENTLIST, articleId);
+				if(type==ArticleType.Delete.getIndex()){
+					articleDao.removeRedisArticleList(RedisInfo.ARTICLEMOMENTLIST, articleId);
+				}
+				//
 			}
 			else if(oldType==ArticleType.DayExquisite.getIndex()||oldType==ArticleType.DayExquisiteReport.getIndex()){
 				articleDao.decRedisArticleCount(RedisInfo.ARTICLEEXQUISITECOUNT);
@@ -852,13 +863,13 @@ public class ArticleManager implements IArticleManager {
 			}
 			else if(oldType==ArticleType.NoAuditingActivity.getIndex()){
 				articleDao.decRedisArticleCount(RedisInfo.ARTICLENOAUDITINGCOUNT);
-				articleDao.removeRedisArticleList(RedisInfo.ACTIVITYNOAUDITINGLIST+article.getActivity().getActivityId(), articleId);
+				articleDao.removeRedisArticleList(RedisInfo.ACTIVITYNOAUDITINGLIST+showId, articleId);
 			}
 			else if(oldType==ArticleType.Activity.getIndex()){
 				if(type==ArticleType.Delete.getIndex()){
 					articleDao.decRedisArticleCount(RedisInfo.ARTICLEACTIVITYCOUNT);
-					articleDao.removeRedisArticleList(RedisInfo.ACTIVITYARTICLEALLLIST+article.getActivity().getActivityId(), articleId);
-					articleDao.removeRedisArticleList(RedisInfo.ACTIVITYARTICLEAUDITINGLIST+article.getActivity().getActivityId(), articleId);
+					articleDao.removeRedisArticleList(RedisInfo.ACTIVITYARTICLEALLLIST+showId, articleId);
+					articleDao.removeRedisArticleList(RedisInfo.ACTIVITYARTICLEAUDITINGLIST+showId, articleId);
 				}
 			}
 			else if(oldType==ArticleType.ExquisiteNoAuditing.getIndex()){
@@ -867,11 +878,34 @@ public class ArticleManager implements IArticleManager {
 			else if(oldType==ArticleType.CommonNoAuditing.getIndex()){
 				articleDao.removeRedisArticleList(RedisInfo.ARTICLENOAUDITINGMOMENTLIST, articleId);
 			}
-			
+			else if(oldType==ArticleType.ActivityExquisite.getIndex()&&type==ArticleType.Delete.getIndex()){
+				articleDao.removeRedisArticleList(RedisInfo.ARTICLERECOMMENDLIST, articleId);
+				articleDao.removeRedisArticleList(RedisInfo.ACTIVITYARTICLEALLLIST+showId, articleId);
+				articleDao.removeRedisArticleList(RedisInfo.ACTIVITYARTICLEAUDITINGLIST+showId, articleId);
+			}
+			else if(oldType==ArticleType.CommonActivity.getIndex()&&type==ArticleType.Delete.getIndex()){
+				articleDao.removeRedisArticleList(RedisInfo.ARTICLEMOMENTLIST, articleId);
+				articleDao.removeRedisArticleList(RedisInfo.ACTIVITYARTICLEALLLIST+showId, articleId);
+				articleDao.removeRedisArticleList(RedisInfo.ACTIVITYARTICLEAUDITINGLIST+showId, articleId);
+			}
+			else if(oldType==ArticleType.CommonActivityExquisite.getIndex()){
+				articleDao.removeRedisArticleList(RedisInfo.ARTICLEMOMENTLIST, articleId);
+				articleDao.removeRedisArticleList(RedisInfo.ARTICLERECOMMENDLIST, articleId);
+				articleDao.removeRedisArticleList(RedisInfo.ACTIVITYARTICLEALLLIST+showId, articleId);
+				articleDao.removeRedisArticleList(RedisInfo.ACTIVITYARTICLEAUDITINGLIST+showId, articleId);
+			}
+			else if(oldType==ArticleType.Delete.getIndex()){
+				articleDao.removeRedisArticleList(RedisInfo.ARTICLEMOMENTLIST, articleId);
+				articleDao.removeRedisArticleList(RedisInfo.ARTICLERECOMMENDLIST, articleId);
+				articleDao.removeRedisArticleList(RedisInfo.ACTIVITYARTICLEALLLIST+showId, articleId);
+				articleDao.removeRedisArticleList(RedisInfo.ACTIVITYARTICLEAUDITINGLIST+showId, articleId);
+			}
 			
 			if(type==ArticleType.Publish.getIndex()){
 				articleDao.addRedisArticleCount(RedisInfo.ARTICLEPUBLISHCOUNT);
-				articleDao.addRedisArticleId(RedisInfo.ARTICLEMOMENTLIST, articleId);
+				if(oldType==ArticleType.CommonNoAuditing.getIndex()){
+					articleDao.addRedisArticleId(RedisInfo.ARTICLEMOMENTLIST, articleId);
+				}
 			}
 			else if(type==ArticleType.DayExquisite.getIndex()||type==ArticleType.DayExquisiteReport.getIndex()){
 				articleDao.addRedisArticleCount(RedisInfo.ARTICLEEXQUISITECOUNT);
@@ -893,7 +927,7 @@ public class ArticleManager implements IArticleManager {
 			}
 			else if(type==ArticleType.Activity.getIndex()){
 				articleDao.addRedisArticleCount(RedisInfo.ARTICLEACTIVITYCOUNT);
-				articleDao.addRedisActivityAuditingList(article.getActivity().getActivityId(), articleId);
+				articleDao.addRedisActivityAuditingList(showId, articleId);
 			}
 			else if(type==ArticleType.Delete.getIndex()){
 				articleDao.addRedisArticleCount(RedisInfo.ARTICLEDELETECOUNT);
@@ -901,9 +935,18 @@ public class ArticleManager implements IArticleManager {
 				articleDao.removeRedisUserArticleList(article.getUser().getUserId(), articleId);
 				articleDao.decRedisUserArticleCount(article.getUser().getUserId());
 				articleDao.addRedisArticleId(RedisInfo.ARTICLEDELETELIST, articleId);
+				//articleDao.removeRedisArticleList(RedisInfo.ARTICLEMOMENTLIST, articleId);
 			}
 			else if(type==ArticleType.ActivityExquisite.getIndex()){
 				articleDao.addRedisArticleId(RedisInfo.ARTICLERECOMMENDLIST, articleId);
+			}
+			else if(type==ArticleType.CommonExquisite.getIndex()){
+				articleDao.addRedisArticleId(RedisInfo.ARTICLERECOMMENDLIST, articleId);
+				//articleDao.addRedisArticleId(RedisInfo.ARTICLEMOMENTLIST, articleId);
+			}
+			else if(type==ArticleType.CommonActivityExquisite.getIndex()){
+				articleDao.addRedisArticleId(RedisInfo.ARTICLERECOMMENDLIST, articleId);
+				//articleDao.addRedisArticleId(RedisInfo.ARTICLEMOMENTLIST, articleId);
 			}
 		}
 		return result;
@@ -1150,6 +1193,9 @@ public class ArticleManager implements IArticleManager {
 		types.add(ArticleType.CommonExquisite.getIndex());
 		types.add(ArticleType.ActivityExquisite.getIndex());
 		types.add(ArticleType.ExquisiteMagazineReport.getIndex());
+		types.add(ArticleType.ExquisiteMagazine.getIndex());
+		types.add(ArticleType.CommonActivityExquisite.getIndex());
+		
 		List<ArticleInfo> tlist = articleDao.getArticleByType(types, page*maxResults+size, maxResults-size);
 		
 		listToListAndAddRedisId(key,tlist,articles);
@@ -1190,6 +1236,18 @@ public class ArticleManager implements IArticleManager {
 		List<Map<String,Object>> aList = new ArrayList<Map<String,Object>>();
 		for(ArticleInfo article:articles){
 			
+			aList.add(articleToMap(article,userId));
+		}
+		map.put("articles", aList);
+		map.put("result", 1);
+		return map;
+	}
+	
+	public Map<String, Object> articlesToMap(List<ArticleInfo> articles, int userId,int showId) {
+		Map<String, Object> map = new HashMap<String,Object>();
+		List<Map<String,Object>> aList = new ArrayList<Map<String,Object>>();
+		for(ArticleInfo article:articles){
+			article.setActivity(new ActivityInfo(showId));
 			aList.add(articleToMap(article,userId));
 		}
 		map.put("articles", aList);
@@ -1278,7 +1336,7 @@ public class ArticleManager implements IArticleManager {
 		
 		listToListAndAddRedisId(key,alist,articles);
 		
-		return articlesToMap(articles,userId);
+		return articlesToMap(articles,userId,showId);
 	}
 	
 	@Override
@@ -1459,7 +1517,7 @@ public class ArticleManager implements IArticleManager {
 		boolean result = articleDao.setBrowseCount(articleId,count);
 		if(result){
 			String key = ArticleInfo.getKey(articleId);
-			articleDao.setRedisArticleCount(key,ArticleInfo.BROWSECOUNT,count);
+			articleDao.setRedisArticleInfo(key,ArticleInfo.BROWSECOUNT,count+"");
 		}
 		return result;
 	}
@@ -1477,7 +1535,7 @@ public class ArticleManager implements IArticleManager {
 		
 		listToListAndAddRedisId(key,alist,articles);
 		
-		return articlesToMap(articles,userId);
+		return articlesToMap(articles,userId,showId);
 	}
 
 	@Override
@@ -1491,6 +1549,9 @@ public class ArticleManager implements IArticleManager {
 		
 		List<Integer> types = new ArrayList<Integer>();
 		types.add(ArticleType.Publish.getIndex());
+		types.add(ArticleType.CommonExquisite.getIndex());
+		types.add(ArticleType.CommonActivity.getIndex());
+		types.add(ArticleType.CommonActivityExquisite.getIndex());
 		List<ArticleInfo> tlist = articleDao.getArticleByType(types, page*maxResults+size, maxResults-size);
 		
 		listToListAndAddRedisId(key,tlist,articles);
@@ -1532,5 +1593,18 @@ public class ArticleManager implements IArticleManager {
 		listToListAndAddRedisId(key,tlist,articles);
 		
 		return articlesToMap(articles,0);
+	}
+
+	@Override
+	public boolean moveArticleToRecommend(int articleId, int showId) {
+		int type = ArticleType.ActivityExquisite.getIndex();
+		boolean result = articleDao.changeArticleShowId(articleId,showId);
+		result = articleDao.changeArticleType(articleId,type);
+		if(result){
+			articleDao.changeRedisArticleType(articleId,type);
+			articleDao.addRedisArticleId(RedisInfo.ARTICLERECOMMENDLIST, articleId);
+			articleDao.setRedisArticleInfo(ArticleInfo.getKey(articleId), ArticleInfo.ACTIVITYID, showId+"");
+		}
+		return result;
 	}
 }

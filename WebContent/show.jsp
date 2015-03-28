@@ -47,11 +47,14 @@ body {
    <%@ include file="browseDialog.jsp"%>
    <%@ include file="auditingDialog.jsp"%>
    <%@ include file="sliderShow.jsp"%>
+   <%@ include file="moveArticle.jsp"%>
 	<script src="../js/jquery-1.11.2.min.js"></script>
 	<script src="../js/bootstrap.min.js"></script>
     <script src="../js/main.js"></script>
 	<script type="text/javascript">
 		var isAuditing = false;
+		var selectActivityType = 0;
+		var selectActivityId = 0;
 		var total = document.documentElement.clientHeight - 70;
 		document.getElementById("mainBody").style.height = total + "px";
 		function callback(str) {
@@ -65,8 +68,9 @@ body {
 			}
 
 		}
-		function showArticles(activityId) {
+		function showArticles(activityId,type) {
 			selectActivityId = activityId;
+			selectActivityType = type;
 			$("#createShowId").css({
                 display : "none"
             });
@@ -89,7 +93,7 @@ body {
             });
 		}
 		var type = 0;
-	    var selectActivityId = 0;
+	    
 	    function uploadBannerPic(id){
 	        type=0;
 	        selectActivityId=id;
@@ -187,7 +191,6 @@ body {
 	    function auditingBack(type){
 	    	var articleId = currentArticle.Id;
 	    	if(type==9){
-	    		
 	            var url = "/StarkPet/article/changeArticleType.do?articleId="+ articleId + "&type=" + 10;
 	            ajaxRequest(url, response);
 	    	}
@@ -200,7 +203,9 @@ body {
 	    function response(data){
 	    	if (data.result == 1) {
                 if(isAuditing){
-                    $("#articleType"+currentArticle.Id).html(data.type);
+                	if(data.type){
+                		$("#articleType"+currentArticle.Id).html(data.type);
+                	}
                 }
                 else{
                     $("#mediaMainId" + currentArticle.Id).remove();
@@ -219,6 +224,19 @@ body {
                 $("#activity"+selectActivityId).remove();
                 createShow();
             }
+	    }
+	    
+	    function moveBack(moveToWhere,showId){
+	    	isAuditing = true;
+	    	var articleId = currentArticle.Id;
+	    	if(moveToWhere==0){
+	    		 var url = "/StarkPet/article/moveArticleToRecommend.do?articleId="+ articleId + "&showId=" + selectActivityId;
+                 ajaxRequest(url, response);
+	    	}
+	    	else if(moveToWhere==1){
+	    		var url = "/StarkPet/activity/moveArticleToShow.do?showId="+showId+"&articleId="+articleId+"&type="+10;
+	    		ajaxRequest(url,response);
+	    	}
 	    }
 	</script>
 </body>

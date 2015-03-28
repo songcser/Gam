@@ -164,4 +164,6 @@ public interface IArticleManager {
 
 	public Map<String, Object> getDeleteList(int page, int maxResults);
 
+	public boolean moveArticleToRecommend(int articleId, int showId);
+
 }

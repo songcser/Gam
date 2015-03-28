@@ -225,10 +225,12 @@ public interface IArticleDAO {
 
 	public boolean setBrowseCount(int articleId, int count);
 
-	public void setRedisArticleCount(String key, String field, int count);
+	public void setRedisArticleInfo(String key, String field, String value);
 
 	public long addRedisCollectionCount(int articleId);
 
 	public boolean addActivityArticleId(int activityId, int id);
+
+	public boolean changeArticleShowId(int articleId, int showId);
 
 }

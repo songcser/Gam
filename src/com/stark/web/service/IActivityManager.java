@@ -31,5 +31,9 @@ public interface IActivityManager {
 
 	public void setActivityOrder(int activityId, int order);
 
+	public boolean moveToShow(int showId, int articleId);
+
+	public boolean moveToShow(int showId, int articleId, int type);
+
 
 }

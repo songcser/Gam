@@ -142,7 +142,13 @@ function createMediaDiv(art){
      //var typeStr = typeChangeStr(type);
 	 var typeStr = art.typeStr;
 	 if(type==14){
-		 typeStr = "节目单: "+art.showTitle;
+		 typeStr = "推荐: "+art.showTitle;
+	 }
+	 else if(type==16){
+		 typeStr = "普通: "+art.showTitle;
+	 }
+	 else if(type==17){
+		 typeStr = "普通推荐: "+art.showTitle;
 	 }
 	
 	mediaOper.append('<div class="btn-group" role="button"><a href="javascript:changeArticleType('+art.articleId+','+art.type+')" class="btn btn-default" id="articleType'+art.articleId+'">'+typeStr+' </a></div>');
@@ -362,7 +368,9 @@ function selectUserSubmit(){
 	
 }
 
+var oldArticleType = -1;
 function changeArticleType(articleId,type){
+	oldArticleType = type;
 	if(type==2){
 		return;
 	}
@@ -375,10 +383,22 @@ function changeArticleType(articleId,type){
 		showAuditingDialog("节目单推文通过审核",type);
 	}
 	else if(type==10){
-		showAuditingDialog("将推文选入推荐",type);
+		showMoveArticleDialog("将推文选入推荐",type);
 	}
 	else if(type==15){
 		showAuditingDialog("普通推文通过审核",type);
+	}
+	else if(type==14){
+		showMoveArticleDialog("将推文选入推荐",type);
+	}
+	else if(type==0){
+		showMoveArticleDialog("将推文选入推荐",type);
+	}
+	else if(type==16){
+		showMoveArticleDialog("将推文选入推荐",type);
+	}
+	else if(type==13){
+		showMoveArticleDialog("将推文选入推荐",type);
 	}
 }
 

@@ -352,4 +352,13 @@ public class ActivityDAO implements IActivityDAO{
 		redisDao.zrem(key, activityId+"");
 	}
 
+	@Override
+	public boolean addArticleToShow(int showId, int articleId) {
+		String sql = "insert into RelActivityArticle(ArticleId,ActivityId) values(?,?)";
+		Query query = sessionFactory.getCurrentSession().createSQLQuery(sql);
+		query.setInteger(0, articleId);
+		query.setInteger(1, showId);
+		return query.executeUpdate()>0;
+	}
+
 }

@@ -1228,11 +1228,11 @@ public class ArticleDAO implements IArticleDAO {
 	}
 
 	@Override
-	public void setRedisArticleCount(String key, String field, int count) {
+	public void setRedisArticleInfo(String key, String field, String value) {
 		if(redisDao==null)
 			return ;
 		//redisDao.hincrby(ArticleInfo.getKey(articleId),ArticleInfo.PRAISECOUNT,1);
-		redisDao.hset(key, field, ""+count);
+		redisDao.hset(key, field, value);
 	}
 
 	@Override
@@ -1248,6 +1248,16 @@ public class ArticleDAO implements IArticleDAO {
 		Query query = sessionFactory.getCurrentSession().createSQLQuery(sql);
 		query.setInteger(0, activityId);
 		query.setInteger(1, articleid);
+		
+		return query.executeUpdate()>0;
+	}
+
+	@Override
+	public boolean changeArticleShowId(int articleId, int showId) {
+		String hql = "update ArticleInfo as a set a.activity.activityId =:showId where a.articleId =:articleId";
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		query.setInteger("showId", showId);
+		query.setInteger("articleId", articleId);
 		
 		return query.executeUpdate()>0;
 	}

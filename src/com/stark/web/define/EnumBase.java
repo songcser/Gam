@@ -677,14 +677,15 @@ public class EnumBase {
 		DayExquisiteReport("推荐被举报",6),
 		FashionMagazineReport("杂志被举报",7),
 		ExquisiteMagazineReport("推荐杂志被举报",8),
-		NoAuditingActivity("未审核活动推文",9),
-		Activity("活动推文",10),
+		NoAuditingActivity("未审核节目单推文",9),
+		Activity("节目单推文",10),
 		Delete("已删除",11),
 		ExquisiteNoAuditing("推荐未审核",12),
 		CommonExquisite("普通推荐",13),
-		ActivityExquisite("活动推荐",14),
-		CommonNoAuditing("普通未审核",15);
-		
+		ActivityExquisite("节目单推荐",14),
+		CommonNoAuditing("普通未审核",15),
+		CommonActivity("普通节目单",16),
+		CommonActivityExquisite("普通节目单推荐",17);
 
 		private String name;
 		private int index;

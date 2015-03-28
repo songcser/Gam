@@ -5,7 +5,7 @@
 		<c:forEach items="${showList }" var="o">
 			<div id="activity${o.activityId }" class="border bg-red-light radius media padding-top" style="overflow: auto">
 				<div class="media-left padding-small">
-					<a style="width: 400px; height: 250px" href="javascript:showArticles(${o.activityId })" class="thumbnail"> <img class="media-object" style="width: 100%; height: 100%"
+					<a style="width: 400px; height: 250px" href="javascript:showArticles(${o.activityId },${o.type })" class="thumbnail"> <img class="media-object" style="width: 100%; height: 100%"
 						src="${o.getBannerPicUrl() }" alt="" id="activityBannerPic${o.activityId }">
 					</a>
 				</div>

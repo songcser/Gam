@@ -24,6 +24,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import com.stark.web.define.EnumBase.ActivityStatus;
+import com.stark.web.define.EnumBase.ArticleType;
 import com.stark.web.entity.ActivityInfo;
 import com.stark.web.entity.CommentInfo;
 import com.stark.web.hunter.FileManager;
@@ -191,7 +192,7 @@ public class ActivityController {
 			map.put("result", 0);
 			return map;
 		}
-		List<Map<String,Object>> lm = new ArrayList<Map<String,Object>>();
+		//List<Map<String,Object>> lm = new ArrayList<Map<String,Object>>();
 		for(ActivityInfo act:list){
 			Map<String,Object> am = new HashMap<String,Object>();
 			am.put("showId", act.getActivityId());
@@ -260,5 +261,23 @@ public class ActivityController {
 	@RequestMapping("setActivityOrder.do")
 	public void setActivityOrder(int activityId,int order){
 		activityManager.setActivityOrder(activityId,order);
+	}
+	
+	@RequestMapping("moveArticleToShow.do")
+	@ResponseBody
+	public Map<String,Object> moveArticleToShow(int showId,int articleId,int type){
+		boolean result = false;
+		Map<String,Object> map = new HashMap<String,Object>();
+		if(type==10){
+			result = activityManager.moveToShow(showId,articleId);
+		}
+		else if(type==16||type==17){
+			result = activityManager.moveToShow(showId,articleId,type);
+			map.put("type", ArticleType.getName(type));
+		}
+		
+		map.put("result", result?1:0);
+		//map.put("type", "活动推文");
+		return map;
 	}
 }

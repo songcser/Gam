@@ -39,6 +39,7 @@ body {
     <%@ include file="commentDialog.jsp"%>
     <%@ include file="sliderShow.jsp"%>
     <%@ include file="selectUserList.jsp"%>
+     <%@ include file="moveArticle.jsp"%>
 	<script src="../js/jquery-1.11.2.min.js"></script>
     <script src="../js/bootstrap.min.js"></script>
     <script src="../js/main.js"></script>
@@ -98,6 +99,34 @@ body {
             }
         } else {
             alert("失败了!!!");
+        }
+    }
+    
+    function moveBack(moveToWhere,showId){
+        isAuditing = true;
+        var articleId = currentArticle.Id;
+        if(moveToWhere==0){
+        	var url = "";
+        	if(oldArticleType==16){
+        		url = "/StarkPet/article/changeArticleType.do?articleId="+ articleId + "&type=" + 17;
+        	}
+        	else if(oldArticleType==13){
+        		url = "/StarkPet/activity/moveArticleToShow.do?showId="+showId+"&articleId="+ articleId + "&type=" + 17;
+        	}
+        	else {
+        		url = "/StarkPet/article/changeArticleType.do?articleId="+ articleId + "&type=" + 13;
+        	}
+            ajaxRequest(url, response);
+        }
+        else if(moveToWhere==1){
+        	var url = "";
+        	if(oldArticleType==13){
+        		url = "/StarkPet/activity/moveArticleToShow.do?showId="+showId+"&articleId="+ articleId + "&type=" + 17;
+        	}
+        	else{
+        		url = "/StarkPet/activity/moveArticleToShow.do?showId="+showId+"&articleId="+articleId+"&type="+16;
+        	} 
+            ajaxRequest(url,response);
         }
     }
     </script>

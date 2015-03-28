@@ -6,12 +6,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.Resource;
+
 import com.stark.web.dao.ActivityDAO;
 import com.stark.web.dao.IActivityDAO;
+import com.stark.web.dao.IArticleDAO;
 import com.stark.web.define.RedisInfo;
 import com.stark.web.define.EnumBase.ActivityStatus;
 import com.stark.web.define.EnumBase.ActivityType;
 import com.stark.web.entity.ActivityInfo;
+import com.stark.web.entity.ArticleInfo;
 
 public class ActivityManager implements IActivityManager{
 
@@ -19,6 +23,13 @@ public class ActivityManager implements IActivityManager{
 	
 	public void setActivityDao(IActivityDAO activityDao){
 		this.activityDao = activityDao;
+	}
+	
+	@Resource
+	private IArticleDAO articleDao;
+	
+	public void setArticleDao(IArticleDAO articleDao){
+		this.articleDao = articleDao;
 	}
 	
 	@Override
@@ -178,6 +189,29 @@ public class ActivityManager implements IActivityManager{
 			activityDao.setRedisActivity(key,ActivityInfo.ORDER,order+"");
 			activityDao.addRedisActivityZSet(RedisInfo.ACTIVITYORDERZSET,order,activityId);
 		}
+	}
+
+	@Override
+	public boolean moveToShow(int showId, int articleId) {
+		boolean result = activityDao.addArticleToShow(showId,articleId);
+		if(result){
+			articleDao.addRedisActivityAuditingList(showId,articleId);
+			
+		}
+		return result;
+	}
+
+	@Override
+	public boolean moveToShow(int showId, int articleId, int type) {
+		boolean result = activityDao.addArticleToShow(showId,articleId);
+		result = articleDao.changeArticleType(articleId,type);
+		result = articleDao.changeArticleShowId(articleId,showId);
+		if(result){
+			articleDao.addRedisActivityAuditingList(showId,articleId);
+			articleDao.changeRedisArticleType(articleId,type);
+			articleDao.setRedisArticleInfo(ArticleInfo.getKey(articleId), ArticleInfo.ACTIVITYID, showId+"");
+		}
+		return result;
 	}
 	
 }

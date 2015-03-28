@@ -65,4 +65,6 @@ public interface IActivityDAO {
 	public void setRedisActivity(String key, String field, String value);
 
 	public void removeRedisActivityZSet(String key, int activityId);
+
+	public boolean addArticleToShow(int showId, int articleId);
 }

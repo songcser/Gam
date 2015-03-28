@@ -1520,4 +1520,14 @@ public class ArticleController {
 		Map<String,Object>  map = articleManager.getDeleteList(page,maxResults2);
 		return map;
 	}
+	
+	@RequestMapping("moveArticleToRecommend.do")
+	@ResponseBody
+	public Map<String,Object> moveArticleToRecommend(int articleId,int showId){
+		boolean result = articleManager.moveArticleToRecommend(articleId,showId);
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("result", result?1:0);
+		map.put("type", ArticleType.getName(ArticleType.ActivityExquisite.getIndex()));
+		return map;
+	}
 }
