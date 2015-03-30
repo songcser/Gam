@@ -2,7 +2,7 @@
 <div class="modal fade" id="sliderDialog" tabindex="-1" role="dialog" aria-labelledby="sliderLabel" aria-hidden="true">
 	<div class="modal-dialog" id="sliderModalId">
 		<div class="modal-content " id="sliderContentId">
-			<div id="slidershow" class="carousel slide padding-top" data-ride="carousel" style="height:100%">
+			<div id="slidershow" class="carousel slide padding-top padding-bottom" data-ride="carousel" style="height:100%">
 				<!-- 设置图片轮播的顺序 -->
 				<ol class="carousel-indicators" id="carouselIndicators">
 					

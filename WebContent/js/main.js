@@ -123,7 +123,7 @@ function createMediaDiv(art){
 	var mediaPic = $('<div class=" padding-small-bottom">');
 	for (var j = 0; j < picList.length; j++) {
 		var picstr = "'"+picList[j]+"'";
-		mediaPic.append('<a href="javascript:viewPicture('+art.articleId+')"><img src="'+picList[j]+'" width="100px" height="100px" class="img-border radius-small" name="sliderPicture'+art.articleId+'" /> </a>');
+		mediaPic.append('<a href="javascript:viewPicture('+art.articleId+')"  ><img src="'+picList[j]+'" width="100px" height="100px" class="img-border border radius-small" name="sliderPicture'+art.articleId+'" /> </a>');
 	}
 	mediaBody.append(mediaPic);
 	
