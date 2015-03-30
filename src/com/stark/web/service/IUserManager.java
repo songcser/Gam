@@ -126,4 +126,8 @@ public interface IUserManager {
 
 	public List<UserInfo> getMarkUsers();
 
+	public boolean markUser(int userId);
+
+	public List<UserInfo> getLastUsers(int maxResult);
+
 }

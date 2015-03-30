@@ -482,8 +482,6 @@ public class UserManager implements IUserManager{
 		map.put("noticeStatus", user.getNoticeStatus());
 		//map.put("type", new ArrayList<String>(user.getType()));
 		
-		//map.put("pets", list);
-		
 		return map;
 	}
 
@@ -816,6 +814,36 @@ public class UserManager implements IUserManager{
 			return list;
 		
 		List<UserInfo> users = userDao.getUsersByRole(UserRole.Mark.getIndex());
+		if(users!=null&&!users.isEmpty()){
+			for(UserInfo user:users)
+			userDao.addRedisUsers(key, user.getUserId());
+		}
+		return users;
+	}
+
+	@Override
+	public boolean markUser(int userId) {
+		String key = RedisInfo.USERMARKLIST;
+		boolean result = userDao.updateUserInfo(userId,"role",UserRole.Mark.getIndex());
+		if(result){
+			userDao.updateRedisUserInfo(UserInfo.getKey(userId),UserInfo.ROLE,UserRole.Mark.getIndex()+"");
+			userDao.addRedisUsers(key, userId);
+		}
+		
+		return result;
+	}
+
+	@Override
+	public List<UserInfo> getLastUsers(int maxResult) {
+		String key = RedisInfo.USERNORMALZSET;
+		List<String> ids = userDao.getRedisUsers(key,maxResult);
+		List<UserInfo> list = idsToUserList(ids);
+		if(list!=null&&!list.isEmpty())
+			return list;
+		List<Integer> roles = new ArrayList<Integer>();
+		roles.add(UserRole.Normal.getIndex());
+		roles.add(UserRole.Mark.getIndex());
+		List<UserInfo> users = userDao.getUsersByRoles(roles,maxResult);
 		if(users!=null&&!users.isEmpty()){
 			for(UserInfo user:users)
 			userDao.addRedisUsers(key, user.getUserId());

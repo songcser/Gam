@@ -606,12 +606,43 @@ public class UserDAO implements IUserDAO{
 		}
 		return query.list();
 	}
+	
+	@Override
+	public List<UserInfo> getUsersByRoles(List<Integer> roles,int maxResult) {
+		
+		StringBuilder builder = new StringBuilder();
+		for(int i=0;i<roles.size();i++){
+			
+			if(i<roles.size()-1){
+				builder.append(" u.role=? or");
+			}
+			else {
+				builder.append(" u.role=?");
+			}
+		}
+		String hql = "from UserInfo as u where "+builder+ " order by u.userId desc";
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		for(int i=0;i<roles.size();i++){
+			query.setInteger(i, roles.get(i));
+		}
+		query.setFirstResult(0);
+		query.setMaxResults(maxResult);
+		
+		return query.list();
+	}
 
 	@Override
 	public List<String> getRedisUsers(String key) {
 		if(redisDao==null)
 			return null;
 		return redisDao.lrange(key, 0, -1);
+	}
+	
+	@Override
+	public List<String> getRedisUsers(String key,int maxResult) {
+		if(redisDao==null)
+			return null;
+		return redisDao.lrange(key, 0, maxResult);
 	}
 
 	@Override
@@ -1026,6 +1057,20 @@ public class UserDAO implements IUserDAO{
 		Query query = sessionFactory.getCurrentSession().createQuery(hql);
 		query.setString("name", name);
 		return query.list();
+	}
+
+	@Override
+	public boolean updateUserInfo(int userId, String field, int value) {
+		String hql = "update UserInfo as u set u."+field+" =:value where u.userId=:userId";
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		query.setInteger("value", userId);
+		query.setInteger("userId", userId);
+		return query.executeUpdate()>0;
+	}
+
+	@Override
+	public void updateRedisUserInfo(String key, String field, String value) {
+		redisDao.hset(key, field, value);
 	}
 
 

@@ -3,6 +3,7 @@ package com.stark.web.dao;
 import java.util.List;
 import java.util.Set;
 
+import com.stark.web.define.EnumBase.UserRole;
 import com.stark.web.entity.RelUserFollow;
 import com.stark.web.entity.RelUserFriend;
 import com.stark.web.entity.UserInfo;
@@ -181,6 +182,14 @@ public interface IUserDAO {
 	public void addRedisUserPassword(String key, int userId);
 
 	public List<UserInfo> getUserByName(String name);
+
+	public boolean updateUserInfo(int userId, String field, int mark);
+
+	public void updateRedisUserInfo(String key, String role, String string);
+
+	public List<String> getRedisUsers(String key, int maxResult);
+
+	public List<UserInfo> getUsersByRoles(List<Integer> roles, int maxResult);
 
 
 }

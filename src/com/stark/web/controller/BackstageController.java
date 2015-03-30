@@ -85,22 +85,13 @@ public class BackstageController {
 			//System.out.println("add cookie");
 			response.addCookie(userNameCookie);
 			response.addCookie(userRoleCookie);
-			//HttpSession session = request.getSession(true);
-			//session.setAttribute("adminId", user.getUserId());
-			//session.setAttribute("adminName", user.getName());
-			//session.setAttribute("adminRole", user.getRole());
-			
-			//UserInfo user = userManager.getUser(adminId);
 			
 			request.setAttribute("user", user);
 			addCount(request);
 			
 			return "/home";
 		}
-//		PrintWriter out = response.getWriter();
-//		out.print("<script language='javascript'>parent.callback();</script>");
-//		out.flush();
-//		out.close();
+
 		request.setAttribute("error", true);
 		return "/adminLogin";
 	}
@@ -279,7 +270,8 @@ public class BackstageController {
 		if(!isLogin){
 			return "/adminLogin";
 		}
-		
+		List<UserInfo> lastUsers = userManager.getLastUsers(20);
+		request.setAttribute("lastUser", lastUsers);
 		addCount(request);
 		
 		return "/home";

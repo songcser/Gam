@@ -1435,4 +1435,13 @@ public class UserController {
 		map.put("users", list);
 		return map;
 	}
+	
+	@RequestMapping("markUser.do")
+	@ResponseBody
+	public Map<String,Object> markUser(int userId){
+		boolean result = userManager.markUser(userId);
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("result", result?1:0);
+		return map;
+	}
 }

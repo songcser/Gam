@@ -106,7 +106,7 @@ function createMediaDiv(art){
 	
 	var mediaBody = $('<div class="media-body padding-left padding-top"></div>');
 	if(roleStr=="普通用户"){
-		mediaBody.append('<h4 class="media-heading"><strong>'+ art.name+'</strong><small> ('+roleStr+') <a href="#"><span class="glyphicon glyphicon-tag"></span></a></small></h4>');
+		mediaBody.append('<h4 class="media-heading"><strong>'+ art.name+'</strong><small> ('+roleStr+') <a href="javascript:markUser('+art.userId+')"><span class="glyphicon glyphicon-tag"></span></a></small></h4>');
 	}
 	else{
 		mediaBody.append('<h4 class="media-heading"><strong>'+ art.name+'</strong><small> ('+roleStr+')</small></h4>');
@@ -454,5 +454,18 @@ function deleteResponse(data){
 	}
 	else{
 		alert("失败了!!!");
+	}
+}
+
+function markUser(userId){
+	var url = "/StarkPet/user/markUser.do?userId="+userId;
+	ajaxRequest(url,markResponse);
+}
+function markResponse(ret){
+	if(ret.result==1){
+		alert("已标记用户");
+	}
+	else{
+		alert("标记不成功");
 	}
 }

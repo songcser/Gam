@@ -159,8 +159,6 @@ public class ArticleManager implements IArticleManager {
 		return id;
 	}
 	
-	
-
 	public IUserDAO getUserDao() {
 		return userDao;
 	}
@@ -832,7 +830,7 @@ public class ArticleManager implements IArticleManager {
 		if(article.getActivity()!=null){
 			showId = article.getActivity().getActivityId();
 		}
-		if(type==oldType){
+		if(type==oldType&&type!=ArticleType.Delete.getIndex()){
 			return true;
 		}
 		boolean result = articleDao.changeArticleType(articleId,type);
@@ -935,6 +933,10 @@ public class ArticleManager implements IArticleManager {
 				articleDao.removeRedisUserArticleList(article.getUser().getUserId(), articleId);
 				articleDao.decRedisUserArticleCount(article.getUser().getUserId());
 				articleDao.addRedisArticleId(RedisInfo.ARTICLEDELETELIST, articleId);
+				articleDao.removeRedisArticleList(RedisInfo.ARTICLEMOMENTLIST, articleId);
+				articleDao.removeRedisArticleList(RedisInfo.ARTICLERECOMMENDLIST, articleId);
+				articleDao.removeRedisArticleList(RedisInfo.ACTIVITYARTICLEALLLIST+showId, articleId);
+				articleDao.removeRedisArticleList(RedisInfo.ACTIVITYARTICLEAUDITINGLIST+showId, articleId);
 				//articleDao.removeRedisArticleList(RedisInfo.ARTICLEMOMENTLIST, articleId);
 			}
 			else if(type==ArticleType.ActivityExquisite.getIndex()){
