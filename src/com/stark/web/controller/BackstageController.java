@@ -430,4 +430,18 @@ public class BackstageController {
 		request.setAttribute("showList", acList);
 		return "moment";
 	}
+	
+	@RequestMapping("chartlet.do")
+	public String chartlet(HttpServletRequest request){
+		if(getLoginUser(request)==null){
+			return "/adminLogin";
+		}
+		List<ChartletInfo> chartlets = articleManager.getAllChartlet();
+		for(ChartletInfo chartlet:chartlets){
+			List<RelChartletPicture> pictures = articleManager.getChartletPictures(chartlet.getChartletId());
+			chartlet.setPicList(pictures);
+		}
+		request.setAttribute("chartlets", chartlets);
+		return "chartlet";
+	}
 }
