@@ -1261,4 +1261,27 @@ public class ArticleDAO implements IArticleDAO {
 		
 		return query.executeUpdate()>0;
 	}
+
+	@Override
+	public List<ArticleInfo> getUserPublishList(List<Integer> roles,int start, int maxResult) {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < roles.size(); i++) {
+			if (i == roles.size() - 1) {
+				sb.append("u.role = ? ");
+			} else
+				sb.append("u.role = ? or ");
+
+		}
+		String hql = "select a from ArticleInfo as a,UserInfo as u where ("+sb+") and a.user.userId = u.userId order by a.articleId desc";
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		
+		for (int i = 0; i < roles.size(); i++) {
+			int type = roles.get(i);
+			query.setInteger(i, type);
+		}
+		query.setFirstResult(start);
+		query.setMaxResults(maxResult);
+		
+		return query.list();
+	}
 }

@@ -1530,4 +1530,20 @@ public class ArticleController {
 		map.put("type", ArticleType.getName(ArticleType.ActivityExquisite.getIndex()));
 		return map;
 	}
+	
+	@RequestMapping("getCommonPublishList.do")
+	@ResponseBody
+	public Map<String,Object> getCommonPublishList(int page){
+		Map<String,Object> map = articleManager.getCommonPublishList(page,maxResults2);
+		
+		return map;
+	}
+	
+	@RequestMapping("getOperPublishList.do")
+	@ResponseBody
+	public Map<String,Object> getOperPublishList(int page){
+		Map<String,Object> map = articleManager.getOperPublishList(page,maxResults2);
+		
+		return map;
+	}
 }

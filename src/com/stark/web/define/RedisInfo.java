@@ -19,7 +19,9 @@ public class RedisInfo {
 	public static final String ARTICLENOAUDITINGRECOMMENDLIST = "Article:NoAuditing:Recommend:List"; //未审核推荐推文列表
 	public static final String ARTICLEMOMENTLIST = "Article:Moment:List";							//瞬间推文列表
 	public static final String ARTICLENOAUDITINGMOMENTLIST = "Article:NoAuditing:Moment:List";			//未审核瞬间推文列表
-	public static final String ARTICLEDELETELIST = "Article:Delete:List";
+	public static final String ARTICLEDELETELIST = "Article:Delete:List";							//删除的推文列表
+	public static final String ARTICLECOMMONLIST = "Article:Common:List";							//普通用户发布推文列表
+	public static final String ARTICLEOPERTORLIST = "Article:Opertor:List";							//运营人员发布推文列表
 	
 	public static final String USERARTICLELIST = "User:Article:List:";							//用户发布推文列表
 	public static final String USEROSLIST = "User:OS:List";										//运营人员和模拟用户列表

@@ -192,14 +192,17 @@ public class ActivityController {
 			map.put("result", 0);
 			return map;
 		}
-		//List<Map<String,Object>> lm = new ArrayList<Map<String,Object>>();
+		List<Map<String,Object>> lm = new ArrayList<Map<String,Object>>();
 		for(ActivityInfo act:list){
 			Map<String,Object> am = new HashMap<String,Object>();
 			am.put("showId", act.getActivityId());
 			am.put("showTitle", act.getSubject());
 			am.put("showPic", act.getBannerPicUrl());
 			am.put("showType", act.getType());
+			lm.add(am);
 		}
+		map.put("result", 1);
+		map.put("shows", lm);
 		
 		return map;
 	}

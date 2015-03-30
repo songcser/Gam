@@ -166,4 +166,8 @@ public interface IArticleManager {
 
 	public boolean moveArticleToRecommend(int articleId, int showId);
 
+	public Map<String, Object> getCommonPublishList(int page, int maxResults);
+
+	public Map<String, Object> getOperPublishList(int page, int maxResults2);
+
 }

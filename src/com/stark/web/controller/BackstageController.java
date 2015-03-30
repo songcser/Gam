@@ -87,6 +87,8 @@ public class BackstageController {
 			response.addCookie(userRoleCookie);
 			
 			request.setAttribute("user", user);
+			List<UserInfo> lastUsers = userManager.getLastUsers(20);
+			request.setAttribute("lastUser", lastUsers);
 			addCount(request);
 			
 			return "/home";

@@ -1444,4 +1444,5 @@ public class UserController {
 		map.put("result", result?1:0);
 		return map;
 	}
+	
 }

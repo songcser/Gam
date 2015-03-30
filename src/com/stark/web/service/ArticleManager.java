@@ -1609,4 +1609,41 @@ public class ArticleManager implements IArticleManager {
 		}
 		return result;
 	}
+
+	@Override
+	public Map<String, Object> getCommonPublishList(int page, int maxResults) {
+		List<ArticleInfo> articles = new ArrayList<ArticleInfo>();
+		String key = RedisInfo.ARTICLECOMMONLIST;
+		List<String> ids = articleDao.getRedisArticleIds(key, page, maxResults);
+		int size = idsToArticleList(ids,articles);
+		if(size==maxResults)
+			return articlesToMap(articles,0);
+		
+		List<Integer> roles = new ArrayList<Integer>();
+		roles.add(UserRole.Normal.getIndex());
+		roles.add(UserRole.Mark.getIndex());
+		List<ArticleInfo> tlist = articleDao.getUserPublishList(roles,page*maxResults+size, maxResults-size);
+		listToListAndAddRedisId(key,tlist,articles);
+		return articlesToMap(articles,0);
+	}
+
+	@Override
+	public Map<String, Object> getOperPublishList(int page, int maxResults) {
+		List<ArticleInfo> articles = new ArrayList<ArticleInfo>();
+		String key = RedisInfo.ARTICLEOPERTORLIST;
+		List<String> ids = articleDao.getRedisArticleIds(key, page, maxResults);
+		int size = idsToArticleList(ids,articles);
+		if(size==maxResults)
+			return articlesToMap(articles,0);
+		
+		List<Integer> roles = new ArrayList<Integer>();
+		roles.add(UserRole.Admin.getIndex());
+		roles.add(UserRole.Operatior.getIndex());
+		roles.add(UserRole.Simulation.getIndex());
+		roles.add(UserRole.Important.getIndex());
+		roles.add(UserRole.Organization.getIndex());
+		List<ArticleInfo> tlist = articleDao.getUserPublishList(roles,page*maxResults+size, maxResults-size);
+		listToListAndAddRedisId(key,tlist,articles);
+		return articlesToMap(articles,0);
+	}
 }

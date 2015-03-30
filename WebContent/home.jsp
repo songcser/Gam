@@ -46,9 +46,9 @@
 		<input size="100" type="file" name="file" id="headFileId" style="display: none" onchange="addFile()" /> <input type="hidden" name="userId" value="${user.userId }">
 	</form>
 	<iframe id='frameFile' name='frameFile' style='display: none;'></iframe>
-    <div class="row">
-	<div id="head" class="col-md-3 col-lg-3 " >
-		<div class="panel  panel-success padding-left">
+    <div class="row padding-left padding-right">
+	<div id="head" class="col-md-3 col-lg-3" >
+		<div class="panel  panel-success ">
 			<div class="panel-heading ">
 				<strong><c:if test="${user.role==1 }">超级管理员</c:if> <c:if test="${user.role==2 }">运营人员</c:if> </strong>
 			</div>
@@ -61,20 +61,20 @@
 			</div>
 		</div>
 	</div>
-	<div class="col-md-9 col-lg-9 " style="padding-top: 100px;  overflow:auto">
+	<div class="col-md-9 col-lg-9 " style="padding-top: 100px;">
 		<div class="panel panel-default panel-success">
 			<div class="panel-heading ">
 				<strong>最新用户</strong>
 			</div>
 			<div class="panel-body">
-        <div class="media-inline">
+        <div class="media-inline " style="overflow:auto">
 			<c:forEach items="${lastUser }" var="u">
 				<div class="media media-y" style="width:100px">
-					<a class="thumbnail" style="width:80px;height:80px" href="javascript:showUser(${u.userId })"> 
-					<img src="${u.getHeadUrl()}" class="img-circle" alt="">
+					<a  style="width:100px;height:100px" href="javascript:showUser(${u.userId })"> 
+					<img src="${u.getHeadUrl()}" style="width:100px;height:100px" class="img-circle" alt="">
 					</a>
-					<div >
-						<strong>${u.name }</strong>
+					<div>
+						${u.name }
 					</div>
 			 </div>
 			</c:forEach>

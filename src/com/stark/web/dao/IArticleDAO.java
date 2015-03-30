@@ -233,4 +233,6 @@ public interface IArticleDAO {
 
 	public boolean changeArticleShowId(int articleId, int showId);
 
+	public List<ArticleInfo> getUserPublishList(List<Integer> roles,int start, int maxResult);
+
 }
