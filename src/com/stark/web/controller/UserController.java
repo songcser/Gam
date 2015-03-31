@@ -1462,6 +1462,8 @@ public class UserController {
 			return map;
 		}
 		map.put("result", 1);
+		ArticleInfo article = articleManager.getArticle(articleId);
+		map.put("praiseCount", article.getPraiseCount());
 		List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
 		for(UserInfo user:users){
 			Map<String,Object> lm = new HashMap<String,Object>();

@@ -747,7 +747,7 @@ public class UserManager implements IUserManager{
 		List<UserInfo> users = new ArrayList<UserInfo>();
 		String key = RedisInfo.USERFANSZSET+userId;
 		Set<String> ids = userDao.getRedisSetUserIds(key);
-		if(ids!=null){
+		if(ids!=null&&!ids.isEmpty()){
 			int size = ids.size();
 			UserInfo user = getUser(userId);
 			if(user.getFansCount()==size){
