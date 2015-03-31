@@ -235,4 +235,6 @@ public interface IArticleDAO {
 
 	public List<ArticleInfo> getUserPublishList(List<Integer> roles,int start, int maxResult);
 
+	public void removeRedisZSetArticleId(String key, String member);
+
 }

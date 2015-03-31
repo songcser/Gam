@@ -240,6 +240,7 @@ public class ArticleManager implements IArticleManager {
 			articleDao.addRedisPraise(userId, articleId);
 			ArticleInfo article = getArticle(articleId);
 			articleDao.addRedisUserPraiseCount(article.getUser().getUserId());
+			articleDao.addRedisArticleId(RedisInfo.ARTICLEPRAISELIST+articleId, userId);
 			
 		}
 		return result;
@@ -937,6 +938,17 @@ public class ArticleManager implements IArticleManager {
 				articleDao.removeRedisArticleList(RedisInfo.ARTICLERECOMMENDLIST, articleId);
 				articleDao.removeRedisArticleList(RedisInfo.ACTIVITYARTICLEALLLIST+showId, articleId);
 				articleDao.removeRedisArticleList(RedisInfo.ACTIVITYARTICLEAUDITINGLIST+showId, articleId);
+				
+				int userId = article.getUser().getUserId();
+				List<UserInfo> fans = userManager.getAllFansList(userId);
+				String key = RedisInfo.USERFOLLOWARTICLEZSET+userId;
+				for(UserInfo user :fans){
+					List<ArticleInfo> articles = getAllArticleByUserId(user.getUserId());
+					for(ArticleInfo a:articles){
+						int aid = a.getArticleId();
+						removeSetArticleId(key,aid+"");
+					}
+				}
 				//articleDao.removeRedisArticleList(RedisInfo.ARTICLEMOMENTLIST, articleId);
 			}
 			else if(type==ArticleType.ActivityExquisite.getIndex()){
@@ -1645,5 +1657,10 @@ public class ArticleManager implements IArticleManager {
 		List<ArticleInfo> tlist = articleDao.getUserPublishList(roles,page*maxResults+size, maxResults-size);
 		listToListAndAddRedisId(key,tlist,articles);
 		return articlesToMap(articles,0);
+	}
+
+	@Override
+	public void removeSetArticleId(String key,  String member) {
+		articleDao.removeRedisZSetArticleId(key,member);
 	}
 }

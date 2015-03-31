@@ -22,10 +22,11 @@ public class RedisInfo {
 	public static final String ARTICLEDELETELIST = "Article:Delete:List";							//删除的推文列表
 	public static final String ARTICLECOMMONLIST = "Article:Common:List";							//普通用户发布推文列表
 	public static final String ARTICLEOPERTORLIST = "Article:Opertor:List";							//运营人员发布推文列表
+	public static final String ARTICLEPRAISELIST = "Article:Praise:List:";							//推文赞过的用户列表
 	
-	public static final String USERARTICLELIST = "User:Article:List:";							//用户发布推文列表
-	public static final String USEROSLIST = "User:OS:List";										//运营人员和模拟用户列表
-	public static final String USERPRAISESET = "User:Praise:Set:";								//用户赞的推文集
+	public static final String USERARTICLELIST = "User:Article:List:";								//用户发布推文列表
+	public static final String USEROSLIST = "User:OS:List";											//运营人员和模拟用户列表
+	public static final String USERPRAISESET = "User:Praise:Set:";									//用户赞的推文集
 	public static final String USERFOLLOWZSET = "User:Follow:ZSet:";								//用户关注列表
 	public static final String USERFANSZSET = "User:Fans:ZSet:";									//用户粉丝列表
 	public static final String OPERATIORCOUNT = "User:Operatior:Count";							//运营人员数量

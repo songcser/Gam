@@ -1073,6 +1073,21 @@ public class UserDAO implements IUserDAO{
 		redisDao.hset(key, field, value);
 	}
 
+	@Override
+	public List<String> getRedisUsers(String key, int page, int maxResults) {
+		return redisDao.lrange(key, page*maxResults, (page+1)*maxResults-1);
+	}
+
+	@Override
+	public Set<String> getRedisUserSet(String key) {
+		return redisDao.smembers(key);
+	}
+
+	@Override
+	public void addRedisUserSet(String key, int userId) {
+		redisDao.sadd(key,userId+"");
+	}
+
 
 	
 }

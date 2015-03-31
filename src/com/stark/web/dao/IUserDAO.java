@@ -191,5 +191,11 @@ public interface IUserDAO {
 
 	public List<UserInfo> getUsersByRoles(List<Integer> roles, int maxResult);
 
+	public List<String> getRedisUsers(String key, int page, int maxUserCount);
+
+	public Set<String> getRedisUserSet(String key);
+
+	public void addRedisUserSet(String key, int userId);
+
 
 }

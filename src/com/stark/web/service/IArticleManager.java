@@ -170,4 +170,6 @@ public interface IArticleManager {
 
 	public Map<String, Object> getOperPublishList(int page, int maxResults2);
 
+	public void removeSetArticleId(String key, String member);
+
 }

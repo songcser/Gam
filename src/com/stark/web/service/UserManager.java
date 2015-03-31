@@ -409,6 +409,7 @@ public class UserManager implements IUserManager{
 		if(result){
 			userDao.removeRedisFollow(userId,followId);
 			userDao.removeRedisFans(userId,followId);
+			
 			subFollowingCount(userId);
 			subFansCount(followId);
 		}
@@ -746,15 +747,15 @@ public class UserManager implements IUserManager{
 		List<UserInfo> users = new ArrayList<UserInfo>();
 		String key = RedisInfo.USERFANSZSET+userId;
 		Set<String> ids = userDao.getRedisSetUserIds(key);
-		if(ids==null)
-			return null;
-		int size = ids.size();
-		UserInfo user = getUser(userId);
-		if(user.getFansCount()==size){
-			for(String id :ids){
-				users.add(getUser(Integer.parseInt(id)));
+		if(ids!=null){
+			int size = ids.size();
+			UserInfo user = getUser(userId);
+			if(user.getFansCount()==size){
+				for(String id :ids){
+					users.add(getUser(Integer.parseInt(id)));
+				}
+				return users;
 			}
-			return users;
 		}
 		
 		users.clear();
@@ -763,10 +764,9 @@ public class UserManager implements IUserManager{
 			userDao.deleteRedisKey(key);
 			for(RelUserFollow rel : ruf){
 				
-				//RelUserFollow rel = ruf.get(i);
 				UserInfo u = getUser(rel.getUser().getUserId());
 				if(u!=null){
-					users.add(user);
+					users.add(u);
 					userDao.addRedisOnlyFansZSet(rel);
 				}
 			}
@@ -844,6 +844,21 @@ public class UserManager implements IUserManager{
 		roles.add(UserRole.Normal.getIndex());
 		roles.add(UserRole.Mark.getIndex());
 		List<UserInfo> users = userDao.getUsersByRoles(roles,maxResult);
+		if(users!=null&&!users.isEmpty()){
+			for(UserInfo user:users)
+			userDao.addRedisUsers(key, user.getUserId());
+		}
+		return users;
+	}
+
+	@Override
+	public List<UserInfo> getPraiseUsers(int articleId, int page, int maxUserCount) {
+		String key = RedisInfo.ARTICLEPRAISELIST+articleId;
+		List<String> ids = userDao.getRedisUsers(key,page,maxUserCount);
+		List<UserInfo> list = idsToUserList(ids);
+		if(list!=null&&!list.isEmpty())
+			return list;
+		List<UserInfo> users = userDao.getPraiseUser(articleId);
 		if(users!=null&&!users.isEmpty()){
 			for(UserInfo user:users)
 			userDao.addRedisUsers(key, user.getUserId());

@@ -76,6 +76,7 @@ public class UserController {
 	// @Resource(name="redisManager")
 	// private IRedisManager redisManager;
 
+	private static int maxUserCount = 20;
 	private static int maxRequestFollowCount = 20;
 	private static int maxPictureResult = 15;
 	private static int maxMeetingCount = 8;
@@ -719,7 +720,13 @@ public class UserController {
 		//rel.setFollow(new UserInfo(followId));
 
 		boolean result = userManager.removeFollow(userId, followId);
-
+		if(result){
+			List<ArticleInfo> articles = articleManager.getAllArticleByUserId(followId);
+			for(ArticleInfo article:articles){
+				int articleId = article.getArticleId();
+				articleManager.removeSetArticleId(RedisInfo.USERFOLLOWARTICLEZSET+userId,articleId+"");
+			}
+		}
 		//String ret = "{\"result\":\"" + (result ? 1 : 0) + "\"}";
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("result", result);
@@ -1445,4 +1452,28 @@ public class UserController {
 		return map;
 	}
 	
+	@RequestMapping("getPraiseUserList2.0.do")
+	@ResponseBody
+	public Map<String,Object> getPraiseUserList2(int userId,int articleId,int page){
+		Map<String,Object> map = new HashMap<String,Object>();
+		List<UserInfo> users = userManager.getPraiseUsers(articleId,page,maxUserCount);
+		if(users==null){
+			map.put("result", 0);
+			return map;
+		}
+		map.put("result", 1);
+		List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
+		for(UserInfo user:users){
+			Map<String,Object> lm = new HashMap<String,Object>();
+			lm.put("userId", user.getUserId());
+			lm.put("name", user.getName());
+			boolean follow = userManager.isFollow(userId, user.getUserId());
+			lm.put("followStatus", follow?1:0);
+			lm.put("headPic", user.getHeadUrl());
+			list.add(lm);
+		}
+		
+		map.put("users", list);
+		return map;
+	}
 }

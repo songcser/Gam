@@ -1284,4 +1284,9 @@ public class ArticleDAO implements IArticleDAO {
 		
 		return query.list();
 	}
+
+	@Override
+	public void removeRedisZSetArticleId(String key, String member) {
+		redisDao.zrem(key, member);
+	}
 }

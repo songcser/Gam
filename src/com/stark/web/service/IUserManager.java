@@ -130,4 +130,6 @@ public interface IUserManager {
 
 	public List<UserInfo> getLastUsers(int maxResult);
 
+	public List<UserInfo> getPraiseUsers(int articleId, int page, int maxUserCount);
+
 }
