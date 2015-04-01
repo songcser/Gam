@@ -17,5 +17,17 @@
         <property name="status" type="int">
             <column name="Status" not-null="true" default="0" />
         </property>
+        <property name="coordinateX" type="int">
+            <column name="CoordinateX" not-null="true" default="0" />
+        </property>
+        <property name="coordinateY" type="int">
+            <column name="CoordinateY" not-null="true" default="0" />
+        </property>
+        <property name="width" type="int">
+            <column name="Width" not-null="true" default="0" />
+        </property>
+        <property name="height" type="int">
+            <column name="Height" not-null="true" default="0" />
+        </property>
     </class>
 </hibernate-mapping>

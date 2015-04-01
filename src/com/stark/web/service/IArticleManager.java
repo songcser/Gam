@@ -172,4 +172,8 @@ public interface IArticleManager {
 
 	public void removeSetArticleId(String key, String member);
 
+	public boolean setBubbleCoordinate(int bubbleId, String flag, int value);
+
+	public List<ChartletInfo> getBubbleList();
+
 }

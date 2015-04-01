@@ -1416,6 +1416,7 @@ public class ArticleController {
 	@RequestMapping("getRecommendList2.0.do")
 	@ResponseBody
 	public Map<String,Object> getRecommendList2(int userId,int page){
+		System.out.println(userId);
 		Map<String,Object> map = new HashMap<String,Object>();
 		map = articleManager.getRecommendList(userId,page,maxResults2);
 		return map;
@@ -1544,6 +1545,51 @@ public class ArticleController {
 	public Map<String,Object> getOperPublishList(int page){
 		Map<String,Object> map = articleManager.getOperPublishList(page,maxResults2);
 		
+		return map;
+	}
+	
+	@RequestMapping("setBubbleCoordinate.do")
+	@ResponseBody
+	public Map<String,Object> setBubbleCoordinate(int bubbleId,String flag,int value){
+		Map<String,Object> map = new HashMap<String,Object>();
+		boolean result = articleManager.setBubbleCoordinate(bubbleId,flag,value);
+		map.put("result", result?1:0);
+		return map;
+	}
+	
+	@RequestMapping("getBubbleList2.0.do")
+	@ResponseBody
+	public Map<String,Object> getBubbleList2(){
+		Map<String,Object> map = new HashMap<String,Object>();
+		List<ChartletInfo> chartlets = articleManager.getBubbleList();
+		for(ChartletInfo chartlet:chartlets){
+			List<RelChartletPicture> pictures = articleManager.getChartletPictures(chartlet.getChartletId());
+			chartlet.setPicList(pictures);
+		}
+		if(chartlets!=null){
+			map.put("result", 1);
+			List<Map<String, Object>> bubbles = new ArrayList<Map<String,Object>>();
+			//List<Map<String, Object>> pictures = new ArrayList<Map<String,Object>>();
+			for(ChartletInfo chartlet : chartlets){
+				Map<String, Object> chartMap = new HashMap<String, Object>();
+				chartMap.put("title", chartlet.getTitle());
+				//map.put("urls", chartlet.getPicList());
+				List<Map<String, Object>> urlMaps = new ArrayList<Map<String,Object>>();
+				for(RelChartletPicture url: chartlet.getPicList()){
+					Map<String, Object> urlMap = new HashMap<String, Object>();
+					urlMap.put("url", url.getPicUrl(chartlet.getChartletId()));
+					urlMap.put("x", url.getCoordinateX());
+					urlMap.put("y", url.getCoordinateY());
+					urlMap.put("w", url.getWidth());
+					urlMap.put("h", url.getHeight());
+					urlMaps.add(urlMap);
+				}
+				chartMap.put("urls", urlMaps);
+				bubbles.add(chartMap);
+				
+ 			}
+			map.put("bubbles", bubbles);
+		}
 		return map;
 	}
 }

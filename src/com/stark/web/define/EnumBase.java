@@ -5,8 +5,9 @@ public class EnumBase {
 	public enum ChartletType{
 		Word("字帖",0),
 		Picture("图贴",1),
-		Dialogue("台词",2),
-		Dialog("对话框",3);
+		Bubble("气泡框",2),
+		Dialogue("台词",3);
+		
 		
 		private String name;
 		private int index;

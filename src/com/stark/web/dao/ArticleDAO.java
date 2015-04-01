@@ -965,6 +965,10 @@ public class ArticleDAO implements IArticleDAO {
 		map.put(RelChartletPicture.CHARTLETID, rel.getChartlet().getChartletId()+"");
 		map.put(RelChartletPicture.PICTURE, rel.getPicture());
 		map.put(RelChartletPicture.STATUS, rel.getStatus()+"");
+		map.put(RelChartletPicture.COORDINATEX, rel.getCoordinateX()+"");
+		map.put(RelChartletPicture.COORDINATEY, rel.getCoordinateY()+"");
+		map.put(RelChartletPicture.WIDTH, rel.getWidth()+"");
+		map.put(RelChartletPicture.HEIGHT, rel.getHeight()+"");
 		
 		return redisDao.hmset(rel.getKey(), map)!=null;
 	}
@@ -987,6 +991,22 @@ public class ArticleDAO implements IArticleDAO {
 		rel.setPicture(cMap.get(RelChartletPicture.PICTURE));
 		rel.setStatus(Integer.parseInt(cMap.get(ChartletInfo.STATUS)));
 		rel.setChartlet(new ChartletInfo(Integer.parseInt(cMap.get(RelChartletPicture.CHARTLETID))));
+		String coordinateX = cMap.get(RelChartletPicture.COORDINATEX);
+		if(coordinateX!=null){
+			rel.setCoordinateX(Integer.parseInt(coordinateX));
+		}
+		String coordinateY = cMap.get(RelChartletPicture.COORDINATEY);
+		if(coordinateY!=null){
+			rel.setCoordinateY(Integer.parseInt(coordinateY));
+		}
+		String width = cMap.get(RelChartletPicture.WIDTH);
+		if(width!=null){
+			rel.setWidth(Integer.parseInt(width));
+		}
+		String height = cMap.get(RelChartletPicture.HEIGHT);
+		if(height!=null){
+			rel.setHeight(Integer.parseInt(height));
+		}
 		return rel;
 	}
 
@@ -1288,5 +1308,21 @@ public class ArticleDAO implements IArticleDAO {
 	@Override
 	public void removeRedisZSetArticleId(String key, String member) {
 		redisDao.zrem(key, member);
+	}
+
+	@Override
+	public boolean setBubbleCoordinate(int bubbleId, String flag, int value) {
+		String hql = "update RelChartletPicture as rel set rel."+flag+"=:value where rel.id =:bubbleId";
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		query.setInteger("value", value);
+		query.setInteger("bubbleId", bubbleId);
+		return query.executeUpdate()>0;
+	}
+
+	@Override
+	public List<ChartletInfo> getChartletByType(int type) {
+		String hql = "from ChartletInfo as c where c.type=:type";
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		return query.list();
 	}
 }

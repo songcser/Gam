@@ -27,6 +27,7 @@ import org.springframework.stereotype.Component;
 
 import com.stark.web.dao.IArticleDAO;
 import com.stark.web.dao.IUserDAO;
+import com.stark.web.define.EnumBase.ChartletType;
 import com.stark.web.define.EnumBase.UserRole;
 import com.stark.web.define.RedisInfo;
 import com.stark.web.define.EnumBase.ArticleType;
@@ -1138,7 +1139,6 @@ public class ArticleManager implements IArticleManager {
 		if(picIds!=null&&!picIds.isEmpty()){
 			for(String id:picIds){
 				RelChartletPicture rel = getRelChartletPicture(Integer.parseInt(id));
-				//System.out.println(rel.getPicture());
 				if(rel!=null){
 					list.add(rel);
 				}
@@ -1662,5 +1662,40 @@ public class ArticleManager implements IArticleManager {
 	@Override
 	public void removeSetArticleId(String key,  String member) {
 		articleDao.removeRedisZSetArticleId(key,member);
+	}
+
+	@Override
+	public boolean setBubbleCoordinate(int bubbleId, String flag, int value) {
+		boolean result = articleDao.setBubbleCoordinate(bubbleId,flag,value);
+		if(result){
+			articleDao.setRedisArticleInfo(RelChartletPicture.getKey(bubbleId), flag, value+"");
+		}
+		return result;
+	}
+
+	@Override
+	public List<ChartletInfo> getBubbleList() {
+		String key = RedisInfo.CHARTLETBUBBLELIST;
+		List<String> ids = articleDao.getRedisChartletIds(key);
+		List<ChartletInfo> list = new ArrayList<ChartletInfo>();
+		if(ids!=null&&!ids.isEmpty()){
+			for(String id : ids){
+				ChartletInfo chartlet = getChartlet(Integer.parseInt(id));
+				if(chartlet!=null)
+					list.add(chartlet);
+			}
+			return list;
+		}
+		
+		list = articleDao.getChartletByType(ChartletType.Bubble.getIndex());
+		if(list!=null){
+			int size = list.size();
+			for(int i=size-1;i>=0;i--){
+				ChartletInfo chartlet = list.get(i);
+				articleDao.addRedisChartlet(chartlet);
+				articleDao.addRedisAllChartlet(key,chartlet.getChartletId());
+			}
+		}
+		return list;
 	}
 }

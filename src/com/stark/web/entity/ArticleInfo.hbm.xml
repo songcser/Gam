@@ -63,7 +63,7 @@
 			<many-to-many class="TagInfo" column="TagId"/> </set> -->
 		<set cascade="delete" inverse="true" lazy="true" name="praiseUser" sort="unsorted" table="RelArticlePraise">
 			<key>
-				<column name="ArticleId" unique-key="multicolumn_unique_key_name" />
+				<column name="ArticleId" unique-key="unique_key_id" />
 			</key>
 			<many-to-many class="UserInfo" column="UserId" unique="false" />
 		</set>

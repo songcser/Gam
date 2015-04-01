@@ -88,7 +88,6 @@ body {
 	        if(url=="0"){
 	            return ;
 	        }
-	        //alert(id);
 	        var tdObj = '<td class="border-right" width="200px" height="270px" ><div  style="height:200px;width:200px">'
 	        +' <a href="javascript:removeChartletPicture()" style="position:relative;left:195px;top:0px">'
 	        +' <span class="icon-times-circle" ></span></a>'
@@ -138,6 +137,27 @@ body {
                  var tdObj = document.getElementById("picObj"+picIdGlobal);
                  trObj.removeChild(tdObj);
              }
+		}
+		
+		function bubbleBack(ret){
+			if (ret.result == "1") {
+                //alert("创建成功");
+                var chartletId = ret.chartletId;
+                var title = ret.title;
+                var divStr = '<div class="margin-top border" >'
+                        + '<form id="chartletPicture'+chartletId+'" name="formFile" method="post" action="../article/addChartletPicture.do" target="frameFile" enctype="multipart/form-data">'
+                        + '<div class="text-large text-yellow padding-large-left text-justify padding-top">'
+                        + '<input type="hidden" value="'+chartletId+'" name="chartletId">'
+                        + '<div class="text-large text-yellow inline">'+ title + '</div>'
+                        + ' <a class="btn input-file bg-sub margin-large-left" href="javascript:void(0);"> '
+                        + ' 添加图片</a><a class="btn bg-sub margin-large-left" href="javascript:deleteChartlet(' + chartletId + ');"> 删除套图 </a>'
+                        + ' </div></form>'
+                        + '<div  class="media-inline padding" style="overflow:auto;">'
+                        + '  <table class="table table-hover " width="100%">'
+                        + '     <tr id="piclist'+chartletId+'"> <td></td></tr>'
+                        + '   </table> </div></div>';
+                $("#" + chartletType).prepend(divStr);
+            }
 		}
 	</script>
 </body>
