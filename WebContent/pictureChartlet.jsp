@@ -19,8 +19,10 @@
                             <c:forEach items="${o.picList }" var="pic">
                                 <td class="border-right" width="200px" height="270px" id="picObj${pic.id }">
                                     <div style="height: 200px; width: 200px">
-                                        <a href="javascript:removeChartletPicture(${o.chartletId },${pic.id })" style="position: relative; left: 195px; top: 0px"> <span class="icon-times-circle"></span></a> <a><img
-                                            src="${pic.getPicUrl(o.chartletId) }" width="200px" height="200px"></a>
+                                        <a href="javascript:removeChartletPicture(${o.chartletId },${pic.id })" style="position: relative; left: 195px; top: 0px">
+                                         <span class="glyphicon glyphicon-remove"></span>
+                                         </a> 
+                                         <a><img src="${pic.getPicUrl(o.chartletId) }" width="200px" height="200px"></a>
                                         <div class="button-group checkbox padding-top" style="width: 200px; text-align: center;">
                                             <c:if test="${pic.status==0 }">
                                                 <label class="button "><input name="pintuer" type="checkbox" onclick="changeChartletStatus(this,'${pic.id}')"><span class="icon icon-check"></span> 最新</label>

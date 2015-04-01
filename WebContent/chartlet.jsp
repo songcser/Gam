@@ -23,7 +23,7 @@ body {
 					<button type="button" class="btn btn-primary" data-toggle="collapse" data-parent="#chartletDiv" data-target="#pictureChartlet" aria-expanded="false"
 						aria-controls="pictureChartlet" id="pictureChartletBtn">图贴</button>
 					<button type="button" class="btn btn-primary" data-toggle="collapse" data-parent="#chartletDiv" data-target="#dialogChartlet" aria-expanded="false"
-						aria-controls="dialogChartlet" id="dialogChartletBtn">对话框</button>
+						aria-controls="dialogChartlet" id="dialogChartletBtn">气泡框</button>
 				</div>
 				<div id="wordChartlet" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
 					<div class="panel-body">
@@ -41,7 +41,7 @@ body {
 				</div>
 				<div id="dialogChartlet" class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingThree">
 					<div class="panel-body">
-						<%@include file="dialogChartlet.jsp"%>
+						<%@include file="bubbleChartlet.jsp"%>
 					</div>
 				</div>
 			</div>
@@ -110,6 +110,33 @@ body {
              }
              else {
                  alert("删除失败");
+             }
+		}
+		function changeChartletStatus(checkboxObj,picId){
+	        if(checkboxObj.checked){
+	            status=1;
+	        }else{
+	            status=0;
+	        }
+	        var url = "/StarkPet/article/changeChartletPictureStatus.do?pictureId="+picId+"&status="+status;
+	        ajaxRequest(url,changeResponse);
+	    }
+		function changeResponse(){
+			
+		}
+		var trIdGlobal = '';
+		var picIdGlobal = '';
+		function removeChartletPicture(trId,picId){
+			trIdGlobal = trId;
+			picIdGlobal = picId;
+			var url = "/StarkPet/article/removeChartletPicture.do?pictureId="+picId;
+			ajaxRequest(url,removeResponse);
+	    }
+		function removeResponse(ret){
+			 if (ret.result == "1") {
+                 var trObj = document.getElementById("piclist"+trIdGlobal);
+                 var tdObj = document.getElementById("picObj"+picIdGlobal);
+                 trObj.removeChild(tdObj);
              }
 		}
 	</script>
