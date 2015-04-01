@@ -469,3 +469,16 @@ function markResponse(ret){
 		alert("标记不成功");
 	}
 }
+
+function jsonAjax(url,data,handle){
+	$.ajax({
+        url : url,
+        type : "post",
+        data:JSON.stringify(data),
+        success : function(ret){    
+       	 handle(ret);
+        },
+        dataType : "json",
+        contentType : "application/json",
+    });
+}

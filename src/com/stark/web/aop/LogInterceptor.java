@@ -3,6 +3,7 @@ package com.stark.web.aop;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 
 import org.apache.log4j.Logger;
 import org.aspectj.lang.JoinPoint;
@@ -27,7 +28,14 @@ public class LogInterceptor {
 		Object[] args = jp.getArgs();
 		String arg = "Redis: "+jp.getSignature().getName()+" ";
 		for(int i=0;i<args.length;i++){
-			arg +=args[i]+" ";
+			Object o = args[i];
+			if(o instanceof String[]){
+				arg += Arrays.toString((String[])o);
+			}
+			else {
+				arg +=o+" ";
+			}
+			
 		}
 		logger.info(arg);
 	}

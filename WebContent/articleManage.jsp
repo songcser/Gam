@@ -319,11 +319,8 @@
 	}
 	
 	function addFile(id){
-		
-		//$('#chartletPic'+id).replaceWith('<input size="100" type="file" id="chartletPic1" onchange="addFile('+'"chartletPic1"'+')"/>');
 		var form = "chartletPicture"+id;
 		$('#chartletPicture'+id).submit();
-		
 	}
 	
 	function callbackChartlet(url,id,picId){
