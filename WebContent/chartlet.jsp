@@ -95,15 +95,19 @@ body {
 	        +'<div class="button-group checkbox " style="width:200px;text-align:center;">';
 	       
 	        if(chartletType == "bubbleChartletList"){
+	        	var coordinateX = "'coordinateX'";
+	        	var coordinateY = "'coordinateY'";
+	        	var width = "'width'";
+	        	var height = "'height'";
 	        	tdObj +='<div class="input-group ">'
-                    +'<input type="text" class="form-control-small" placeholder="X" style="width:50px" value="0" onclick="getFocus(this)" onblur="inputblur(this)"'
-                    +'    onkeyup="setBubbleSize('+id+',this,'+"coordinateX"+')" data-toggle="popover" data-content="坐标:X" data-placement="top" data-container="body">'
-                    +'   <input type="text" class="form-control-small" placeholder="Y" style="width:50px" value="0" onclick="getFocus(this)" onblur="inputblur(this)"'
-                    +'   onkeyup="setBubbleSize('+id+',this,'+"coordinateY"+')" data-toggle="popover" data-content="坐标:Y" data-placement="top" data-container="body">'
-                    +'   <input type="text" class="form-control-small" placeholder="W" style="width:50px" value="0" onclick="getFocus(this)" onblur="inputblur(this)"'
-                    +'   onkeyup="setBubbleSize('+id+',this,'+"width"+')" data-toggle="popover" data-content="宽度:W" data-placement="top" data-container="body">'
-                    +'   <input type="text" class="form-control-small" placeholder="H" style="width:50px" value="0" onclick="getFocus(this)" onblur="inputblur(this)"'
-                    +'   onkeyup="setBubbleSize('+id+',this,'+"height"+')" data-toggle="popover" data-content="高度:H" data-placement="top" data-container="body">'
+                    +'<input type="text" class="form-control-small" placeholder="X" style="width:50px" value="0" onclick="getFocus(this)" '
+                    +'    onblur="setBubbleSize('+id+',this,'+coordinateX+')" data-toggle="popover" data-content="坐标:X" data-placement="top" data-container="body">'
+                    +'   <input type="text" class="form-control-small" placeholder="Y" style="width:50px" value="0" onclick="getFocus(this)" '
+                    +'   onblur="setBubbleSize('+id+',this,'+coordinateY+')" data-toggle="popover" data-content="坐标:Y" data-placement="top" data-container="body">'
+                    +'   <input type="text" class="form-control-small" placeholder="W" style="width:50px" value="0" onclick="getFocus(this)" '
+                    +'   onblur="setBubbleSize('+id+',this,'+width+')" data-toggle="popover" data-content="宽度:W" data-placement="top" data-container="body">'
+                    +'   <input type="text" class="form-control-small" placeholder="H" style="width:50px" value="0" onclick="getFocus(this)" '
+                    +'   onblur="setBubbleSize('+id+',this,'+height+')" data-toggle="popover" data-content="高度:H" data-placement="top" data-container="body">'
                     +' </div>'
                     +'</div>';
 	        }

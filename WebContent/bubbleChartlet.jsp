@@ -24,14 +24,14 @@
 										<a class="thumbnail"><img src="${pic.getPicUrl(o.chartletId) }" width="200px" height="200px"></a>
 										<div class="button-group checkbox " style="width: 200px; text-align: center;">
 											<div class="input-group ">
-												<input type="text" class="form-control-small" placeholder="X" style="width:50px" value="${pic.coordinateX }" onclick="getFocus(this)" onblur="inputblur(this)"
-												 onkeyup="setBubbleSize(${pic.id},this,'coordinateX')" data-toggle="popover" data-content="坐标:X" data-placement="top" data-container="body">
-												<input type="text" class="form-control-small" placeholder="Y" style="width:50px" value="${pic.coordinateY }" onclick="getFocus(this)" onblur="inputblur(this)"
-												onkeyup="setBubbleSize(${pic.id},this,'coordinateY')" data-toggle="popover" data-content="坐标:Y" data-placement="top" data-container="body">
-												<input type="text" class="form-control-small" placeholder="W" style="width:50px" value="${pic.width }" onclick="getFocus(this)" onblur="inputblur(this)"
-												onkeyup="setBubbleSize(${pic.id},this,'width')" data-toggle="popover" data-content="宽度:W" data-placement="top" data-container="body">
-												<input type="text" class="form-control-small" placeholder="H" style="width:50px" value="${pic.height }" onclick="getFocus(this)" onblur="inputblur(this)"
-												onkeyup="setBubbleSize(${pic.id},this,'height')" data-toggle="popover" data-content="高度:H" data-placement="top" data-container="body">
+												<input type="text" class="form-control-small" placeholder="X" style="width:50px" value="${pic.coordinateX }" onclick="getFocus(this)" 
+												 onblur="setBubbleSize(${pic.id},this,'coordinateX')" data-toggle="popover" data-content="坐标:X" data-placement="top" data-container="body">
+												<input type="text" class="form-control-small" placeholder="Y" style="width:50px" value="${pic.coordinateY }" onclick="getFocus(this)"
+												onblur="setBubbleSize(${pic.id},this,'coordinateY')" data-toggle="popover" data-content="坐标:Y" data-placement="top" data-container="body">
+												<input type="text" class="form-control-small" placeholder="W" style="width:50px" value="${pic.width }" onclick="getFocus(this)" 
+												onblur="setBubbleSize(${pic.id},this,'width')" data-toggle="popover" data-content="宽度:W" data-placement="top" data-container="body">
+												<input type="text" class="form-control-small" placeholder="H" style="width:50px" value="${pic.height }" onclick="getFocus(this)" 
+												onblur="setBubbleSize(${pic.id},this,'height')" data-toggle="popover" data-content="高度:H" data-placement="top" data-container="body">
 											</div>
 										</div>
 									</div>
@@ -69,6 +69,7 @@
 			alert("请输入正确数字");
 			return;
 		}
+		$(obj).popover('destroy');
 		var url = "/StarkPet/article/setBubbleCoordinate.do?bubbleId="+picId+"&flag="+flag+"&value="+value;
 		ajaxRequest(url,bubbleResponse);
 	}
