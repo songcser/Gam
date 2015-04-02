@@ -1323,6 +1323,7 @@ public class ArticleDAO implements IArticleDAO {
 	public List<ChartletInfo> getChartletByType(int type) {
 		String hql = "from ChartletInfo as c where c.type=:type";
 		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		query.setInteger("type", type);
 		return query.list();
 	}
 }
