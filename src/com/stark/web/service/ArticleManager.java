@@ -35,6 +35,7 @@ import com.stark.web.entity.ActivityInfo;
 import com.stark.web.entity.ArticleInfo;
 import com.stark.web.entity.ArticlePublishTimeLine;
 import com.stark.web.entity.ChartletInfo;
+import com.stark.web.entity.DialogueInfo;
 import com.stark.web.entity.FileInfo;
 import com.stark.web.entity.RelArticleForward;
 import com.stark.web.entity.RelChartletPicture;
@@ -1697,5 +1698,42 @@ public class ArticleManager implements IArticleManager {
 			}
 		}
 		return list;
+	}
+
+	@Override
+	public int addDialogue(DialogueInfo dialogue) {
+		int id = articleDao.addDialogue(dialogue);
+		if(id>0){
+			articleDao.addRedisDialogue(dialogue);
+			articleDao.setKeyExpire(DialogueInfo.getKey(id),60*60*24*30 );
+		}
+		return id;
+	}
+
+	@Override
+	public List<DialogueInfo> getDialogueListByChartletId(int chartletId) {
+		String key = RedisInfo.CHARTLEDIALOGUEZSET+chartletId;
+		Set<String> ids = articleDao.getRedisZSet(key);
+		if(ids!=null&&!ids.isEmpty()){
+			for(String id:ids){
+				DialogueInfo d = getDialogueInfo(Integer.parseInt(id));
+			}
+		}
+		List<DialogueInfo> list = articleDao.getDialogueListByChartletId(chartletId);
+		return list;
+	}
+
+	private DialogueInfo getDialogueInfo(int id) {
+		DialogueInfo  dialogue = articleDao.getRedisDialogueInfo(id);
+		return null;
+	}
+
+	@Override
+	public boolean deleteDialogue(int dialogueId) {
+		boolean result = articleDao.deleteDialogue(dialogueId);
+		if(result){
+			articleDao.deleteRedisKey(DialogueInfo.getKey(dialogueId));
+		}
+		return result;
 	}
 }

@@ -20,10 +20,12 @@ import com.stark.web.entity.ActivityInfo;
 import com.stark.web.entity.ArticleInfo;
 import com.stark.web.entity.ArticlePublishTimeLine;
 import com.stark.web.entity.ChartletInfo;
+import com.stark.web.entity.DialogueInfo;
 import com.stark.web.entity.FileInfo;
 import com.stark.web.entity.RelArticleForward;
 import com.stark.web.entity.RelChartletPicture;
 import com.stark.web.entity.UserInfo;
+import com.stark.web.service.WebManager;
 
 public class ArticleDAO implements IArticleDAO {
 
@@ -1325,5 +1327,68 @@ public class ArticleDAO implements IArticleDAO {
 		Query query = sessionFactory.getCurrentSession().createQuery(hql);
 		query.setInteger("type", type);
 		return query.list();
+	}
+
+	@Override
+	public int addDialogue(DialogueInfo dialogue) {
+		return (int) sessionFactory.getCurrentSession().save(dialogue);
+	}
+
+	@Override
+	public boolean addRedisDialogue(DialogueInfo dialogue) {
+		Map<String, String> map = new HashMap<String, String>();
+		map.put(DialogueInfo.USERID,dialogue.getUser().getUserId()+"");
+		map.put(DialogueInfo.CHARTLETID, dialogue.getChartlet().getChartletId()+"");
+		map.put(DialogueInfo.CONTENT,dialogue.getContent());
+		map.put(DialogueInfo.NUMBER, dialogue.getNumber()+"");
+		SimpleDateFormat sdf = WebManager.getDateFormat();
+		map.put(DialogueInfo.DATE, sdf.format(dialogue.getDate()));
+		
+		return redisDao.hmset(dialogue.getKey(), map)!=null;
+	}
+
+	@Override
+	public List<DialogueInfo> getDialogueListByChartletId(int chartletId) {
+		String hql = "from DialogueInfo as d where d.chartlet.chartletId =:chartletId order by d.number";
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		query.setInteger("chartletId", chartletId);
+		return query.list();
+	}
+
+	@Override
+	public boolean deleteDialogue(int dialogueId) {
+		String hql = "delete from DialogueInfo as d where d.dialogueId =:dialogueId";
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		query.setInteger("dialogueId", dialogueId);
+		return query.executeUpdate()>0;
+	}
+
+	@Override
+	public Set<String> getRedisZSet(String key) {
+		return redisDao.zrange(key, 0, -1);
+	}
+
+	@Override
+	public DialogueInfo getRedisDialogueInfo(int id) {
+		if(redisDao==null)
+			return null;
+		Map<String, String> cMap = redisDao.hgetAll(DialogueInfo.getKey(id));
+		if(cMap==null||cMap.isEmpty()){
+			return null;
+		}
+		DialogueInfo dialogue = new DialogueInfo();
+		dialogue.setDialogueId(id);
+		dialogue.setUser(new UserInfo(Integer.parseInt(cMap.get(DialogueInfo.USERID))));
+		dialogue.setChartlet(new ChartletInfo(Integer.parseInt(cMap.get(DialogueInfo.CHARTLETID))));
+		dialogue.setContent(cMap.get(DialogueInfo.CONTENT));
+		dialogue.setNumber(Integer.parseInt(cMap.get(DialogueInfo.NUMBER)));
+		SimpleDateFormat sdf = WebManager.getDateFormat();
+		try {
+			dialogue.setDate(sdf.parse(cMap.get(DialogueInfo.DATE)));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		return dialogue;
 	}
 }

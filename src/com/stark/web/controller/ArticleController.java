@@ -49,6 +49,7 @@ import com.stark.web.entity.ArticleInfo;
 import com.stark.web.entity.ArticlePublishTimeLine;
 import com.stark.web.entity.ChartletInfo;
 import com.stark.web.entity.CommentInfo;
+import com.stark.web.entity.DialogueInfo;
 import com.stark.web.entity.RelChartletPicture;
 import com.stark.web.entity.UserGroup;
 import com.stark.web.entity.NoticeInfo;
@@ -1590,6 +1591,51 @@ public class ArticleController {
  			}
 			map.put("bubbles", bubbles);
 		}
+		return map;
+	}
+	
+	@RequestMapping("addDialogue.do")
+	@ResponseBody
+	public Map<String,Object> addDialogue(@RequestBody DialogueInfo dialogue){
+		dialogue.setDate(new Date());
+		int id = articleManager.addDialogue(dialogue);
+		Map<String,Object> map = new HashMap<String,Object>();
+		
+		map.put("result", id>0?1:0);
+		map.put("dialogueId", id);
+		return map;
+	}
+	
+	@RequestMapping("getDialogueListByChartlet.do")
+	@ResponseBody
+	public Map<String,Object> getDialogueListByChartlet(int chartletId){
+		List<DialogueInfo> dialogues = articleManager.getDialogueListByChartletId(chartletId);
+		Map<String,Object> map = new HashMap<String,Object>();
+		if(dialogues==null){
+			map.put("result", 0);
+			return map;
+		}
+		map.put("result", 1);
+		List<Object> list = new ArrayList<Object>();
+		for(DialogueInfo d:dialogues){
+			Map<String,Object> dm = new HashMap<String,Object>();
+			dm.put("number", d.getNumber());
+			dm.put("content", d.getContent());
+			dm.put("id", d.getDialogueId());
+			list.add(dm);
+		}
+		
+		map.put("dialogues", list);
+		return map;
+	}
+	
+	@RequestMapping("deleteDialogue.do")
+	@ResponseBody
+	public Map<String,Object> deleteDialogue(int dialogueId){
+		boolean result = articleManager.deleteDialogue(dialogueId);
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("result", result?1:0);
+		
 		return map;
 	}
 }

@@ -7,6 +7,7 @@ import java.util.Set;
 import com.stark.web.entity.ArticleInfo;
 import com.stark.web.entity.ArticlePublishTimeLine;
 import com.stark.web.entity.ChartletInfo;
+import com.stark.web.entity.DialogueInfo;
 import com.stark.web.entity.FileInfo;
 import com.stark.web.entity.RelArticleForward;
 import com.stark.web.entity.RelChartletPicture;
@@ -175,5 +176,11 @@ public interface IArticleManager {
 	public boolean setBubbleCoordinate(int bubbleId, String flag, int value);
 
 	public List<ChartletInfo> getBubbleList();
+
+	public int addDialogue(DialogueInfo dialogue);
+
+	public List<DialogueInfo> getDialogueListByChartletId(int chartletId);
+
+	public boolean deleteDialogue(int dialogueId);
 
 }

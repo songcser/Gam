@@ -17,6 +17,7 @@
          <mapping resource="com/stark/web/entity/ActivityInfo.hbm.xml"/>
 	<!--	<mapping resource="com/stark/web/entity/FileInfo.hbm.xml"/>    -->
 	    <mapping resource="com/stark/web/entity/ChartletInfo.hbm.xml"/>    
-         <mapping resource="com/stark/web/entity/RelChartletPicture.hbm.xml"/>   
+         <mapping resource="com/stark/web/entity/RelChartletPicture.hbm.xml"/>  
+        <mapping resource="com/stark/web/entity/DialogueInfo.hbm.xml"/> 
     </session-factory>
 </hibernate-configuration>

@@ -6,8 +6,8 @@ public class EnumBase {
 		Word("字帖",0),
 		Picture("图贴",1),
 		Bubble("气泡框",2),
-		Dialogue("台词",3);
-		
+		Dialogue("台词",3),
+		UserDialogue("用户台词",4);
 		
 		private String name;
 		private int index;
@@ -675,7 +675,7 @@ public class EnumBase {
 		Forward("转发", 1), 
 		DayExquisite("推荐", 2), 
 		FashionMagazine("杂志", 3), 
-		ExquisiteMagazine("精选杂志", 4), 
+		ExquisiteMagazine("推荐杂志", 4), 
 		Report("举报", 5),
 		DayExquisiteReport("推荐被举报",6),
 		FashionMagazineReport("杂志被举报",7),

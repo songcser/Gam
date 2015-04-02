@@ -24,6 +24,8 @@ body {
 						aria-controls="pictureChartlet" id="pictureChartletBtn">图贴</button>
 					<button type="button" class="btn btn-primary" data-toggle="collapse" data-parent="#chartletDiv" data-target="#dialogChartlet" aria-expanded="false"
 						aria-controls="dialogChartlet" id="dialogChartletBtn" onclick="clickBubbleBtn()">气泡框</button>
+					<button type="button" class="btn btn-primary" data-toggle="collapse" data-parent="#chartletDiv" data-target="#dialogueChartlet" aria-expanded="false"
+                        aria-controls="dialogueChartlet" id="dialogueChartletBtn" onclick="clickDialogueBtn()">台词</button>
 				</div>
 				<div id="wordChartlet" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
 					<div class="panel-body">
@@ -44,6 +46,11 @@ body {
 						<%@include file="bubbleChartlet.jsp"%>
 					</div>
 				</div>
+				<div id="dialogueChartlet" class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingFour">
+                    <div class="panel-body">
+                        <%@include file="dialogue.jsp"%>
+                    </div>
+                </div>
 			</div>
 		</div>
 	</div>
@@ -54,6 +61,9 @@ body {
 	<script type="text/javascript">
 		//var total = document.documentElement.clientHeight-80;
 		//document.getElementById("").style.height=total+"px";
+		$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+			  getDialogueList(e.target);
+		});
 		var chartletType = "";
 		var chartletId = 0;
 		function chartletBack(ret) {
@@ -181,6 +191,11 @@ body {
 		}
 		function clickBubbleBtn(){
             chartletType = "bubbleChartletList";
+		}
+		function clickDialogueBtn(){
+			var obj = $('#dialogueUL a:first');
+			obj.tab('show');
+			chartletId = obj[0].name;
 		}
 	</script>
 </body>

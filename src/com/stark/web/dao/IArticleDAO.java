@@ -6,6 +6,7 @@ import java.util.Set;
 import com.stark.web.entity.ArticleInfo;
 import com.stark.web.entity.ArticlePublishTimeLine;
 import com.stark.web.entity.ChartletInfo;
+import com.stark.web.entity.DialogueInfo;
 import com.stark.web.entity.FileInfo;
 import com.stark.web.entity.RelArticleForward;
 import com.stark.web.entity.RelChartletPicture;
@@ -240,5 +241,17 @@ public interface IArticleDAO {
 	public boolean setBubbleCoordinate(int bubbleId, String flag, int value);
 
 	public List<ChartletInfo> getChartletByType(int type);
+
+	public int addDialogue(DialogueInfo dialogue);
+
+	public boolean addRedisDialogue(DialogueInfo dialogue);
+
+	public List<DialogueInfo> getDialogueListByChartletId(int chartletId);
+
+	public boolean deleteDialogue(int dialogueId);
+
+	public Set<String> getRedisZSet(String key);
+
+	public DialogueInfo getRedisDialogueInfo(int id);
 
 }

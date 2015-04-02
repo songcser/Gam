@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-4-2 13:53:07 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping package="com.stark.web.entity">
+    <class name="DialogueInfo" table="DialogueInfo">
+        <id name="dialogueId" type="int">
+            <column name="ID" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="user" class="UserInfo" fetch="join">
+            <column name="UserId" />
+        </many-to-one>
+        <many-to-one name="chartlet" class="ChartletInfo" fetch="join">
+            <column name="ChartletId" />
+        </many-to-one>
+        <property name="content" type="java.lang.String">
+            <column name="Content" not-null="true" default="''" />
+        </property>
+        <property name="number" type="int">
+            <column name="Number" default="0" not-null="true"/>
+        </property>
+        <property name="date" type="java.util.Date">
+            <column name="Date" />
+        </property>
+    </class>
+</hibernate-mapping>
