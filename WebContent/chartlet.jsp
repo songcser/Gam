@@ -23,7 +23,7 @@ body {
 					<button type="button" class="btn btn-primary" data-toggle="collapse" data-parent="#chartletDiv" data-target="#pictureChartlet" aria-expanded="false"
 						aria-controls="pictureChartlet" id="pictureChartletBtn">图贴</button>
 					<button type="button" class="btn btn-primary" data-toggle="collapse" data-parent="#chartletDiv" data-target="#dialogChartlet" aria-expanded="false"
-						aria-controls="dialogChartlet" id="dialogChartletBtn">气泡框</button>
+						aria-controls="dialogChartlet" id="dialogChartletBtn" onclick="clickBubbleBtn()">气泡框</button>
 				</div>
 				<div id="wordChartlet" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
 					<div class="panel-body">
@@ -88,13 +88,29 @@ body {
 	        if(url=="0"){
 	            return ;
 	        }
-	        var tdObj = '<td class="border-right" width="200px" height="270px" ><div  style="height:200px;width:200px">'
-	        +' <a href="javascript:removeChartletPicture()" style="position:relative;left:195px;top:0px">'
-	        +' <span class="icon-times-circle" ></span></a>'
-	        +'<a><img src="'+url+'" alt="..." width="200px" height="200px"></a>'
-	        +'<div class="button-group checkbox padding-top" style="width:200px;text-align:center;">'
-	        +'<label  class="button "><input name="pintuer" type="checkbox"  onclick="changeChartletStatus(this,'+picId+')"><span class="icon icon-check"></span> 最新</label>'
-	        +' </div></div></td>';
+	        var tdObj = '<td width="200px" height="270px" ><div  style="height:200px;width:200px">'
+	        +' <a href="javascript:removeChartletPicture()" style="position:relative;left:193px;top:7px">'
+	        +' <span class="glyphicon glyphicon-remove" ></span></a>'
+	        +'<a class="thumbnail"><img src="'+url+'" alt="..." width="200px" height="200px"></a>'
+	        +'<div class="button-group checkbox " style="width:200px;text-align:center;">';
+	       
+	        if(chartletType == "bubbleChartletList"){
+	        	tdObj +='<div class="input-group ">'
+                    +'<input type="text" class="form-control-small" placeholder="X" style="width:50px" value="0" onclick="getFocus(this)" onblur="inputblur(this)"'
+                    +'    onkeyup="setBubbleSize('+id+',this,'+"coordinateX"+')" data-toggle="popover" data-content="坐标:X" data-placement="top" data-container="body">'
+                    +'   <input type="text" class="form-control-small" placeholder="Y" style="width:50px" value="0" onclick="getFocus(this)" onblur="inputblur(this)"'
+                    +'   onkeyup="setBubbleSize('+id+',this,'+"coordinateY"+')" data-toggle="popover" data-content="坐标:Y" data-placement="top" data-container="body">'
+                    +'   <input type="text" class="form-control-small" placeholder="W" style="width:50px" value="0" onclick="getFocus(this)" onblur="inputblur(this)"'
+                    +'   onkeyup="setBubbleSize('+id+',this,'+"width"+')" data-toggle="popover" data-content="宽度:W" data-placement="top" data-container="body">'
+                    +'   <input type="text" class="form-control-small" placeholder="H" style="width:50px" value="0" onclick="getFocus(this)" onblur="inputblur(this)"'
+                    +'   onkeyup="setBubbleSize('+id+',this,'+"height"+')" data-toggle="popover" data-content="高度:H" data-placement="top" data-container="body">'
+                    +' </div>'
+                    +'</div>';
+	        }
+	        else {
+	        	tdObj += '<label  class="button "><input name="pintuer" type="checkbox"  onclick="changeChartletStatus(this,'+picId+')"><span class="icon icon-check"></span> 最新</label>'
+	            +' </div></div></td>';
+	        }
 	        $("#piclist"+id).prepend(tdObj); 
 	        $('#chartletPictureForm').reset();
 	    }
@@ -158,6 +174,9 @@ body {
                         + '   </table> </div></div>';
                 $("#" + chartletType).prepend(divStr);
             }
+		}
+		function clickBubbleBtn(){
+            chartletType = "bubbleChartletList";
 		}
 	</script>
 </body>
