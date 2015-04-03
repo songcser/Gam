@@ -6,6 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Uha 首页</title>
 <link rel="stylesheet" href="../css/bootstrap.css">
+<script src="../js/jquery-1.11.2.min.js"></script>
 <style type="text/css">
 #head {
 	padding-top: 100px;
@@ -14,31 +15,7 @@
 	
 }
 </style>
-<script type="text/javascript">
-	function modifyUser() {
-		$("#loginDIV").css({
-			display : "block"
-		});
-		$("#mbDIV").css({
-			display : "block"
-		});
-	}
-	function addFile() {
-		document.forms[0].submit();
-	}
 
-	function selectUserHead() {
-		$("#headFileId").click();
-	}
-
-	function callback(str) {
-		$("#headPic").attr("src", str);
-		$("#formFile").reset();
-	}
-	function showUser(userId){
-	    window.location.href="showUser.do?userId="+userId; 
-	}
-</script>
 </head>
 <body class="bg-blue-light">
 	<%@ include file="header.jsp"%>
@@ -118,5 +95,31 @@
 	</div>
 	<script src="../js/jquery-1.11.2.min.js"></script>
 	<script src="../js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+	
+    function modifyUser() {
+        $("#loginDIV").css({
+            display : "block"
+        });
+        $("#mbDIV").css({
+            display : "block"
+        });
+    }
+    function addFile() {
+        document.forms[0].submit();
+    }
+
+    function selectUserHead() {
+        $("#headFileId").click();
+    }
+
+    function callback(str) {
+        $("#headPic").attr("src", str);
+        $("#formFile").reset();
+    }
+    function showUser(userId){
+        window.location.href="showUser.do?userId="+userId; 
+    }
+</script>
 </body>
 </html>

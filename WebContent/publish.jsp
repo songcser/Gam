@@ -6,6 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>友哈-发布管理</title>
 <link rel="stylesheet" href="../css/bootstrap.css">
+<script src="../js/jquery-1.11.2.min.js"></script>
 <style type="text/css">
 body {
 	margin-top: 80px;
@@ -82,7 +83,6 @@ body {
 	</div>
 	<iframe id='frameFile' name='frameFile' style='display: none;'></iframe>
 	<%@ include file="selectUserList.jsp"%>
-	<script src="../js/jquery-1.11.2.min.js"></script>
 	<script src="../js/bootstrap.min.js"></script>
 	<script type="text/javascript">
 		var isClick = false;

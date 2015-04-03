@@ -5,6 +5,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>友哈-推荐管理</title>
 <link rel="stylesheet" href="../css/bootstrap.css">
+<script src="../js/jquery-1.11.2.min.js"></script>
 <style type="text/css">
 body {
 	margin-top: 50px;
@@ -38,7 +39,6 @@ body {
 	<%@ include file="commentDialog.jsp"%>
 	<%@ include file="sliderShow.jsp"%>
 	<%@ include file="selectUserList.jsp"%>
-	<script src="../js/jquery-1.11.2.min.js"></script>
 	<script src="../js/bootstrap.min.js"></script>
 	<script src="../js/main.js"></script>
 	<script type="text/javascript">

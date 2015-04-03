@@ -6,6 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>友哈-贴图管理</title>
 <link rel="stylesheet" href="../css/bootstrap.css">
+<script src="../js/jquery-1.11.2.min.js"></script>
 <style type="text/css">
 body {
 	margin-top: 60px;
@@ -55,7 +56,6 @@ body {
 		</div>
 	</div>
 	<iframe id='frameFile' name='frameFile' style='display: none;'></iframe>
-	<script src="../js/jquery-1.11.2.min.js"></script>
 	<script src="../js/bootstrap.min.js"></script>
 	<script src="../js/main.js"></script>
 	<script type="text/javascript">
@@ -195,7 +195,7 @@ body {
 		function clickDialogueBtn(){
 			var obj = $('#dialogueUL a:first');
 			obj.tab('show');
-			chartletId = obj[0].name;
+			chartletId = obj[0].title;
 		}
 	</script>
 </body>

@@ -21,7 +21,7 @@
             </c:if>
         </c:forEach>
 	</ul>
-	<div id="dialogueTabContent" class="tab-content">
+	<div id="dialogueTabContent" class="tab-content ">
 	   <div class="row" id="editDialogueDiv">
 	    <div class="col-lg-6 ">
 		<div id="" class="input-group margin-top" >
