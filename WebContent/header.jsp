@@ -27,7 +27,7 @@ $(document).ready(function(){
 	if(url.indexOf("toMain.do")>0){
 		$('ul li:eq(0)').addClass("active");
 	}
-	else if(url.indexOf("operatorManage.do")>0){
+	else if(url.indexOf("operatorManage.do")>0||url.indexOf("showUser.do")>0){
 		$('ul li:eq(1)').addClass("active");
 	}
 	else if(url.indexOf("recommend.do")>0){

@@ -29,7 +29,7 @@
 			<div class="panel-heading ">
 				<strong><c:if test="${user.role==1 }">超级管理员</c:if> <c:if test="${user.role==2 }">运营人员</c:if> </strong>
 			</div>
-			<div class="thumbnail center-block">
+			<div class="thumbnail center-block" >
 				<a href="javascript:selectUserHead()"> <img src="${user.getHeadUrl()}" class="img-thumbnail" id="headPic" width="100px" height="100px" alt="...">
 				</a>
 				<div class="caption">
@@ -43,16 +43,15 @@
 			<div class="panel-heading ">
 				<strong>最新用户</strong>
 			</div>
-			<div class="panel-body">
+		<div class="panel-body">
         <div class="media-inline " style="overflow:auto">
+            
 			<c:forEach items="${lastUser }" var="u">
-				<div class="media media-y" style="width:100px">
-					<a  style="width:100px;height:100px" href="javascript:showUser(${u.userId })"> 
+				<div class="text-center padding-right padding-bottom" style="width:120px;display:table-cell">
+					<a class="margin-right"  style="width:100px;height:100px" href="javascript:showUser(${u.userId })"> 
 					<img src="${u.getHeadUrl()}" style="width:100px;height:100px" class="img-circle" alt="">
 					</a>
-					<div>
-						${u.name }
-					</div>
+					<div > ${u.name } </div>
 			 </div>
 			</c:forEach>
 			</div>
