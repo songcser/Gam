@@ -21,4 +21,8 @@
 	function resetRichTextContent(){
 		ue.execCommand('cleardoc');
 	}
+	
+	function setUeditorContent(body){
+		ue.setContent(body);
+	}
 </script>

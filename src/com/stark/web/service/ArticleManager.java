@@ -1334,7 +1334,8 @@ public class ArticleManager implements IArticleManager {
 		List<String> pics = getPicListById(articleId);
 		aMap.put("pictures", pics);
 		aMap.put("browseCount", article.getBrowseCount());
-		aMap.put("url", article.getUrl());
+		
+		aMap.put("url", FileManager.getHtmlUrl(articleId));
 		aMap.put("shareUrl", FileManager.getShareUrl(articleId));
 		//aMap.put("articles", aMap);
 		return aMap;

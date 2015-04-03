@@ -51,7 +51,7 @@ body {
 						</div>
 
 						<div class="form-group">
-							<label for="title">标题</label> <input type="text" class="form-control" name="title">
+							<label for="title">标题</label> <input type="text" class="form-control" name="title" id="title">
 						</div>
 
 						<div class="form-group">
@@ -68,6 +68,12 @@ body {
 
 						<div id="richTextDiv" class="form-group collapse">
 							<label for="content">富文本</label>
+							<div class="input-group margin-bottom">
+                                <input type="text" class="form-control" id="checkUrlId" placeholder="请输入url地址">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-info" type="button" onclick="checkUrl()">检测</button>
+                                </span>
+                            </div>
 							<%@ include file="ueditor.jsp"%>
 						</div>
 
@@ -84,6 +90,7 @@ body {
 	<iframe id='frameFile' name='frameFile' style='display: none;'></iframe>
 	<%@ include file="selectUserList.jsp"%>
 	<script src="../js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../js/main.js"></script>
 	<script type="text/javascript">
 		var isClick = false;
 		function selectCommonMode() {
@@ -165,6 +172,21 @@ body {
 					}
 				});
 		});
+		
+		function checkUrl(){
+			
+			var data = {url:$("#checkUrlId").val()};
+			var url = "/StarkPet/article/checkUrl.do";
+			jsonAjax(url,data,checkBack);
+		}
+		function checkBack(ret){
+			if(ret.result=="1"){
+				$("#title").val(ret.title);
+				setUeditorContent(ret.body);
+			}
+			else 
+				alert(ret.message);
+		}
 	</script>
 </body>
 </html>

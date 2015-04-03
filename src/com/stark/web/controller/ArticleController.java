@@ -29,6 +29,9 @@ import javax.imageio.ImageReader;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.codehaus.jackson.map.ObjectMapper;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -1019,9 +1022,11 @@ public class ArticleController {
 				article.setReference(multiRequest.getParameter("reference"));
 				article.setTitle(multiRequest.getParameter("title"));
 				String richText = multiRequest.getParameter("richText");
-				if(richText!=null){
-					article.setRichText(richText);
-				}
+				
+				SimpleDateFormat sdf = WebManager.getDateFormat();
+				String htmlName = sdf.format(new Date());
+				article.setRichText(htmlName);
+				
 				int articleId = articleManager.addArticle(article);
 				if(articleId<1){
 					//map.put("result", 0);
@@ -1031,7 +1036,12 @@ public class ArticleController {
 					out.close();
 					return ;
 				}
-				
+				if(richText!=null){
+					InputStream is = new ByteArrayInputStream(richText.getBytes());
+					
+					String path = FileManager.getArticleHtmlPath(articleId, htmlName);
+					FileManager.upload(path, is, richText.length());
+				}
 				addFansArticleZSet(userId);
 				Iterator<String> iter = multiRequest.getFileNames();
 				int i=0;
@@ -1705,5 +1715,49 @@ public class ArticleController {
 		}
 		map.put("dialogues", list);
 		return map;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping("checkUrl.do")
+	@ResponseBody
+	public Map<String,Object> checkUrl(@RequestBody String data){
+		ObjectMapper objectMapper = new ObjectMapper();
+		Map<String, Object> dm;
+		try {
+			dm = objectMapper.readValue(data,Map.class);
+			String url = (String) dm.get("url");
+			System.out.println(url);
+			Map<String,Object> map = new HashMap<String,Object>();
+			String html = WebManager.getOneHtml(url);
+			System.out.println(html);
+			if(html==null||html.equals("")){
+				map.put("result", 0);
+				map.put("message", html);
+				return map;
+			}
+			String title =WebManager.getTitle(html);
+			String body = WebManager.getBody(html);
+			map.put("title",title);
+			map.put("body", body);
+			map.put("result", 1);
+			return map;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	@RequestMapping("showArticleDetial.do")
+	public String showArticleDetial(int articleId,HttpServletRequest request){
+		ArticleInfo article = articleManager.getArticle(articleId);
+		//UserInfo user = userManager.getUser(article.getUser().getUserId());
+		String path = FileManager.getArticleHtmlPath(articleId, article.getRichText());
+		String content = FileManager.getContent( path);
+		
+		request.setAttribute("content", content);
+		request.setAttribute("article", article);
+		//request.setAttribute("user", user);
+		
+		return "article";
 	}
 }
