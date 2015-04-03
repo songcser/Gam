@@ -1189,6 +1189,8 @@ public class ArticleManager implements IArticleManager {
 		if(result){
 			articleDao.removeRedisChartlet(chartletId);
 			articleDao.removeRedisAllChartlet(RedisInfo.CHARTLETALLLIST,chartletId);
+			articleDao.removeRedisAllChartlet(RedisInfo.CHARTLETBUBBLELIST, chartletId);
+			articleDao.removeRedisAllChartlet(RedisInfo.CHARTLETDIALOGUELIST, chartletId);
 		}
 		return result;
 	}
@@ -1705,35 +1707,101 @@ public class ArticleManager implements IArticleManager {
 		int id = articleDao.addDialogue(dialogue);
 		if(id>0){
 			articleDao.addRedisDialogue(dialogue);
-			articleDao.setKeyExpire(DialogueInfo.getKey(id),60*60*24*30 );
+			articleDao.setKeyExpire(DialogueInfo.getKey(id),60*60*24*20 );
+			String key = RedisInfo.CHARTLETDIALOGUEZSET+dialogue.getChartlet().getChartletId();
+			articleDao.addRedisZSet(key,dialogue.getNumber(),dialogue.getDialogueId()+"");
 		}
 		return id;
 	}
 
 	@Override
 	public List<DialogueInfo> getDialogueListByChartletId(int chartletId) {
-		String key = RedisInfo.CHARTLEDIALOGUEZSET+chartletId;
+		String key = RedisInfo.CHARTLETDIALOGUEZSET+chartletId;
+		List<DialogueInfo> diaList = new ArrayList<DialogueInfo>();
 		Set<String> ids = articleDao.getRedisZSet(key);
 		if(ids!=null&&!ids.isEmpty()){
 			for(String id:ids){
 				DialogueInfo d = getDialogueInfo(Integer.parseInt(id));
+				if(d!=null){
+					diaList.add(d);
+				}
+				
 			}
+			return diaList;
 		}
 		List<DialogueInfo> list = articleDao.getDialogueListByChartletId(chartletId);
+		if(list!=null){
+			for(DialogueInfo d:list){
+				articleDao.addRedisDialogue(d);
+				articleDao.addRedisZSet(key,d.getNumber(),d.getDialogueId()+"");
+			}
+		}
 		return list;
 	}
 
 	private DialogueInfo getDialogueInfo(int id) {
 		DialogueInfo  dialogue = articleDao.getRedisDialogueInfo(id);
-		return null;
+		if(dialogue==null){
+			dialogue = articleDao.getDialogueInfo(id);
+			if(dialogue!=null){
+				articleDao.addRedisDialogue(dialogue);
+			}
+		}
+		return dialogue;
 	}
 
 	@Override
 	public boolean deleteDialogue(int dialogueId) {
 		boolean result = articleDao.deleteDialogue(dialogueId);
 		if(result){
+			DialogueInfo dia = getDialogueInfo(dialogueId);
+			String key = RedisInfo.CHARTLETDIALOGUEZSET+dia.getChartlet().getChartletId();
+			articleDao.removeRedisZSet(key, dialogueId+"");
 			articleDao.deleteRedisKey(DialogueInfo.getKey(dialogueId));
 		}
 		return result;
+	}
+
+	@Override
+	public List<ChartletInfo> getDialogueList() {
+		String key = RedisInfo.CHARTLETDIALOGUELIST;
+		List<String> ids = articleDao.getRedisChartletIds(key);
+		List<ChartletInfo> list = new ArrayList<ChartletInfo>();
+		if(ids!=null&&!ids.isEmpty()){
+			for(String id : ids){
+				ChartletInfo chartlet = getChartlet(Integer.parseInt(id));
+				if(chartlet!=null)
+					list.add(chartlet);
+			}
+			return list;
+		}
+		
+		list = articleDao.getChartletByType(ChartletType.Dialogue.getIndex());
+		if(list!=null){
+			int size = list.size();
+			for(int i=size-1;i>=0;i--){
+				ChartletInfo chartlet = list.get(i);
+				articleDao.addRedisChartlet(chartlet);
+				articleDao.addRedisAllChartlet(key,chartlet.getChartletId());
+			}
+		}
+		return list;
+	}
+
+	@Override
+	public ChartletInfo getUserChartlet() {
+		String key = RedisInfo.CHARTLETDIALOGUEUSER;
+		String id = articleDao.getRedisString(key);
+		if(id!=null){
+			return getChartlet(Integer.parseInt(id));
+		}
+		List<ChartletInfo> list = articleDao.getChartletByType(ChartletType.UserDialogue.getIndex());
+		if(list!=null&&!list.isEmpty()){
+			ChartletInfo chartlet = list.get(0);
+			articleDao.addRedisChartlet(chartlet);
+			articleDao.setRedisString(key,chartlet.getChartletId()+"");
+			return chartlet;
+		}
+		return null;
 	}
 }

@@ -63,6 +63,7 @@ import com.stark.web.service.ICommentManager;
 import com.stark.web.service.INoticeManager;
 import com.stark.web.service.ITagManager;
 import com.stark.web.service.IUserManager;
+import com.stark.web.service.WebManager;
 import com.stark.web.service.WordFilter;
 
 @Controller
@@ -139,6 +140,23 @@ public class ArticleController {
 	
 				return map;
 			}
+			
+			String dialogueSize = multiRequest.getParameter("dialogueSize");
+			if(dialogueSize!=null&&!dialogueSize.equals("")){
+				int size = Integer.parseInt(dialogueSize);
+				ChartletInfo chartlet = articleManager.getUserChartlet();
+				for(int i=0;i<size;i++){
+					String dcontent = multiRequest.getParameter("dialogue"+i);
+					DialogueInfo dialogue = new DialogueInfo();
+					dialogue.setUser(user);
+					dialogue.setChartlet(chartlet);
+					dialogue.setContent(dcontent);
+					dialogue.setNumber(0);
+					dialogue.setDate(new Date());
+					articleManager.addDialogue(dialogue);
+				}
+			}
+			
 			addFansArticleZSet(userId);
 			map.put("articleId", articleId);
 			map.put("outShareUrl", ourShareUrl+articleId);
@@ -1402,7 +1420,6 @@ public class ArticleController {
 	@RequestMapping("deleteChartlet.do")
 	@ResponseBody
 	public Map<String, Object> deleteChartlet(int chartletId){
-		System.out.println("==> /article/changeArticleType.do?chartletId="+chartletId);
 		boolean result = articleManager.deleteChartlet(chartletId);
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("result", result?1:0);
@@ -1616,13 +1633,34 @@ public class ArticleController {
 			return map;
 		}
 		map.put("result", 1);
+		ChartletInfo chartlet = articleManager.getChartlet(chartletId);
+		int type = chartlet.getType();
+		map.put("chartletType", type);
 		List<Object> list = new ArrayList<Object>();
-		for(DialogueInfo d:dialogues){
-			Map<String,Object> dm = new HashMap<String,Object>();
-			dm.put("number", d.getNumber());
-			dm.put("content", d.getContent());
-			dm.put("id", d.getDialogueId());
-			list.add(dm);
+		if(type==ChartletType.Dialogue.getIndex()){
+			for(DialogueInfo d:dialogues){
+				Map<String,Object> dm = new HashMap<String,Object>();
+				dm.put("number", d.getNumber());
+				dm.put("content", d.getContent());
+				dm.put("id", d.getDialogueId());
+				list.add(dm);
+			}
+		}
+		else if(type==ChartletType.UserDialogue.getIndex()){
+			for(DialogueInfo d:dialogues){
+				Map<String,Object> dm = new HashMap<String,Object>();
+				dm.put("number", d.getNumber());
+				dm.put("content", d.getContent());
+				dm.put("id", d.getDialogueId());
+				SimpleDateFormat sdf = WebManager.getDateFormat();
+				dm.put("date", sdf.format(d.getDate()));
+				UserInfo user = userManager.getUser(d.getUser().getUserId());
+				dm.put("userId", user.getUserId());
+				dm.put("userName", user.getName());
+				dm.put("headPic", user.getHeadUrl());
+				
+				list.add(dm);
+			}
 		}
 		
 		map.put("dialogues", list);
@@ -1636,6 +1674,36 @@ public class ArticleController {
 		Map<String,Object> map = new HashMap<String,Object>();
 		map.put("result", result?1:0);
 		
+		return map;
+	}
+	
+	@RequestMapping("getDialogueList2.0.do")
+	@ResponseBody
+	public Map<String,Object> getDialogueList2(){
+		Map<String,Object> map = new HashMap<String,Object>();
+		List<ChartletInfo> chartletList = articleManager.getDialogueList();
+		if(chartletList==null){
+			map.put("result", 0);
+			return map;
+		}
+		map.put("result", 1);
+		List<Object> list = new ArrayList<Object>();
+		for(ChartletInfo chartlet:chartletList){
+			Map<String,Object> cm = new HashMap<String,Object>();
+			cm.put("title", chartlet.getTitle());
+			
+			List<Object> dl = new ArrayList<Object>();
+			List<DialogueInfo> dialogues = articleManager.getDialogueListByChartletId(chartlet.getChartletId());
+			for(DialogueInfo dia:dialogues){
+				Map<String,Object> dm = new HashMap<String,Object>();
+				dm.put("number", dia.getNumber());
+				dm.put("content", dia.getContent());
+				dl.add(dm);
+			}
+			cm.put("list", dl);
+			list.add(cm);
+		}
+		map.put("dialogues", list);
 		return map;
 	}
 }

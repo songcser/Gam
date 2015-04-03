@@ -183,4 +183,8 @@ public interface IArticleManager {
 
 	public boolean deleteDialogue(int dialogueId);
 
+	public List<ChartletInfo> getDialogueList();
+
+	public ChartletInfo getUserChartlet();
+
 }

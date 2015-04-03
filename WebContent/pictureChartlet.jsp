@@ -2,19 +2,19 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <div class="block-inline">
     <input type="text" class="input radius-rounded" id="pictureChartletTitle" />
-    <button class="btn bg-sub " onclick="createPictureChartlet()">创建套图</button>
+    <button class="btn bg-sub margin-left" onclick="createPictureChartlet()">创建套图</button>
 </div>
 <div id="pictureChartletList">
     <c:forEach items="${chartlets }" var="o">
         <c:if test="${o.type=='1'}">
-            <div class=" border margin-top" id="chartletPictureDiv${o.chartletId }">
+            <div class=" border margin-top bg-green-light"  id="chartletPictureDiv${o.chartletId }">
                 <div class="text-large  padding-large-left  padding-top">
                     <div class="text-large text-yellow inline">${o.title}</div>
                     <a class="btn bg-sub margin-large-left" href="javascript:addChartletPicture(${o.chartletId })">添加图片</a>
                     <a class="btn input-file bg-sub margin-large-left" href="javascript:deleteChartlet(${o.chartletId });"> 删除套图 </a>
                 </div>
                 <div class=" padding" style="overflow: auto;">
-                    <table class="table table-hover ">
+                    <table class="table table-hover bg-white">
                         <tr id="piclist${o.chartletId }">
                             <c:forEach items="${o.picList }" var="pic">
                                 <td width="200px" height="270px" id="picObj${pic.id }">

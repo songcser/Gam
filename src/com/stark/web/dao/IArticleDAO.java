@@ -254,4 +254,14 @@ public interface IArticleDAO {
 
 	public DialogueInfo getRedisDialogueInfo(int id);
 
+	public DialogueInfo getDialogueInfo(int id);
+
+	public void addRedisZSet(String key, int number, String string);
+
+	public void removeRedisZSet(String key, String string);
+
+	public String getRedisString(String key);
+
+	public void setRedisString(String key ,String value);
+
 }

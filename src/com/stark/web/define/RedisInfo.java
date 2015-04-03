@@ -60,6 +60,7 @@ public class RedisInfo {
 	public static final String CHARTLETALLLIST = "Chartlet:All:List";								//贴图列表
 	public static final String CHARTLETPICTURELIST = "Chartlet:Picture:List:";					//贴图图片列表
 	public static final String CHARTLETBUBBLELIST = "Chartlet:Bubble:List";						//气泡框列表
-	public static final String CHARTLEDIALOGUEZSET = "Chartlet:Dialogue:ZSet:";					//台词有序集
-	
+	public static final String CHARTLETDIALOGUEZSET = "Chartlet:Dialogue:ZSet:";					//台词有序集
+	public static final String CHARTLETDIALOGUELIST = "Chartlet:Dialogue:List";					//贴图台词列表
+	public static final String CHARTLETDIALOGUEUSER = "Chartlet:Dialogue:User";					//用户台词系列ID
 }

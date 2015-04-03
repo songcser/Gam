@@ -452,7 +452,6 @@ public class ArticleDAO implements IArticleDAO {
 				.setFirstResult(start)
 				.setMaxResults(maxResults);
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 //		String hql = "from ArticleInfo as a where a.date>:startDate and a.date<:endDate order by a.date desc";
@@ -1390,5 +1389,30 @@ public class ArticleDAO implements IArticleDAO {
 		}
 		
 		return dialogue;
+	}
+
+	@Override
+	public DialogueInfo getDialogueInfo(int id) {
+		return (DialogueInfo) sessionFactory.getCurrentSession().get(DialogueInfo.class, id);
+	}
+
+	@Override
+	public void addRedisZSet(String key, int score, String member) {
+		redisDao.zadd(key, score, member);
+	}
+
+	@Override
+	public void removeRedisZSet(String key, String member) {
+		redisDao.zrem(key, member);
+	}
+
+	@Override
+	public String getRedisString(String key) {
+		return redisDao.get(key);
+	}
+
+	@Override
+	public void setRedisString(String key, String value) {
+		redisDao.set(key, value);
 	}
 }
