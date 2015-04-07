@@ -1454,10 +1454,11 @@ public class ArticleController {
 	@ResponseBody
 	public Map<String,Object> getShowArticleList2(int showId,int userId,int page){
 		Map<String,Object> map = articleManager.getShowArticleList(showId,userId,page,maxResults2);
+		ActivityInfo act = activityManager.getActivity(showId);
 		if (page == 0) {
-			ActivityInfo act = activityManager.getActivity(showId);
 			map.put("activityPic", act.getContentPicUrl());
 		}
+		map.put("showType", act.getType());
 		return map;
 	}
 	

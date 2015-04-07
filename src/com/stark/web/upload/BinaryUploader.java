@@ -142,7 +142,7 @@ public class BinaryUploader {
 	}
 
 	public static final State saveOSS(HttpServletRequest request, Map<String, Object> conf){
-		FileItemStream fileStream = null;
+		//FileItemStream fileStream = null;
 		boolean isAjaxUpload = request.getHeader( "X_Requested_With" ) != null;
 
 		if (!ServletFileUpload.isMultipartContent(request)) {
@@ -170,19 +170,6 @@ public class BinaryUploader {
 				fileItem = null;
 			}
 			
-			
-			//while (iterator.hasNext()) {
-			//	fileStream = iterator.next();
-
-			//	if (!fileStream.isFormField())
-			//		break;
-			//	fileStream = null;
-			//}
-			//System.out.println(fileStream);
-			//if (fileStream == null) {
-			//	return new BaseState(false, AppInfo.NOTFOUND_UPLOAD_DATA);
-			//}
-			//System.out.println("after");
 			String savePath = (String) conf.get("savePath");
 			//String originFileName = fileStream.getName();
 			String originFileName = fileItem.getName();
@@ -199,9 +186,6 @@ public class BinaryUploader {
 			}
 
 			savePath = PathFormat.parse(savePath, originFileName);
-			System.out.println(savePath);
-			//String physicalPath = (String) conf.get("rootPath") + savePath;
-			//String path = "html/images"+savePath;
 			//InputStream is = fileStream.openStream();
 			InputStream is = fileItem.getInputStream();
 			//State storageState = StorageManager.saveFileByInputStream(is,	physicalPath, maxSize);

@@ -18,10 +18,13 @@
 						<tr id="piclist${o.chartletId }">
 							<c:forEach items="${o.picList }" var="pic">
 								<td class="" width="200px"  id="picObj${pic.id }">
-									<div style="height: 250px; width: 200px">
-										<a href="javascript:removeChartletPicture(${o.chartletId },${pic.id })" style="position: relative; left: 193px; top: 7px"> 
-										<span class="glyphicon glyphicon-remove"></span></a> 
-										<a class="thumbnail"><img src="${pic.getPicUrl(o.chartletId) }" width="200px" height="200px"></a>
+									<div style="height: 250px; width: 200px;position:relative">
+									   <a href="javascript:removeChartletPicture(${o.chartletId },${pic.id })" style="position: absolute; right: -7px; top: -7px"> 
+                                        <span class="glyphicon glyphicon-remove"></span></a> 
+										 <button onclick="javascript:setBubbleStatus(${pic.id },${pic.status },this)" style="position: absolute; left: 2px; top: 2px"> 
+                                        <span class=" glyphicon glyphicon-asterisk"></span></button> 
+                                        
+										<a href="#" class="thumbnail"><img src="${pic.getPicUrl(o.chartletId) }" width="200px" height="200px"></a>
 										<div class="button-group checkbox " style="width: 200px; text-align: center;">
 											<div class="input-group ">
 												<input type="text" class="form-control-small" placeholder="X" style="width:50px" value="${pic.coordinateX }" onclick="getFocus(this)" 
@@ -83,5 +86,8 @@
 	}
 	function inputblur(obj){
 		$(obj).popover('destroy');
+	}
+	function setBubbleStatus(picId,status){
+		alert(status);
 	}
 </script>

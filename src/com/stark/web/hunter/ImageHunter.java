@@ -85,12 +85,15 @@ public class ImageHunter {
 			}
 			
 			String savePath = this.getPath( this.savePath, this.filename, suffix );
-			String physicalPath = this.rootPath + savePath;
-
-			State state = StorageManager.saveFileByInputStream( connection.getInputStream(), physicalPath );
-			
+			//String physicalPath = this.rootPath + savePath;
+			//System.out.println(savePath);
+			FileManager.uploadoss(savePath, connection.getInputStream(), connection.getContentLength());
+			//State state = StorageManager.saveFileByInputStream( connection.getInputStream(), physicalPath );
+			State state = new BaseState(true);
 			if ( state.isSuccess() ) {
-				state.putInfo( "url", PathFormat.format( savePath ) );
+				String imgUrl = FileManager.getOssUrl();
+				state.putInfo("url", imgUrl+savePath);
+				//state.putInfo( "url", PathFormat.format( savePath ) );
 				state.putInfo( "source", urlStr );
 			}
 			

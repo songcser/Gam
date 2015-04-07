@@ -17,13 +17,13 @@
                     <table class="table table-hover bg-white">
                         <tr id="piclist${o.chartletId }">
                             <c:forEach items="${o.picList }" var="pic">
-                                <td width="200px" height="270px" id="picObj${pic.id }">
-                                    <div style="height: 200px; width: 200px">
-                                        <a href="javascript:removeChartletPicture(${o.chartletId },${pic.id })" style="position: relative; left: 193px; top: 7px">
+                                <td width="200px" height="250px" id="picObj${pic.id }">
+                                    <div style="height: 200px; width: 200px;position:relative">
+                                        <a href="javascript:removeChartletPicture(${o.chartletId },${pic.id })" style="position: absolute; right:-7px; top:-7px">
                                          <span class="glyphicon glyphicon-remove"></span>
                                          </a> 
                                          <a class="thumbnail"><img src="${pic.getPicUrl(o.chartletId) }" width="200px" height="200px"></a>
-                                        <div class="button-group checkbox padding-top" style="width: 200px; text-align: center;">
+                                        <div class="button-group checkbox " style="width: 200px; text-align: center;">
                                             <c:if test="${pic.status==0 }">
                                                 <label class="button "><input name="pintuer" type="checkbox" onclick="changeChartletStatus(this,'${pic.id}')"><span class="icon icon-check"></span> 最新</label>
                                             </c:if>
