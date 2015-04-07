@@ -21,10 +21,16 @@
 									<div style="height: 250px; width: 200px;position:relative">
 									   <a href="javascript:removeChartletPicture(${o.chartletId },${pic.id })" style="position: absolute; right: -7px; top: -7px"> 
                                         <span class="glyphicon glyphicon-remove"></span></a> 
-										 <button onclick="javascript:setBubbleStatus(${pic.id },${pic.status },this)" style="position: absolute; left: 2px; top: 2px"> 
-                                        <span class=" glyphicon glyphicon-asterisk"></span></button> 
-                                        
-										<a href="#" class="thumbnail"><img src="${pic.getPicUrl(o.chartletId) }" width="200px" height="200px"></a>
+										 
+                                        <c:if test="${pic.status=='0' }">
+                                        <a id="bubbleStatusId${pic.id }" href="#" style="position: absolute; left: 2px; top: 2px;display:none" title="${pic.status }"> 
+                                        <span class=" glyphicon glyphicon-asterisk"></span></a> 
+                                        </c:if>
+                                        <c:if test="${pic.status=='1' }">
+                                        <a id="bubbleStatusId${pic.id }" href="#" style="position: absolute; left: 2px; top: 2px;" title="${pic.status }"> 
+                                        <span class=" glyphicon glyphicon-asterisk"></span></a> 
+                                        </c:if>
+										<a href="javascript:setBubbleStatus(${pic.id })" class="thumbnail"><img src="${pic.getPicUrl(o.chartletId) }" width="200px" height="200px"></a>
 										<div class="button-group checkbox " style="width: 200px; text-align: center;">
 											<div class="input-group ">
 												<input type="text" class="form-control-small" placeholder="X" style="width:50px" value="${pic.coordinateX }" onclick="getFocus(this)" 
@@ -87,7 +93,31 @@
 	function inputblur(obj){
 		$(obj).popover('destroy');
 	}
-	function setBubbleStatus(picId,status){
-		alert(status);
+	function setBubbleStatus(picId){
+		var status = $("#bubbleStatusId"+picId).attr("title");
+		if(status==0){
+			status=1;
+		}
+		else if(status==1){
+			status=0;
+		}
+		 var url = "/StarkPet/article/changeChartletPictureStatus.do?pictureId="+picId+"&status="+status;
+		 ajaxRequest(url,setBubbleStatusResponse);
+	}
+	
+	function setBubbleStatusResponse(ret){
+		if(ret.result=="1"){
+			$("#bubbleStatusId"+ret.picId).attr("title",ret.status);
+			if(ret.status=="0"){
+				$("#bubbleStatusId"+ret.picId).css({
+	                display : "none"
+	            });
+			}
+			else if(ret.status=="1"){
+				$("#bubbleStatusId"+ret.picId).css({
+                    display : "block"
+                });
+			}
+		}
 	}
 </script>

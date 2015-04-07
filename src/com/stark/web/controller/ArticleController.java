@@ -1346,6 +1346,8 @@ public class ArticleController {
 		boolean result = articleManager.changeChartletPictureStatus(pictureId,status);
 		if(result){
 			map.put("result", 1);
+			map.put("status", status);
+			map.put("picId",pictureId);
 		}else {
 			map.put("result", 0);
 		}
@@ -1607,6 +1609,7 @@ public class ArticleController {
 				for(RelChartletPicture url: chartlet.getPicList()){
 					Map<String, Object> urlMap = new HashMap<String, Object>();
 					urlMap.put("url", url.getPicUrl(chartlet.getChartletId()));
+					urlMap.put("status", url.getStatus());
 					urlMap.put("x", url.getCoordinateX());
 					urlMap.put("y", url.getCoordinateY());
 					urlMap.put("w", url.getWidth());
