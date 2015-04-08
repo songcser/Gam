@@ -4,6 +4,8 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link type="image/ico" href="../images/favicon.ico" rel="shortcut icon" />
+<link href="../images/favicon.ico" rel="bookmark icon" />
 <title>友哈-用户管理</title>
 <link rel="stylesheet" href="../css/bootstrap.css">
 <script src="../js/jquery-1.11.2.min.js"></script>
