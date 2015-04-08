@@ -10,6 +10,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
@@ -41,6 +42,7 @@ import com.baidu.ueditor.PathFormat;
 import com.stark.web.define.AppInfo;
 import com.stark.web.define.BaseState;
 import com.stark.web.define.EnumBase;
+import com.stark.web.define.MIMEType;
 import com.stark.web.define.MultiState;
 import com.stark.web.define.State;
 
@@ -358,14 +360,26 @@ public class FileManager {
 		return putObject(bucketName, fileName, input, length);
 	}
 
-	public static void upload(String path, URL uri) {
+	public static String uploadURL(String path, String uri) {
 		try {
 			// uploadLocal(path, uri.openStream());
-			uploadoss(path, uri.openStream());
+			URL url = new URL(uri);
+			HttpURLConnection connection = null;
+			connection = (HttpURLConnection) url.openConnection();
+			connection.setInstanceFollowRedirects( true );
+			connection.setUseCaches( true );
+			
+			if ( connection.getResponseCode() !=HttpURLConnection.HTTP_OK) {
+				return "";
+			}
+			String suffix = MIMEType.getSuffix( connection.getContentType() );
+			FileManager.uploadoss(path+suffix, connection.getInputStream(), connection.getContentLength());
+			return suffix;
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
+		return "";
 	}
 
 	public static void uploadoss(String path, InputStream input) {

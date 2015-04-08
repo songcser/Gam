@@ -377,28 +377,24 @@ public class ArticleManager implements IArticleManager {
 		for (String url : listImgSrc) {
 			String imageName = url.substring(url.lastIndexOf("/") + 1, url.length());
 			System.out.println("Url: " + url);
-			try {
-				String path = FileManager.getArticlePicturePath(id, imageName);
-				System.out.println(path);
-				URL uri = new URL(url);
-				FileManager.upload(path, uri);
-				// InputStream in = uri.openStream();
-				// FileOutputStream fo = new FileOutputStream(new File(path));
-				// byte[] buf = new byte[1024];
-				// int length = 0;
-				// System.out.println("开始下载:" + url);
-				// while ((length = in.read(buf, 0, buf.length)) != -1) {
-				// fo.write(buf, 0, length);
-				// }
-				// in.close();
-				// fo.close();
-				System.out.println(imageName + "下载完成");
+			String path = FileManager.getArticlePicturePath(id, imageName);
+			System.out.println(path);
+			//URL uri = new URL(url);
+			FileManager.uploadURL(path, url);
+			// InputStream in = uri.openStream();
+			// FileOutputStream fo = new FileOutputStream(new File(path));
+			// byte[] buf = new byte[1024];
+			// int length = 0;
+			// System.out.println("开始下载:" + url);
+			// while ((length = in.read(buf, 0, buf.length)) != -1) {
+			// fo.write(buf, 0, length);
+			// }
+			// in.close();
+			// fo.close();
+			//System.out.println(imageName + "下载完成");
 
-				updatePicture(id, imageName);
-				return;
-			} catch (MalformedURLException e) {
-				e.printStackTrace();
-			}
+			updatePicture(id, imageName);
+			return;
 
 		}
 

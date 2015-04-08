@@ -2,6 +2,7 @@ package com.stark.web.service;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -595,22 +596,17 @@ public class UserManager implements IUserManager{
 
 	@Override
 	public String getUserHeadPic(int userId, String headPicUrl) {
-		String imageName = headPicUrl.substring(headPicUrl.lastIndexOf("/") + 1, headPicUrl.length());
-		if(!imageName.toLowerCase().endsWith(".jpg")&&!imageName.toLowerCase().endsWith(".png")&&!imageName.toLowerCase().endsWith(".jpeg")&&!imageName.toLowerCase().endsWith(".bmp")){
-			imageName = imageName+".jpeg";
-		}
+		//String imageName = headPicUrl.substring(headPicUrl.lastIndexOf("/") + 1, headPicUrl.length());
+		//if(!imageName.toLowerCase().endsWith(".jpg")&&!imageName.toLowerCase().endsWith(".png")&&!imageName.toLowerCase().endsWith(".jpeg")&&!imageName.toLowerCase().endsWith(".bmp")){
+		//	imageName = imageName+".jpeg";
+		//}
+		
+		SimpleDateFormat sdf = WebManager.getDateFormat();
+		String imageName = sdf.format(new Date());
 		String path = FileManager.getUserPicturePath(userId, imageName);
-		try {
-			URL uri = new URL(headPicUrl);
-			FileManager.upload(path, uri);
-			userDao.addUserHeadPic(userId,imageName);
-			userDao.addRedisUserHeadPic(userId,imageName);
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-			userDao.addUserHeadPic(userId,"");
-			userDao.addRedisUserHeadPic(userId,"");
-			return null;
-		}
+		String suffix = FileManager.uploadURL(path, headPicUrl);
+		userDao.addUserHeadPic(userId,imageName+suffix);
+		userDao.addRedisUserHeadPic(userId,imageName+suffix);
 		return imageName;
 	}
 
