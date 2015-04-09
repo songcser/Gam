@@ -46,7 +46,12 @@ body {
 							<select name="activityId" id="showSelect" class="form-control" >
 								<c:if test="${!empty showList }">
 									<c:forEach items="${showList }" var="u">
-										<option value="${u.activityId }" title="${u.type }">${u.subject }</option>
+									   <c:if test="${u.type==2 }">
+									   <option value="${u.activityId }" title="${u.type }">${u.subject } (用户可参加)</option>
+									   </c:if>
+										<c:if test="${u.type==3 }">
+                                       <option value="${u.activityId }" title="${u.type }">${u.subject } (用户不可参加)</option>
+                                       </c:if>
 									</c:forEach>
 								</c:if>
 							</select>

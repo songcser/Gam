@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>${article.title }</title>
-<link rel="stylesheet" href="../css/bootstrap.css">
+<link rel="stylesheet" href="../css/bootstrap.min.css">
 <style type="text/css">
 img{
     margin: 0px; 
@@ -15,18 +15,40 @@ img{
     height: auto !important; 
     box-sizing: border-box !important; 
     word-wrap: break-word !important; 
-    width: 591px !important; 
+    width: 100% !important; 
     visibility: visible !important;
+}
+ul{
+    margin: 0px; 
+    padding: 0px; 
+}
+li{
+    list-style-type:none
+}
+div{
+    max-width: 100%; 
+    overflow:hide;
 }
 </style>
 </head>
 <body >
-<div style="margin-bottom:70px;margin-top:15px" class="container " >
+<div id="bodyMain" style="margin-bottom:70px;margin-top:15px" class="container " >
 
 <article>
 ${content }
 </article>
 </div>
-
+<script src="../js/jquery-1.11.2.min.js"></script>
+<script type="text/javascript">
+var current = $("#bodyMain") ;
+$(current).find("img").each(function(i){ 
+	$(this).attr("style","width: 100%"); 
+	$(this).attr("style","height: auto"); 
+});
+$(current).find("iframe").load(function(i){ 
+    //$(this).height("auto"); 
+    $(this).width($(current).width()); 
+});
+</script>
 </body>
 </html>
