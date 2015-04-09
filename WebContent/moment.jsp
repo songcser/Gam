@@ -29,7 +29,7 @@ body {
 			<div class="col-lg-6 col-md-6 ">
 				<button class="btn bg-blue radius-rounded pading-left" onclick="getAuditedMoment()">已审核</button>
 				<button class="btn bg-blue radius-rounded " onclick="getNoAuditedMoment()">未审核</button>
-				<button class="btn bg-blue radius-rounded " onclick="getCommonPublishList()">普通发布</button>
+				<button class="btn bg-blue radius-rounded " onclick="getCommonPublishList()">真实用户发布</button>
 				<button class="btn bg-blue radius-rounded " onclick="getOperPublishList()">运营发布</button>
 				<button class="btn bg-blue radius-rounded " onclick="getDeleteList()">已删除</button>
 			</div>

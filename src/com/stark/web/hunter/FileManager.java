@@ -27,7 +27,9 @@ import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.aliyun.oss.ClientException;
 import com.aliyun.oss.OSSClient;
+import com.aliyun.oss.OSSException;
 import com.aliyun.oss.model.CompleteMultipartUploadRequest;
 import com.aliyun.oss.model.CompleteMultipartUploadResult;
 import com.aliyun.oss.model.InitiateMultipartUploadRequest;
@@ -661,23 +663,32 @@ public class FileManager {
 		// 初始化 OSSClient
 		OSSClient client = getClient();
 		// 获取 Object,返回结果为 OSSObject 对象
-		OSSObject object = client.getObject(bucketName, key);
-		// 获取 ObjectMeta
-		ObjectMetadata meta = object.getObjectMetadata();
-		// 获取 Object 的输入流
-		InputStream objectContent = object.getObjectContent();
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();  
-		int i;  
-		while ((i = objectContent.read()) != -1) {  
-		    baos.write(i);  
-		}  
-		String content = baos.toString();
-		// 处理 Object
-		
-		// 关闭流
-		objectContent.close();
-		
-		return content;
+		OSSObject object;
+		try {
+			object = client.getObject(bucketName, key);
+			// 获取 ObjectMeta
+			ObjectMetadata meta = object.getObjectMetadata();
+			// 获取 Object 的输入流
+			InputStream objectContent = object.getObjectContent();
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();  
+			int i;  
+			while ((i = objectContent.read()) != -1) {  
+			    baos.write(i);  
+			}  
+			String content = baos.toString();
+			// 处理 Object
+			
+			// 关闭流
+			objectContent.close();
+			
+			return content;
+		} catch (OSSException e) {
+			logger.error(e.getMessage(),e.fillInStackTrace());
+			return null;
+		} catch (ClientException e) {
+			logger.error(e.getMessage(),e.fillInStackTrace());
+			return null;
+		}
 	}
 
 	public static String getContent(String path) {

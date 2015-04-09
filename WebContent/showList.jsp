@@ -10,12 +10,12 @@
 					</a>
 				</div>
 				<div class="media-body padding-top">
-					<button style="width: 170px; height: 30px; margin-left: -15px; display: block" class="bg-green radius-rounded margin-bottom ">${o.subject }</button>
+					<button style="width: 170px; height: 30px; margin-left: -15px; display: block" class=" bg-green radius-rounded margin-bottom ">标题: ${o.subject }</button>
 					<c:if test="${o.type==2 }">
-						<button style="width: 140px; height: 30px; margin-left: -15px; display: block" class="bg-green radius-rounded margin-bottom ">可参加</button>
+						<button style="width: 140px; height: 30px; margin-left: -15px; display: block" class="bg-green radius-rounded margin-bottom ">是否: 可参加</button>
 					</c:if>
 					<c:if test="${o.type==3 }">
-						<button style="width: 140px; height: 30px; margin-left: -15px; display: block" class="bg-green radius-rounded margin-bottom ">不可参加</button>
+						<button style="width: 140px; height: 30px; margin-left: -15px; display: block" class="bg-green radius-rounded margin-bottom ">是否:不可参加</button>
 					</c:if>
 					<input value="序号: ${o.order }" type="button" style="width: 110px; height: 30px; margin-left: -15px; display: block" class="bg-green radius-rounded margin-bottom"
 						onclick="orderSort(this,${o.activityId })">

@@ -21,7 +21,7 @@ public class RedisDataSource implements IRedisDataSource{
 	            ShardedJedis shardJedis = shardedJedisPool.getResource();
 	            return shardJedis;
 	        } catch (Exception e) {
-	            log.error("getRedisClent error");
+	            log.error("getRedisClent error",e.fillInStackTrace());
 	        }
 	        return null;
 	    }

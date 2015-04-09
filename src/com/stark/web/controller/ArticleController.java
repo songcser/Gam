@@ -185,7 +185,8 @@ public class ArticleController {
 						rename = fileName.substring(0,index);
 						filepix = fileName.substring(index);
 					}
-					System.out.println(rename);
+					//System.out.println(rename);
+					/*
 					if(rename.endsWith(".gif")&&i==0){
 						i++;
 						String imageFormat = "gif";
@@ -207,6 +208,7 @@ public class ArticleController {
 						//ImageIO.createImageOutputStream(bi);
 						articleManager.updatePicture(articleId, gifName+filepix);
 					}
+					*/
 					i++;
 					rename = i+rename;
 					String path = FileManager.getArticlePicturePath(articleId, rename);
@@ -1064,6 +1066,7 @@ public class ArticleController {
 							filepix = name.substring(index);
 						}
 						//System.out.println(fileName);
+						/*
 						if(fileName.endsWith(".gif")&&i==0){
 							i++;
 							String imageFormat = "gif";
@@ -1085,7 +1088,7 @@ public class ArticleController {
 							//ImageIO.createImageOutputStream(bi);
 							articleManager.updatePicture(articleId, gifName+filepix);
 						}
-						
+						*/
 						fileName = i+fileName;
 						i++;
 						String path = FileManager.getArticlePicturePath(articleId, fileName);
@@ -1757,7 +1760,9 @@ public class ArticleController {
 		//UserInfo user = userManager.getUser(article.getUser().getUserId());
 		String path = FileManager.getArticleHtmlPath(articleId, article.getRichText());
 		String content = FileManager.getContent( path);
-		
+		if(content==null){
+			content ="没有内容";
+		}
 		request.setAttribute("content", content);
 		request.setAttribute("article", article);
 		//request.setAttribute("user", user);

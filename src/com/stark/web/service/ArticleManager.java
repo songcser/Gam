@@ -1276,6 +1276,7 @@ public class ArticleManager implements IArticleManager {
 		aMap.put("type", article.getType());
 		aMap.put("typeStr", ArticleType.getName(article.getType()));
 		aMap.put("userId", user.getUserId());
+		aMap.put("sex", user.getSex());
 		DateFormat df = WebManager.getDateFormat();
 		Date date = article.getDate();
 		if(date!=null){

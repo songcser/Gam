@@ -65,6 +65,8 @@ dependencies {
     
     compile 'org.quartz-scheduler:quartz:2.2.1'
     
+    compile 'com.wandoulabs.jodis:jodis:0.1.2'
+    
     def tomcatVersion = '7.0.56'
     tomcat "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}",
            "org.apache.tomcat.embed:tomcat-embed-logging-juli:${tomcatVersion}"

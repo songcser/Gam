@@ -142,13 +142,13 @@ function createMediaDiv(art){
      //var typeStr = typeChangeStr(type);
 	 var typeStr = art.typeStr;
 	 if(type==14){
-		 typeStr = "推荐: "+art.showTitle;
+		 typeStr = "推荐:来自 "+art.showTitle;
 	 }
 	 else if(type==16){
-		 typeStr = "普通: "+art.showTitle;
+		 typeStr = "普通:来自 "+art.showTitle;
 	 }
 	 else if(type==17){
-		 typeStr = "普通推荐: "+art.showTitle;
+		 typeStr = "普通推荐:来自 "+art.showTitle;
 	 }
 	
 	mediaOper.append('<div class="btn-group" role="button"><a href="javascript:changeArticleType('+art.articleId+','+art.type+')" class="btn btn-default" id="articleType'+art.articleId+'">'+typeStr+' </a></div>');
