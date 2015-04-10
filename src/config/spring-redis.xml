@@ -68,7 +68,7 @@
 	<bean id="jedisPool" class="com.wandoulabs.jodis.RoundRobinJedisPool" >
 	   <constructor-arg value="127.0.0.1:2181" />
        <constructor-arg type="int" value="30000" />
-       <constructor-arg value="/zk/codis/db_test/proxy" />
+       <constructor-arg value="/zk/codis/db_uha/proxy" />
        <constructor-arg ref="poolConfig" />
 	</bean>
 	
