@@ -34,7 +34,7 @@ public class CodisDAO implements IRedisDAO{
 	@Override
 	public Long lpush(String key, String value) {
 		Jedis jedis =  Jedis();
-		long len = jedis.lpush(key, value); 
+		Long len = jedis.lpush(key, value); 
 		close(jedis);
 		return len;
 	}
@@ -66,7 +66,7 @@ public class CodisDAO implements IRedisDAO{
 	@Override
 	public Long llen(String key) {
 		Jedis jedis = Jedis();
-		long len = jedis.llen(key);
+		Long len = jedis.llen(key);
 		close(jedis);
 		return len;
 	}
@@ -90,7 +90,7 @@ public class CodisDAO implements IRedisDAO{
 	@Override
 	public Long lrem(String key, long count, String value) {
 		Jedis jedis = Jedis();
-		long len = jedis.lrem(key, count, value);
+		Long len = jedis.lrem(key, count, value);
 		close(jedis);
 		return len;
 	}
@@ -122,7 +122,7 @@ public class CodisDAO implements IRedisDAO{
 	@Override
 	public Long del(String... keys) {
 		Jedis jedis = Jedis();
-		long len = jedis.del(keys);
+		Long len = jedis.del(keys);
 		close(jedis);
 		return len;
 	}
@@ -177,7 +177,7 @@ public class CodisDAO implements IRedisDAO{
 	@Override
 	public Boolean exists(String key) {
 		Jedis jedis = Jedis();
-		boolean flag = jedis.exists(key);
+		Boolean flag = jedis.exists(key);
 		close(jedis);
 		return flag;
 	}
@@ -217,7 +217,7 @@ public class CodisDAO implements IRedisDAO{
 	@Override
 	public Boolean sismember(String key, String member) {
 		Jedis jedis = Jedis();
-		boolean result = jedis.sismember(key, member);
+		Boolean result = jedis.sismember(key, member);
 		close(jedis);
 		return result;
 	}
@@ -225,7 +225,7 @@ public class CodisDAO implements IRedisDAO{
 	@Override
 	public Long sadd(String key, String... member) {
 		Jedis jedis = Jedis();
-		long len = jedis.sadd(key, member);
+		Long len = jedis.sadd(key, member);
 		close(jedis);
 		return len;
 	}
@@ -233,7 +233,7 @@ public class CodisDAO implements IRedisDAO{
 	@Override
 	public Long incr(String key) {
 		Jedis jedis = Jedis();
-		long len = jedis.incr(key);
+		Long len = jedis.incr(key);
 		close(jedis);
 		return len;
 	}
@@ -241,7 +241,7 @@ public class CodisDAO implements IRedisDAO{
 	@Override
 	public Long incr(byte[] key) {
 		Jedis jedis = Jedis();
-		long len = jedis.incr(key);
+		Long len = jedis.incr(key);
 		close(jedis);
 		return len;
 	}
@@ -249,7 +249,7 @@ public class CodisDAO implements IRedisDAO{
 	@Override
 	public Long hset(String key, String field, String value) {
 		Jedis jedis = Jedis();
-		long len = jedis.hset(key, field, value);
+		Long len = jedis.hset(key, field, value);
 		close(jedis);
 		return len;
 	}
@@ -257,7 +257,7 @@ public class CodisDAO implements IRedisDAO{
 	@Override
 	public Long hincrby(String key, String field, long increment) {
 		Jedis jedis = Jedis();
-		long len = jedis.hincrBy(key, field, increment);
+		Long len = jedis.hincrBy(key, field, increment);
 		close(jedis);
 		return len;
 	}
@@ -265,7 +265,7 @@ public class CodisDAO implements IRedisDAO{
 	@Override
 	public Long decr(String key) {
 		Jedis jedis = Jedis();
-		long len = jedis.decr(key);
+		Long len = jedis.decr(key);
 		close(jedis);
 		return len;
 	}
@@ -273,7 +273,7 @@ public class CodisDAO implements IRedisDAO{
 	@Override
 	public Long decr(byte[] key) {
 		Jedis jedis = Jedis();
-		long len = jedis.decr(key);
+		Long len = jedis.decr(key);
 		close(jedis);
 		return len;
 	}
@@ -281,7 +281,7 @@ public class CodisDAO implements IRedisDAO{
 	@Override
 	public Boolean expireAt(String key, long seconds) {
 		Jedis jedis = Jedis();
-		boolean result = jedis.expireAt(key, seconds)>0;
+		Boolean result = jedis.expireAt(key, seconds)>0;
 		close(jedis);
 		return result;
 	}
@@ -289,7 +289,7 @@ public class CodisDAO implements IRedisDAO{
 	@Override
 	public Boolean expireAt(byte[] key, long seconds) {
 		Jedis jedis = Jedis();
-		boolean result = jedis.expireAt(key, seconds)>0;
+		Boolean result = jedis.expireAt(key, seconds)>0;
 		close(jedis);
 		return result;
 	}
@@ -297,7 +297,7 @@ public class CodisDAO implements IRedisDAO{
 	@Override
 	public Boolean expire(String key, int seconds) {
 		Jedis jedis = Jedis();
-		boolean result = jedis.expire(key, seconds)>0;
+		Boolean result = jedis.expire(key, seconds)>0;
 		close(jedis);
 		return result;
 	}
@@ -305,7 +305,7 @@ public class CodisDAO implements IRedisDAO{
 	@Override
 	public Boolean expire(byte[] key, int seconds) {
 		Jedis jedis = Jedis();
-		boolean result = jedis.expire(key, seconds)>0;
+		Boolean result = jedis.expire(key, seconds)>0;
 		close(jedis);
 		return result;
 	}
@@ -313,7 +313,7 @@ public class CodisDAO implements IRedisDAO{
 	@Override
 	public Long zadd(String key, double score, String member) {
 		Jedis jedis = Jedis();
-		long len = jedis.zadd(key, score, member);
+		Long len = jedis.zadd(key, score, member);
 		close(jedis);
 		return len;
 	}
@@ -337,7 +337,7 @@ public class CodisDAO implements IRedisDAO{
 	@Override
 	public Double zscore(String key, String member) {
 		Jedis jedis = Jedis();
-		double value = jedis.zscore(key, member);
+		Double value = jedis.zscore(key, member);
 		close(jedis);
 		return value;
 	}
@@ -345,7 +345,7 @@ public class CodisDAO implements IRedisDAO{
 	@Override
 	public Long zrem(String key, Object... member) {
 		Jedis jedis = Jedis();
-		long len = jedis.zrem(key, (String[])member);
+		Long len = jedis.zrem(key, (String[])member);
 		close(jedis);
 		return len;
 	}
@@ -369,7 +369,7 @@ public class CodisDAO implements IRedisDAO{
 	@Override
 	public Long sadd(String key, String member) {
 		Jedis jedis = Jedis();
-		long len = jedis.sadd(key, member);
+		Long len = jedis.sadd(key, member);
 		close(jedis);
 		return len;
 	}
@@ -377,7 +377,7 @@ public class CodisDAO implements IRedisDAO{
 	@Override
 	public Long sadd(byte[] key, byte[] member) {
 		Jedis jedis = Jedis();
-		long len = jedis.sadd(key, member);
+		Long len = jedis.sadd(key, member);
 		close(jedis);
 		return len;
 	}
