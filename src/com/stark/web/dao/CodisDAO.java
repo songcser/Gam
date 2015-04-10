@@ -1,112 +1,172 @@
 package com.stark.web.dao;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.Resource;
+
 import com.wandoulabs.jodis.JedisResourcePool;
-import com.wandoulabs.jodis.RoundRobinJedisPool;
 
 import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPoolConfig;
 
 public class CodisDAO implements IRedisDAO{
 
+	@Resource
+	JedisResourcePool jedisPool;
+	
+	public JedisResourcePool getJedisPool() {
+		return jedisPool;
+	}
+
+	public void setJedisPool(JedisResourcePool jedisPool) {
+		this.jedisPool = jedisPool;
+	}
+
 	private Jedis Jedis(){
-		JedisPoolConfig poolConfig = new JedisPoolConfig();
+		//JedisPoolConfig poolConfig = new JedisPoolConfig();
 		
-		JedisResourcePool jedisPool = new RoundRobinJedisPool("zkserver:2181", 30000, "/zk/codis/db_xxx/proxy",poolConfig);
-		Jedis jedis = jedisPool.getResource();
-		return jedis;
+		//JedisResourcePool jedisPool = new RoundRobinJedisPool("127.0.0.1:2181", 30000, "/zk/codis/db_test/proxy",poolConfig);
+		return jedisPool.getResource();
 	}
 	
 	@Override
 	public Long lpush(String key, String value) {
-		return Jedis().lpush(key, value);
+		Jedis jedis =  Jedis();
+		long len = jedis.lpush(key, value); 
+		close(jedis);
+		return len;
 	}
 
 	@Override
 	public String lpop(String key) {
-		return Jedis().lpop(key);
+		Jedis jedis = Jedis();
+		String value = jedis.lpop(key);
+		close(jedis);
+		return value;
 	}
 
 	@Override
 	public Long rpush(String key, String value) {
-		return Jedis().rpush(key, value);
+		Jedis jedis = Jedis();
+		long len = jedis.rpush(key, value);
+		close(jedis);
+		return len;
 	}
 
 	@Override
 	public String rpop(String key) {
-		return Jedis().rpop(key);
+		Jedis jedis = Jedis();
+		String value = jedis.rpop(key);
+		close(jedis);
+		return value;
 	}
 
 	@Override
 	public Long llen(String key) {
-		return Jedis().llen(key);
+		Jedis jedis = Jedis();
+		long len = jedis.llen(key);
+		close(jedis);
+		return len;
 	}
 
 	@Override
 	public List<String> lrange(String key, long start, long end) {
-		return Jedis().lrange(key, start, end);
+		Jedis jedis = Jedis();
+		List<String> list = jedis.lrange(key, start, end);
+		close(jedis);
+		return list;
 	}
 
 	@Override
 	public String lindex(String key, long index) {
-		return Jedis().lindex(key, index);
+		Jedis jedis = Jedis();
+		String value = jedis.lindex(key, index);
+		close(jedis);
+		return value;
 	}
 
 	@Override
 	public Long lrem(String key, long count, String value) {
-		return Jedis().lrem(key, count, value);
+		Jedis jedis = Jedis();
+		long len = jedis.lrem(key, count, value);
+		close(jedis);
+		return len;
 	}
 
 	@Override
 	public String lset(String key, long index, String value) {
-		return Jedis().lset(key, index, value);
+		Jedis jedis = Jedis();
+		String val = jedis.lset(key, index, value);
+		close(jedis);
+		return val;
 	}
 
 	@Override
 	public String ltrim(String key, long start, long end) {
-		return Jedis().ltrim(key, start, end);
+		Jedis jedis = Jedis();
+		String value =jedis.ltrim(key, start, end);
+		close(jedis);
+		return value;
 	}
 
 	@Override
 	public String hmset(String key, Map<String, String> value) {
-		return Jedis().hmset(key, value);
+		Jedis jedis = Jedis();
+		String val = jedis.hmset(key, value);
+		close(jedis);
+		return val;
 	}
 
 	@Override
 	public Long del(String... keys) {
-		return Jedis().del(keys);
+		Jedis jedis = Jedis();
+		long len = jedis.del(keys);
+		close(jedis);
+		return len;
 	}
 
 	@Override
 	public String set(byte[] key, byte[] value, long liveTime) {
-		String result = Jedis().set(key, value);
-		Jedis().expireAt(key, liveTime);
+		Jedis jedis = Jedis();
+		String result = jedis.set(key, value);
+		jedis.expireAt(key, liveTime);
+		close(jedis);
 		return result;
 	}
 
 	@Override
 	public String set(String key, String value, long liveTime) {
-		String result = Jedis().set(key, value);
-		Jedis().expireAt(key, liveTime);
+		Jedis jedis = Jedis();
+		String result = jedis.set(key, value);
+		jedis.expireAt(key, liveTime);
+		close(jedis);
 		return result;
 	}
 
 	@Override
 	public String set(String key, String value) {
-		return Jedis().set(key, value);
+		Jedis jedis = Jedis();
+		String val = jedis.set(key, value);
+		close(jedis);
+		return val;
 	}
 
 	@Override
 	public String set(byte[] key, byte[] value) {
-		return Jedis().set(key, value);
+		Jedis jedis = Jedis();
+		String val = jedis.set(key, value);
+		close(jedis);
+		return val;
 	}
 
 	@Override
 	public String get(String key) {
-		return Jedis().get(key);
+		Jedis jedis = Jedis();
+		String value = jedis.get(key);
+		close(jedis);
+		return value;
 	}
 
 	@Override
@@ -116,132 +176,213 @@ public class CodisDAO implements IRedisDAO{
 
 	@Override
 	public Boolean exists(String key) {
-		return Jedis().exists(key);
+		Jedis jedis = Jedis();
+		boolean flag = jedis.exists(key);
+		close(jedis);
+		return flag;
 	}
 
 	@Override
 	public String flushDB() {
-		return Jedis().flushDB();
+		Jedis jedis = Jedis();
+		String result = jedis.flushDB();
+		close(jedis);
+		return result;
 	}
 
 	@Override
 	public long dbSize() {
-		return Jedis().dbSize();
+		Jedis jedis = Jedis();
+		long len = jedis.dbSize();
+		close(jedis);
+		return len;
 	}
 
 	@Override
 	public String ping() {
-		return Jedis().ping();
+		Jedis jedis = Jedis();
+		String value = jedis.ping();
+		close(jedis);
+		return value;
 	}
 
 	@Override
 	public Map<String, String> hgetAll(String key) {
-		return Jedis().hgetAll(key);
+		Jedis jedis = Jedis();
+		Map<String,String> map = jedis.hgetAll(key);
+		close(jedis);
+		return map;
 	}
 
 	@Override
 	public Boolean sismember(String key, String member) {
-		return Jedis().sismember(key, member);
+		Jedis jedis = Jedis();
+		boolean result = jedis.sismember(key, member);
+		close(jedis);
+		return result;
 	}
 
 	@Override
 	public Long sadd(String key, String... member) {
-		return Jedis().sadd(key, member);
+		Jedis jedis = Jedis();
+		long len = jedis.sadd(key, member);
+		close(jedis);
+		return len;
 	}
 
 	@Override
 	public Long incr(String key) {
-		return Jedis().incr(key);
+		Jedis jedis = Jedis();
+		long len = jedis.incr(key);
+		close(jedis);
+		return len;
 	}
 
 	@Override
 	public Long incr(byte[] key) {
-		return Jedis().incr(key);
+		Jedis jedis = Jedis();
+		long len = jedis.incr(key);
+		close(jedis);
+		return len;
 	}
 
 	@Override
 	public Long hset(String key, String field, String value) {
-		return Jedis().hset(key, field, value);
+		Jedis jedis = Jedis();
+		long len = jedis.hset(key, field, value);
+		close(jedis);
+		return len;
 	}
 
 	@Override
 	public Long hincrby(String key, String field, long increment) {
-		return Jedis().hincrBy(key, field, increment);
+		Jedis jedis = Jedis();
+		long len = jedis.hincrBy(key, field, increment);
+		close(jedis);
+		return len;
 	}
 
 	@Override
 	public Long decr(String key) {
-		return Jedis().decr(key);
+		Jedis jedis = Jedis();
+		long len = jedis.decr(key);
+		close(jedis);
+		return len;
 	}
 
 	@Override
 	public Long decr(byte[] key) {
-		return Jedis().decr(key);
+		Jedis jedis = Jedis();
+		long len = jedis.decr(key);
+		close(jedis);
+		return len;
 	}
 
 	@Override
 	public Boolean expireAt(String key, long seconds) {
-		return Jedis().expireAt(key, seconds)>0;
+		Jedis jedis = Jedis();
+		boolean result = jedis.expireAt(key, seconds)>0;
+		close(jedis);
+		return result;
 	}
 
 	@Override
 	public Boolean expireAt(byte[] key, long seconds) {
-		return Jedis().expireAt(key, seconds)>0;
+		Jedis jedis = Jedis();
+		boolean result = jedis.expireAt(key, seconds)>0;
+		close(jedis);
+		return result;
 	}
 
 	@Override
 	public Boolean expire(String key, int seconds) {
-		return Jedis().expire(key, seconds)>0;
+		Jedis jedis = Jedis();
+		boolean result = jedis.expire(key, seconds)>0;
+		close(jedis);
+		return result;
 	}
 
 	@Override
 	public Boolean expire(byte[] key, int seconds) {
-		return Jedis().expire(key, seconds)>0;
+		Jedis jedis = Jedis();
+		boolean result = jedis.expire(key, seconds)>0;
+		close(jedis);
+		return result;
 	}
 
 	@Override
 	public Long zadd(String key, double score, String member) {
-		return Jedis().zadd(key, score, member);
+		Jedis jedis = Jedis();
+		long len = jedis.zadd(key, score, member);
+		close(jedis);
+		return len;
 	}
 
 	@Override
 	public Set<String> zrange(String key, int start, int stop) {
-		return Jedis().zrange(key, start, stop);
+		Jedis jedis = Jedis();
+		Set<String> set = jedis.zrange(key, start, stop);
+		close(jedis);
+		return set;
 	}
 
 	@Override
 	public Object hget(String key, String field) {
-		return Jedis().hget(key, field);
+		Jedis jedis = Jedis();
+		Object obj = jedis.hget(key, field);
+		close(jedis);
+		return obj;
 	}
 
 	@Override
 	public Double zscore(String key, String member) {
-		return Jedis().zscore(key, member);
+		Jedis jedis = Jedis();
+		double value = jedis.zscore(key, member);
+		close(jedis);
+		return value;
 	}
 
 	@Override
 	public Long zrem(String key, Object... member) {
-		return Jedis().zrem(key, (String[])member);
+		Jedis jedis = Jedis();
+		long len = jedis.zrem(key, (String[])member);
+		close(jedis);
+		return len;
 	}
 
 	@Override
 	public Set<String> zrevrange(String key, int start, int stop) {
-		return Jedis().zrevrange(key, start, stop);
+		Jedis jedis = Jedis();
+		Set<String> set = jedis.zrevrange(key, start, stop);
+		close(jedis);
+		return set;
 	}
 
 	@Override
 	public Set<String> smembers(String key) {
-		return Jedis().smembers(key);
+		Jedis jedis = Jedis();
+		Set<String> set = jedis.smembers(key);
+		close(jedis);
+		return set;
 	}
 
 	@Override
 	public Long sadd(String key, String member) {
-		return Jedis().sadd(key, member);
+		Jedis jedis = Jedis();
+		long len = jedis.sadd(key, member);
+		close(jedis);
+		return len;
 	}
 
 	@Override
 	public Long sadd(byte[] key, byte[] member) {
-		return Jedis().sadd(key, member);
+		Jedis jedis = Jedis();
+		long len = jedis.sadd(key, member);
+		close(jedis);
+		return len;
 	}
 
+	private void close(Jedis jedis){
+		jedis.close();
+	}
 }

@@ -5,7 +5,7 @@
   
 <beans>  
     
-    <bean id="redisDao" class="com.stark.web.dao.ShareRedisDAO">
+    <bean id="redisDao" class="com.stark.web.dao.CodisDAO">
         <!-- <property name="redisTemplate" ref="redisTemplate" /> -->
     </bean>
     <bean id="userDao" class="com.stark.web.dao.UserDAO">

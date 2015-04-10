@@ -1449,7 +1449,7 @@ public class ArticleController {
 	@RequestMapping("getRecommendList2.0.do")
 	@ResponseBody
 	public Map<String,Object> getRecommendList2(int userId,int page){
-		System.out.println(userId);
+		//System.out.println(userId);
 		Map<String,Object> map = new HashMap<String,Object>();
 		map = articleManager.getRecommendList(userId,page,maxResults2);
 		return map;

@@ -65,7 +65,7 @@
 		<aop:aspect id="logAspect" ref="logInterceptor">
 			<aop:pointcut id="controllerPoint" expression="execution(* com.stark.web.controller..*.*(..))" />
 			<!-- <aop:before method="before" pointcut="execution(public * com.stark.web.controller..*.*(..)) and args(..)" /> -->
-			<aop:before method="beforeRedisDao" pointcut="execution(public * com.stark.web.dao.ShareRedisDAO.*(..)) and args(..)" />
+			<!-- <aop:before method="beforeRedisDao" pointcut="execution(public * com.stark.web.dao.ShareRedisDAO.*(..)) and args(..)" /> -->
 			<!-- <aop:around pointcut-ref="controllerPoint" method="doAround" /> -->
 			<!-- <aop:after-throwing method="afterThrowing" throwing="throwable" pointcut="execution(public * com.stark.web.dao..*.*(..)) and args(..)" /> -->
 			<!-- <aop:before method="beforeDao" pointcut="execution(public * com.stark.web.dao..*.*(..)) and args(..)" /> -->

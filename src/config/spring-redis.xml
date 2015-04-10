@@ -28,13 +28,13 @@
 					<constructor-arg value="${redis.host}" />
 					<constructor-arg type="int" value="${redis.port}" />
 					<constructor-arg value="instance:01" />
-					<property name="password" value="${redis.pass}"></property>
+					<!-- <property name="password" value="${redis.pass}"></property>-->
 				</bean>
 				<bean class="redis.clients.jedis.JedisShardInfo">
                     <constructor-arg value="${redis2.host}" />
                     <constructor-arg type="int" value="${redis2.port}" />
                     <constructor-arg value="instance:02" />
-                    <property name="password" value="${redis2.pass}"></property>
+                   <!--  <property name="password" value="${redis2.pass}"></property> -->
                 </bean>
 			</list>
 		</constructor-arg>
@@ -43,9 +43,8 @@
     <bean id="connectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory" 
        p:host-name="${redis.host}" 
        p:port="${redis.port}" 
-       p:password="${redis.pass}"
        p:pool-config-ref="poolConfig" />
-
+<!--        p:password="${redis.pass}" -->
 	<bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
 		<property name="connectionFactory" ref="connectionFactory" />
 
@@ -65,4 +64,12 @@
 
 	</bean>
 	<!-- <bean id="redisManager" class="com.stark.web.service.RedisManager"> <property name="redisTemplate" ref="redisTemplate" /> </bean> -->
+	
+	<bean id="jedisPool" class="com.wandoulabs.jodis.RoundRobinJedisPool" >
+	   <constructor-arg value="127.0.0.1:2181" />
+       <constructor-arg type="int" value="30000" />
+       <constructor-arg value="/zk/codis/db_test/proxy" />
+       <constructor-arg ref="poolConfig" />
+	</bean>
+	
 </beans>
