@@ -69,7 +69,8 @@ public class UserManager implements IUserManager{
 				userDao.addRedisUserEmailPassword(email,uInfo.getPassword(),userId);
 				userDao.addRedisEmails(email);
 			}
-			
+			String key = RedisInfo.USERNORMALZSET;
+			userDao.addRedisUsers(key,userId);
 		}
 		return userId;
 	}
@@ -377,7 +378,40 @@ public class UserManager implements IUserManager{
 
 	@Override
 	public List<UserInfo> getAllUser() {
-		return userDao.getAllUser();
+		String key = RedisInfo.USERALLSET;
+		Set<String> ids = userDao.getRedisUserSet(key);
+		if(ids!=null&&!ids.isEmpty()){
+			List<UserInfo> users = idSetToUserList(ids);
+			return users;
+		}
+		List<UserInfo> list = userDao.getAllUser();
+		addRedisUserList(key,list);
+		return list;
+	}
+
+	private void addRedisUserList(String key, List<UserInfo> list) {
+		if(list!=null){
+			for(UserInfo user:list){
+				if(user!=null){
+					userDao.addRedisUser(user);
+					userDao.addRedisUserSet(key,user.getUserId());
+				}
+				
+			}
+		}
+		
+	}
+
+	private List<UserInfo> idSetToUserList(Set<String> ids) {
+		List<UserInfo> list = new ArrayList<UserInfo>();
+		if(ids==null||ids.isEmpty()){
+			return null;
+		}
+		for(String id:ids){
+			UserInfo user = getUser(Integer.parseInt(id));
+			list.add(user);
+		}
+		return list;
 	}
 
 	@Override
@@ -742,7 +776,7 @@ public class UserManager implements IUserManager{
 	public List<UserInfo> getAllFansList(int userId) {
 		List<UserInfo> users = new ArrayList<UserInfo>();
 		String key = RedisInfo.USERFANSZSET+userId;
-		Set<String> ids = userDao.getRedisSetUserIds(key);
+		Set<String> ids = userDao.getRedisZSetUserIds(key);
 		if(ids!=null&&!ids.isEmpty()){
 			int size = ids.size();
 			UserInfo user = getUser(userId);

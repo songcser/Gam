@@ -1019,7 +1019,7 @@ public class UserDAO implements IUserDAO{
 	}
 
 	@Override
-	public Set<String> getRedisSetUserIds(String key) {
+	public Set<String> getRedisZSetUserIds(String key) {
 		if(redisDao==null)
 			return null;
 		return redisDao.zrevrange(key, 0, -1);

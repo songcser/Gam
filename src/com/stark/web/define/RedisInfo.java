@@ -48,6 +48,7 @@ public class RedisInfo {
 	public static final String USERNAMELIST = "User:Name:List:";							//用户名字id列表
 	public static final String USERMARKLIST = "User:Mark:List";								//标记用户列表
 	public static final String USERNORMALZSET = "User:Normal:ZSet";								//普通用户有序集
+	public static final String USERALLSET = "User:ALL:Set";										//所有用户集
 	
 	public static final String ACTIVITYBANNERLIST="Activity:Banner:List";							//活动banner列表
 	public static final String ACTIVITYTOPLIST = "Activity:Top:List";								//活动置顶推荐列表

@@ -93,7 +93,7 @@ public class ArticleManager implements IArticleManager {
 			articleDao.addRedisUserArticleCount(aInfo.getUser().getUserId());
 			SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
 			articleDao.addRedisArticleId(RedisInfo.ARTICLEDATELIST+sdf.format(aInfo.getDate()), id);
-			
+			addSetArticleId(RedisInfo.USERFOLLOWARTICLEZSET+aInfo.getUser().getUserId(),id,id+"");
 			//int userId = aInfo.getUser().getUserId();
 			
 			int type = aInfo.getType();

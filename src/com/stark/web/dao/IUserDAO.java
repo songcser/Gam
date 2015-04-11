@@ -171,7 +171,7 @@ public interface IUserDAO {
 
 	public List<UserInfo> getMeetList(int sex, int maxCount);
 
-	public Set<String> getRedisSetUserIds(String string);
+	public Set<String> getRedisZSetUserIds(String string);
 
 	public List<UserInfo> getFansList(int userId);
 
