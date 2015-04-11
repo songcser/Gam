@@ -21,32 +21,32 @@ public class JPushTimerTask {
 	private IUserManager userManager;
 	
 	public void doTask(){
-		System.out.println("####################################");
+		//System.out.println("####################################");
 		Set<String> idSet = userManager.getLogoutUser();
 		
 		//JPushClient jpushClient = new JPushClient(masterSecret, appKey, 3);
-		WebManager.JPush();
-		for(String id:idSet){
-			//System.out.println(id);
-			UserInfo user = userManager.getUser(Integer.parseInt(id));
-			if(user!=null){
-				//System.out.println(user);
-				SimpleDateFormat sdf = WebManager.getDateFormat();
-				Date currentDate = new Date();
-				Calendar calendar = Calendar.getInstance();
-				calendar.setTime(currentDate);
-				int currentDay = calendar.get(Calendar.DAY_OF_YEAR);
-				calendar.setTime(user.getLastLogonDate());
-				int logoutDay = calendar.get(Calendar.DAY_OF_YEAR);
-				int dayDiff = currentDay-logoutDay;
-				if(dayDiff>5){
-					
-				}
-			}
-			else {
-				logger.error("get user null");
-			}
-		}
+//		WebManager.JPush();
+//		for(String id:idSet){
+//			//System.out.println(id);
+//			UserInfo user = userManager.getUser(Integer.parseInt(id));
+//			if(user!=null){
+//				//System.out.println(user);
+//				SimpleDateFormat sdf = WebManager.getDateFormat();
+//				Date currentDate = new Date();
+//				Calendar calendar = Calendar.getInstance();
+//				calendar.setTime(currentDate);
+//				int currentDay = calendar.get(Calendar.DAY_OF_YEAR);
+//				calendar.setTime(user.getLastLogonDate());
+//				int logoutDay = calendar.get(Calendar.DAY_OF_YEAR);
+//				int dayDiff = currentDay-logoutDay;
+//				if(dayDiff>5){
+//					
+//				}
+//			}
+//			else {
+//				logger.error("get user null");
+//			}
+//		}
 	}
 
 }

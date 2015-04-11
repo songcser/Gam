@@ -32,8 +32,8 @@
     <!-- 调度触发器 -->
 	<bean id="taskTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="taskDetail" />
+		<!-- 每天晚上8点执行任务调度 -->
 		<property name="cronExpression" value="0 0 20 * * ?">
-			<!-- 每天晚上8点执行任务调度 -->
 		</property>
 	</bean>
     

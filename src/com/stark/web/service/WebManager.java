@@ -35,22 +35,30 @@ public class WebManager {
 	public static void JPush(){
 		JPushClient jpushClient = new JPushClient(masterSecret, appKey, 3);
 		PushPayload payload = buildPushObject_android_tag_alertWithTitle();
-		 
-		 try {
-	            PushResult result = jpushClient.sendPush(payload);
-	            logger.info("Got result - " + result);
+		
+		toPush(jpushClient,payload);
+	}
+	
+	private static JPushClient getPushClient(){
+		return new JPushClient(masterSecret, appKey, 3);
+	}
+	
+	private static void toPush(JPushClient jpushClient,PushPayload payload){
+		try {
+            PushResult result = jpushClient.sendPush(payload);
+            logger.info("Got result - " + result);
 
-	        } catch (APIConnectionException e) {
-	            // Connection error, should retry later
-	        	logger.error("Connection error, should retry later", e);
+        } catch (APIConnectionException e) {
+            // Connection error, should retry later
+        	logger.error("Connection error, should retry later", e);
 
-	        } catch (APIRequestException e) {
-	            // Should review the error, and fix the request
-	        	logger.error("Should review the error, and fix the request", e);
-	        	logger.info("HTTP Status: " + e.getStatus());
-	        	logger.info("Error Code: " + e.getErrorCode());
-	        	logger.info("Error Message: " + e.getErrorMessage());
-	        }
+        } catch (APIRequestException e) {
+            // Should review the error, and fix the request
+        	logger.error("Should review the error, and fix the request", e);
+        	logger.info("HTTP Status: " + e.getStatus());
+        	logger.info("Error Code: " + e.getErrorCode());
+        	logger.info("Error Message: " + e.getErrorMessage());
+        }
 	}
 	
 	public static PushPayload buildPushObject_all_all_alert() {
@@ -70,6 +78,72 @@ public class WebManager {
                                 .build())
                         .build())
                  .setMessage(Message.content("hello world"))
+                 .setOptions(Options.newBuilder()
+                         .setApnsProduction(true)
+                         .build())
+                 .build();
+	}
+	
+	public static void pushToAll(String content){
+		JPushClient jpushClient = new JPushClient(masterSecret, appKey, 3);
+		PushPayload payload = pushToAll_all(content);
+		
+		toPush(jpushClient,payload);
+	}
+	
+	private static PushPayload pushToAll_all(String content){
+		return PushPayload.alertAll(content);
+	}
+	
+	public static void pushToAllExtShow(String content, int showId) {
+		JPushClient jpushClient = getPushClient();
+		PushPayload payload = pushToAll_show_all(content,showId);
+		
+		toPush(jpushClient,payload);
+	}
+	
+	private static PushPayload pushToAll_show_all(String content,int showId) {
+		return PushPayload.newBuilder()
+				.setPlatform(Platform.ios())
+				.setAudience(Audience.all())
+				.setNotification(Notification.newBuilder()
+                        .addPlatformNotification(IosNotification.newBuilder()
+                                .setAlert(content)
+                                .setSound("happy")
+                                .addExtra("showId", ""+showId)
+                                .build())
+                        .build())
+                 .build();
+	}
+
+	public static void pushToUser(int userId,String content){
+		JPushClient jpushClient = new JPushClient(masterSecret, appKey, 3);
+		PushPayload payload = pushToUser_ios_android(userId,content);
+		
+		toPush(jpushClient,payload);
+	}
+	
+	public static PushPayload pushToUser_ios_android(int userId,String content){
+		System.out.println(userId+" "+content);
+		return PushPayload.newBuilder()
+                .setPlatform(Platform.all())
+                .setAudience(Audience.alias("190"))
+                .setNotification(Notification.alert(ALERT))
+                .build();
+	}
+	public static PushPayload pushShowToUser(int userId,String content,int showId){
+		return PushPayload.newBuilder()
+				.setPlatform(Platform.ios())
+				.setAudience(Audience.alias(userId+""))
+				.setNotification(Notification.newBuilder()
+                        .addPlatformNotification(IosNotification.newBuilder()
+                                .setAlert(ALERT)
+                                .setBadge(5)
+                                .setSound("happy")
+                                .addExtra("showId", ""+showId)
+                                .build())
+                        .build())
+                 .setMessage(Message.content(content))
                  .setOptions(Options.newBuilder()
                          .setApnsProduction(true)
                          .build())
@@ -98,7 +172,7 @@ public class WebManager {
 	public static PushPayload buildPushObject_android_tag_alertWithTitle() {
         return PushPayload.newBuilder()
                 .setPlatform(Platform.ios())
-                .setAudience(Audience.alias("93"))
+                .setAudience(Audience.alias("190"))
                 .setNotification(Notification.ios("hello", null))
                 .build();
     }
@@ -168,4 +242,6 @@ public class WebManager {
 	private static String outTag(final String s) {
 		return s.replaceAll("<.*?>", "");
 	}
+
+	
 }

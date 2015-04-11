@@ -444,4 +444,14 @@ public class BackstageController {
 		request.setAttribute("chartlets", chartlets);
 		return "chartlet";
 	}
+	
+	@RequestMapping("notice.do")
+	public String notice(HttpServletRequest request){
+		if(getLoginUser(request)==null){
+			return "/adminLogin";
+		}
+		List<ActivityInfo> acList = activityManager.getAllShowList();
+		request.setAttribute("showList", acList);
+		return "notice";
+	}
 }

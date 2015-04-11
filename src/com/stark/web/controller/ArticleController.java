@@ -75,7 +75,7 @@ public class ArticleController {
 
 	private static int maxResults = 10;
 	private static int maxResults2 = 20;
-	private static String ourShareUrl = "http://192.168.1.102/StarkPet/article/outsideShare?articleId=";
+	private static String ourShareUrl = "/article/outsideShare?articleId=";
 	private static int maxPictureResult = 15;
 	// private static final String HTTP_REG =
 	// "http://([w-]+.)+[w-]+(/[w- ./?%&=]*)?";
@@ -162,7 +162,7 @@ public class ArticleController {
 			
 			addFansArticleZSet(userId);
 			map.put("articleId", articleId);
-			map.put("outShareUrl", ourShareUrl+articleId);
+			map.put("shareUrl", FileManager.getShareUrl(articleId));
 			Iterator<String> iter = multiRequest.getFileNames();
 			int i=0;
 			while (iter.hasNext()) {
@@ -234,10 +234,6 @@ public class ArticleController {
 		}
 		
 		map.put("result", 1);
-		
-		//out.print("<script language='javascript'>parent.callback('发布推文成功');</script>");
-		//out.flush();
-		//out.close();
 		return map;
 	}
 	private void addFansArticleZSet(int userId) {

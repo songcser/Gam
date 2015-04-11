@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -180,6 +181,8 @@ public class NoticeController {
 		System.out.println("/notice/systemNotice.do");
 		String content = request.getParameter("systemArticle");
 		int userId = Integer.parseInt(request.getParameter("userId"));
+		String showFlag = request.getParameter("showFlag");
+		
 		UserInfo sender = new UserInfo(userId);
 
 		List<UserInfo> userList = userManager.getAllUser();
@@ -200,6 +203,14 @@ public class NoticeController {
 			notice.setStatus(EnumBase.NoticeStatus.NoRead.getIndex());
 
 			noticeManager.addNotice(notice);
+		}
+		int showId = 0;
+		if(showFlag.equals("1")){
+			showId = Integer.parseInt(request.getParameter("activityId"));
+			WebManager.pushToAllExtShow(content,showId);
+		}
+		else {
+			WebManager.pushToAll(content);
 		}
 		
 		PrintWriter out = response.getWriter();
@@ -244,7 +255,31 @@ public class NoticeController {
 	
 	@RequestMapping("test.do")
 	public void test(int page){
-		System.out.println("test.do");
 		WebManager.JPush();
+	}
+	
+	@RequestMapping("publish.do")
+	@ResponseBody
+	public Map<String,Object> publish(@RequestBody NoticeInfo notice){
+		notice.setDate(new Date());
+		notice.setStatus(EnumBase.NoticeStatus.NoRead.getIndex());
+		int id = noticeManager.addNotice(notice);
+		Map<String,Object> map = new HashMap<String,Object>();
+		if(id<=0){
+			map.put("result", 0);
+		}
+		//WebManager.JPush();
+		WebManager.pushToUser(notice.getUser().getUserId(), notice.getContent());
+		map.put("result", 1);
+		SimpleDateFormat sdf = WebManager.getDateFormat();
+		map.put("date", sdf.format(new Date()));
+		return map;
+	}
+	
+	@RequestMapping("publishWithShow.do")
+	@ResponseBody
+	public Map<String,Object> publishWithShow(int showId,@RequestBody NoticeInfo notice){
+		notice.setDate(new Date());
+		return null;
 	}
 }

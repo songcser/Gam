@@ -11,7 +11,7 @@
       <li><a href="moment.do">瞬间管理</a></li>
       <li><a href="chartlet.do">贴图管理</a></li>
       <li><a href="publishManage.do">发布管理</a></li>
-      <li><a href="#">通知管理</a></li>
+      <li><a href="notice.do">通知管理</a></li>
      </ul>
      <!-- <form action="##" class="navbar-form navbar-left" rol="search">
         <div class="form-group">
@@ -44,6 +44,9 @@ $(document).ready(function(){
     }
 	else if(url.indexOf("publishManage.do")>0){
         $('ul li:eq(6)').addClass("active");
+    }
+	else if(url.indexOf("notice.do")>0){
+        $('ul li:eq(7)').addClass("active");
     }
 }) ;
 </script>
