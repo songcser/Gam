@@ -53,12 +53,11 @@
 					<a class="margin-right"  style="width:100px;height:100px" href="javascript:showUser(${u.userId })"> 
 					<img src="${u.getHeadUrl()}" style="width:100px;height:100px" class="img-circle" alt="">
 					</a>
-					<div > ${u.name } </div>
+					<div class="margin-top"><p style="width:100px;white-space:nowrap; text-overflow:ellipsis;  -o-text-overflow:ellipsis;  overflow: hidden; "> ${u.name }</p> </div>
 			 </div>
 			</c:forEach>
 			</div>
 			</div>
-			<div class="panel-footer "></div>
 		</div>
 		<div>
 			<div class="pull-left panel panel-default panel-success" style="width: 48%">

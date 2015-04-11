@@ -25,6 +25,7 @@ body{
                  <button class="btn bg-blue radius-rounded " onclick="createUser()">新建用户</button>
                  <a class="btn bg-green radius-rounded  pull-right margin-left" href="./markUser.do">标记用户</a>
                  <a class="btn bg-green radius-rounded pull-right margin-left" href="javascript:viewImportantUser()">重要用户</a>
+                 <a class="btn bg-green radius-rounded pull-right margin-left" href="javascript:viewOrganizationUser()">机构用户</a>
                 <a class="btn bg-green radius-rounded  pull-right margin-left" href="./operatorManage.do?view=all">查看所有</a>
                 <a class="btn bg-green radius-rounded  pull-right margin-left" href="./operatorManage.do?view=self">查看自己</a>
                 
@@ -79,6 +80,15 @@ body{
 	function selectBack(){
 		selectUserSubmit();
 	}
+    function viewOrganizationUser(){
+    	$("#userTable").find("tr").each(function(){
+            var tdArr = $(this).children();
+            var tdcon = tdArr.eq(3).html();
+            if(tdcon!="机构用户"&&tdcon!="<strong>角色</strong>"){
+                $(tdArr).remove();
+            }
+        });
+    }	
 	</script>
 </body>
 </html>

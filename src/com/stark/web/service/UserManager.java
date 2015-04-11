@@ -50,18 +50,25 @@ public class UserManager implements IUserManager{
 		if(userId>0){
 			uInfo.setUserId(userId);
 			userDao.addRedisUser(uInfo);
-			
+			int role = uInfo.getRole();
 			userDao.addRedisUsers(RedisInfo.USERNAMELIST+uInfo.getName(), userId);
-			if(uInfo.getRole()==UserRole.Normal.getIndex()){
+			if(role==UserRole.Normal.getIndex()){
 				userDao.addRedisUserCount(RedisInfo.NORMALCOUNT);
+				String key = RedisInfo.USERNORMALLIST;
+				userDao.addRedisUsersL(key,userId);
 				
 			}
-			else if(uInfo.getRole()==UserRole.Operatior.getIndex()){
+			else if(role==UserRole.Operatior.getIndex()){
 				userDao.addRedisUserCount(RedisInfo.OPERATIORCOUNT);
 				userDao.addRedisUsers(RedisInfo.USEROSLIST, userId);
 			}
-			else if(uInfo.getRole()==UserRole.Simulation.getIndex()||uInfo.getRole()==UserRole.Important.getIndex()){
+			else if(role==UserRole.Simulation.getIndex()||uInfo.getRole()==UserRole.Important.getIndex()){
 				userDao.addRedisUserCount(RedisInfo.SIMULATIONCOUNT);
+				userDao.addRedisUsers(RedisInfo.USEROSLIST, userId);
+			}
+			else if(role==UserRole.Organization.getIndex()){
+				userDao.addRedisUserCount(RedisInfo.USERORGANIZATIONCOUNT);
+				userDao.addRedisUsers(RedisInfo.USERORGANIZATIONLIST, userId);
 				userDao.addRedisUsers(RedisInfo.USEROSLIST, userId);
 			}
 			String email = uInfo.getEmail();
@@ -69,8 +76,7 @@ public class UserManager implements IUserManager{
 				userDao.addRedisUserEmailPassword(email,uInfo.getPassword(),userId);
 				userDao.addRedisEmails(email);
 			}
-			String key = RedisInfo.USERNORMALZSET;
-			userDao.addRedisUsers(key,userId);
+			
 		}
 		return userId;
 	}
@@ -865,7 +871,7 @@ public class UserManager implements IUserManager{
 
 	@Override
 	public List<UserInfo> getLastUsers(int maxResult) {
-		String key = RedisInfo.USERNORMALZSET;
+		String key = RedisInfo.USERNORMALLIST;
 		List<String> ids = userDao.getRedisUsers(key,maxResult);
 		List<UserInfo> list = idsToUserList(ids);
 		if(list!=null&&!list.isEmpty())

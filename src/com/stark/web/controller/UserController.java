@@ -941,7 +941,6 @@ public class UserController {
 			user.setSinaOpenId("");
 			user.setWeChatOpenId("");
 			
-			Iterator<String> iter = multiRequest.getFileNames();
 			
 			int userId = userManager.addUser(user);
 			if(userId<=0){
@@ -955,6 +954,7 @@ public class UserController {
 			if(user!=null){
 				userManager.addChildUser(Integer.parseInt(uId),userId);
 			}
+			Iterator<String> iter = multiRequest.getFileNames();
 			//String petId = petManager.addPet(pet);
 			// int index = 0;
 			while (iter.hasNext()) {

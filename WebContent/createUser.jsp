@@ -3,7 +3,7 @@
 <div class="panel panel-default">
 	<div class="panel-body">
 		<form id='formFile' name='formFile' method="post" action="../user/addOperator.do" target='frameFile' enctype="multipart/form-data">
-			<input type="hidden" name="userId" id="userId">
+			<input type="hidden" name="userId" id="userId" value="${user.userId }">
 			<div class="form-group">
 				<label for="name">姓名</label> <input type="text" class="form-control" id="name" name="name" size="50" />
 			</div>
@@ -123,7 +123,7 @@
 	        });
 	    }
 		function viewPassword(){
-	        if('${userRole}'!="1"&&'${userId}'!=editUserId){
+	        if('${user.role}'!="1"&&'${user.userId}'!=editUserId){
 	            alert("没有权限查看");
 	            return;
 	        }
@@ -171,7 +171,6 @@
 	            return;
 	        }
 
-	        $("#userId").val("${userId}");
 	        var count = 0;
 	        var obj = document.getElementsByName("type");
 	        for (var i = 0; i < obj.length; i++) {
@@ -190,6 +189,12 @@
 	    }   
 	    function createUser() {
 	        location.reload();
+	    }
+	    function callback2(str){
+	    	if(str=="1"){
+	    		alert("成功");
+	    		location.reload();
+	    	}
 	    }
 		</script>
 	</div>

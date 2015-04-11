@@ -131,7 +131,7 @@ public class BackstageController {
 			request.setAttribute("operations", operators);
 		}
 		
-		
+		request.setAttribute("user", user);
 		request.setAttribute("webIcon", FileManager.getWebIcon());
 		request.setAttribute("roles", UserRole.values());
 		

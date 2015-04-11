@@ -32,6 +32,7 @@ public class RedisInfo {
 	public static final String OPERATIORCOUNT = "User:Operatior:Count";							//运营人员数量
 	public static final String SIMULATIONCOUNT = "User:Simulation:Count";							//模拟用户数量
 	public static final String NORMALCOUNT = "User:Normal:Count";									//普通用户数量
+	public static final String USERORGANIZATIONCOUNT = "User:Organization:Count";					//机构组织数量
 	public static final String USERNOTICELIST = "User:Notice:List:";								//用户通知列表
 	public static final String USERQQOPENID = "User:QQOpenId:";										//QQ用户Id
 	public static final String USERSINAOPENID = "User:SinaOpenId:";							//新浪用户Id
@@ -47,8 +48,9 @@ public class RedisInfo {
 	public static final String USEROPERATIORPASSWORD = "User:Operatior:Password:";			//运营人员密码
 	public static final String USERNAMELIST = "User:Name:List:";							//用户名字id列表
 	public static final String USERMARKLIST = "User:Mark:List";								//标记用户列表
-	public static final String USERNORMALZSET = "User:Normal:ZSet";								//普通用户有序集
+	public static final String USERNORMALLIST = "User:Normal:List";								//普通用户有序集
 	public static final String USERALLSET = "User:ALL:Set";										//所有用户集
+	public static final String USERORGANIZATIONLIST = "User:Organization:List";					//机构用户列表
 	
 	public static final String ACTIVITYBANNERLIST="Activity:Banner:List";							//活动banner列表
 	public static final String ACTIVITYTOPLIST = "Activity:Top:List";								//活动置顶推荐列表
@@ -64,4 +66,5 @@ public class RedisInfo {
 	public static final String CHARTLETDIALOGUEZSET = "Chartlet:Dialogue:ZSet:";					//台词有序集
 	public static final String CHARTLETDIALOGUELIST = "Chartlet:Dialogue:List";					//贴图台词列表
 	public static final String CHARTLETDIALOGUEUSER = "Chartlet:Dialogue:User";					//用户台词系列ID
+	
 }

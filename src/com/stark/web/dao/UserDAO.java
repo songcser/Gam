@@ -1088,6 +1088,11 @@ public class UserDAO implements IUserDAO{
 		redisDao.sadd(key,userId+"");
 	}
 
+	@Override
+	public void addRedisUsersL(String key, int userId) {
+		redisDao.lpush(key, userId+"");
+	}
+
 
 	
 }
