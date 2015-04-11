@@ -63,14 +63,14 @@ public class NoticeDAO implements INoticeDAO{
 
 	@Override
 	public List<NoticeInfo> getNoticeByUser(int uid) {
-		String hql = "from NoticeInfo as n where n.user.userId = ?";
+		String hql = "from NoticeInfo as n where n.user.userId = ? and n.status = 0";
 		Query query = sessionFactory.getCurrentSession().createQuery(hql);
 		query.setInteger(0, uid);
 		return query.list();
 	}
 	@Override
 	public boolean updateStatus(int noticeId, int status) {
-		String sql = "update NOTICEINFO as n set n.STATUS = ? where n.ID = ?";
+		String sql = "update NoticeInfo as n set n.Status = ? where n.Id = ?";
 		Query query = sessionFactory.getCurrentSession().createSQLQuery(sql);
 		query.setInteger(0, status);
 		query.setInteger(1, noticeId);
@@ -184,6 +184,16 @@ public class NoticeDAO implements INoticeDAO{
 		}
 		
 		return Integer.parseInt(result);
+	}
+
+	@Override
+	public void removeRedisUserList(int userId, int noticeId) {
+		redisDao.lrem(RedisInfo.USERNOTICELIST+userId, 0, noticeId+"");
+	}
+
+	@Override
+	public void updateRedisNotice(String key, String field, String value) {
+		redisDao.hset(key, field, value);
 	}
 
 }

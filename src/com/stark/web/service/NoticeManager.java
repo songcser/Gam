@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.stark.web.dao.INoticeDAO;
 import com.stark.web.define.RedisInfo;
+import com.stark.web.define.EnumBase.NoticeStatus;
 import com.stark.web.entity.NoticeInfo;
 
 public class NoticeManager implements INoticeManager{
@@ -79,7 +80,15 @@ public class NoticeManager implements INoticeManager{
 
 	@Override
 	public boolean updateStatus(int noticeId, int status) {
-		return noticeDao.updateStatus(noticeId,status);
+		boolean result = noticeDao.updateStatus(noticeId,status);
+		if(result){
+			noticeDao.updateRedisNotice(NoticeInfo.getKey(noticeId),NoticeInfo.STATUS,status+"");
+			if(status==NoticeStatus.Readed.getIndex()){
+				NoticeInfo notice = getNotice(noticeId);
+				noticeDao.removeRedisUserList(notice.getUser().getUserId(),noticeId);
+			}
+		}
+		return result;
 	}
 
 	@Override

@@ -121,8 +121,11 @@ public class ArticleController {
 			UserInfo user = userManager.getUser(userId);
 			article.setUser(user);
 			String content = multiRequest.getParameter("content");
-			
-			content = filterContent(content);
+			if(content==null){
+				content = "";
+			}else{
+				content = filterContent(content);
+			}
 			
 			article.setContent(content);
 			article.setReference("");

@@ -31,4 +31,8 @@ public interface INoticeDAO {
 	public void setRedisUserNoticeStatus(int userId, int status);
 
 	public int getRedisUserNoticeStatus(int userId);
+
+	public void removeRedisUserList(int userId, int noticeId);
+
+	public void updateRedisNotice(String key, String field, String value);
 }

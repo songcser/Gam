@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import com.stark.web.define.EnumBase;
+import com.stark.web.define.EnumBase.NoticeStatus;
 import com.stark.web.entity.NoticeInfo;
 import com.stark.web.entity.UserInfo;
 import com.stark.web.hunter.FileManager;
@@ -159,7 +160,7 @@ public class NoticeController {
 				}
 				
 			}
-
+			
 			map.put("status", notice.getStatus());
 			map.put("date", format.format(notice.getDate()));
 			if (notice.getType() != EnumBase.NoticeType.System.getIndex()) {
@@ -168,7 +169,7 @@ public class NoticeController {
 				map.put("senderName", sender.getName());
 				map.put("senderHeadPic", sender.getHeadUrl());
 			}
-
+			noticeManager.updateStatus(notice.getNoticeId(),NoticeStatus.Readed.getIndex());
 			list.add(map);
 		}
 		mainMap.put("result", 1);
