@@ -1093,6 +1093,16 @@ public class UserDAO implements IUserDAO{
 		redisDao.lpush(key, userId+"");
 	}
 
+	@Override
+	public String getRedisString(String key) {
+		return redisDao.get(key);
+	}
+
+	@Override
+	public void setRedisString(String key, String value) {
+		redisDao.set(key, value);
+	}
+
 
 	
 }

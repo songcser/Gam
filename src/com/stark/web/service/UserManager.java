@@ -151,6 +151,8 @@ public class UserManager implements IUserManager{
 			//addFansCount(rel.getFollow().getUserId());
 			userDao.addRedisFollowingZSet(rel);
 			userDao.addRedisFansZSet(rel);
+			String key = RedisInfo.USERFOLLOWFLAG+rel.getUser().getUserId()+":"+rel.getFollow().getUserId();
+			userDao.setRedisString(key, "1");
 		}
 		return result;
 	}
@@ -179,6 +181,8 @@ public class UserManager implements IUserManager{
 					if(user!=null){
 						list.add(user);
 						userDao.addRedisOnlyFollowingZSet(rel);
+						String key = RedisInfo.USERFOLLOWFLAG+rel.getUser().getUserId()+":"+rel.getFollow().getUserId();
+						userDao.setRedisString(key, "1");
 //						setUserCount(user);
 						//addFollowingCount(rel.getUser().getUserId());
 					}
@@ -291,19 +295,38 @@ public class UserManager implements IUserManager{
 
 	@Override
 	public boolean isFollow(int userId, int followId) {
-		boolean result = userDao.isRedisFollow(userId,followId);
-		if(!result){
-			result = userDao.isFollow(userId,followId);
+		String key = RedisInfo.USERFOLLOWFLAG+userId+":"+followId;
+		String flag = userDao.getRedisString(key);
+		if(flag==null){
+			boolean result = userDao.isFollow(userId, followId);
 			if(result){
-				RelUserFollow rel = new RelUserFollow();
-				rel.setUser(new UserInfo(userId));
-				rel.setFollow(new UserInfo(followId));
-				rel.setDate(new Date());
-				userDao.addRedisOnlyFollowingZSet(rel);
-				
+				userDao.setRedisString(key, "1");
 			}
+			else {
+				userDao.setRedisString(key, "0");
+			}
+			return result;
 		}
-		return result;
+		if(flag.equals("1")){
+			return true;
+		}
+		else if(flag.equals("0")){
+			return false;
+		}
+		return false;
+//		boolean result = userDao.isRedisFollow(userId,followId);
+//		if(!result){
+//			result = userDao.isFollow(userId,followId);
+//			if(result){
+//				RelUserFollow rel = new RelUserFollow();
+//				rel.setUser(new UserInfo(userId));
+//				rel.setFollow(new UserInfo(followId));
+//				rel.setDate(new Date());
+//				userDao.addRedisOnlyFollowingZSet(rel);
+//				
+//			}
+//		}
+//		return result;
 	}
 
 	@Override

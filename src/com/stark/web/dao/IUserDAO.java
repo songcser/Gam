@@ -199,5 +199,9 @@ public interface IUserDAO {
 
 	public void addRedisUsersL(String key, int userId);
 
+	public String getRedisString(String key);
+
+	public void setRedisString(String key, String string);
+
 
 }
