@@ -43,6 +43,7 @@ public class RedisInfo {
 	public static final String USERLOGINSET = "User:Login:Set";								//用户最新登录集
 	public static final String USEREMAILSET = "User:Email:Set";								//用户邮箱集
 	public static final String USERCOLLECTIONLIST = "User:Collection:List:";				//用户收藏推文列表
+	public static final String USERCOLLECTIONARTICLE="User:Collection:Article:";			//用户收藏推文标识
 	public static final String USERFOLLOWARTICLEZSET = "User:Follow:Article:ZSet:";			//用户关注推文集
 	public static final String USERADMINPASSWORD = "User:Admin:Password:";					//管理员密码
 	public static final String USEROPERATIORPASSWORD = "User:Operatior:Password:";			//运营人员密码

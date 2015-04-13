@@ -1310,7 +1310,7 @@ public class ArticleManager implements IArticleManager {
 		}
 		
 		if(userId>0){
-			boolean flag = articleDao.isCollection(userId,articleId);
+			boolean flag = isCollection(userId,articleId);
 			aMap.put("collection", flag?1:0);
 			flag = false;
 			flag = isPraise(userId, articleId);
@@ -1339,6 +1339,28 @@ public class ArticleManager implements IArticleManager {
 		return aMap;
 	}
 	
+	private boolean isCollection(int userId, int articleId) {
+		String key = RedisInfo.USERCOLLECTIONARTICLE+userId+":"+articleId;
+		String flag = articleDao.getRedisString(key);
+		if(flag==null){
+			boolean result = articleDao.isCollection(userId, articleId);
+			if(result){
+				articleDao.setRedisString(key, "1");
+			}
+			else {
+				articleDao.setRedisString(key, "0");
+			}
+			return result;
+		}
+		if(flag.equals("1")){
+			return true;
+		}
+		else if(flag.equals("0")){
+			return false;
+		}
+		return false;
+	}
+
 	@Override
 	public Map<String, Object> getShowArticleList(int showId, int userId, int page, int maxResults) {
 		List<ArticleInfo> articles = new ArrayList<ArticleInfo>();
@@ -1374,6 +1396,8 @@ public class ArticleManager implements IArticleManager {
 			String key = RedisInfo.USERCOLLECTIONLIST+userId;
 			articleDao.addRedisArticleIdR(key, articleId);
 			articleDao.addRedisCollectionCount(articleId);
+			key = RedisInfo.USERCOLLECTIONARTICLE+userId+":"+articleId;
+			articleDao.setRedisString(key, "1");
 		}
 		return result;
 	}
@@ -1462,12 +1486,20 @@ public class ArticleManager implements IArticleManager {
 			listToListAndAddRedisId(key,alist,articles);
 		}
 		map.put("result", 1);
+		collectionArticles(articles);
 		List<Map<String, Object>> list = articlesToPictureList(articles);
 		map.put("pictures", list);
 		return map;
 		
 	}
 	
+	private void collectionArticles(List<ArticleInfo> articles) {
+		for(ArticleInfo article:articles){
+			String key = RedisInfo.USERCOLLECTIONARTICLE+article.getUser().getUserId()+":"+article.getArticleId();
+			articleDao.setRedisString(key, "1");
+		}
+	}
+
 	@Override
 	public List<ArticleInfo> getAllArticleByUserId(int userId) {
 		List<ArticleInfo> articles = new ArrayList<ArticleInfo>();
