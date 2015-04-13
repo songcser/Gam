@@ -271,14 +271,26 @@ public class ArticleManager implements IArticleManager {
 
 	@Override
 	public boolean isPraise(int userId, int articleId) {
-		boolean result = articleDao.isRedisPraise(userId,articleId);
-		if(!result){
-			result = articleDao.isParise(userId, articleId);
+		String key = RedisInfo.USERPRAISEARTICLE+userId+":"+articleId;
+		String flag = articleDao.getRedisString(key);
+		if(flag==null){
+			boolean result = articleDao.isParise(userId, articleId);
 			if(result){
+				articleDao.setRedisString(key, "1");
 				articleDao.addRedisPraise(userId,articleId);
 			}
+			else {
+				articleDao.setRedisString(key, "0");
+			}
+			return result;
 		}
-		return result;
+		if(flag.equals("1")){
+			return true;
+		}
+		else if(flag.equals("0")){
+			return false;
+		}
+		return false;
 	}
 
 	public String getOneHtml(String htmlUrl) {
@@ -1484,9 +1496,10 @@ public class ArticleManager implements IArticleManager {
 		if(alist!=null&&!alist.isEmpty()){
 			
 			listToListAndAddRedisId(key,alist,articles);
+			
 		}
 		map.put("result", 1);
-		collectionArticles(articles);
+		collectionArticles(alist);
 		List<Map<String, Object>> list = articlesToPictureList(articles);
 		map.put("pictures", list);
 		return map;
@@ -1495,7 +1508,8 @@ public class ArticleManager implements IArticleManager {
 	
 	private void collectionArticles(List<ArticleInfo> articles) {
 		for(ArticleInfo article:articles){
-			String key = RedisInfo.USERCOLLECTIONARTICLE+article.getUser().getUserId()+":"+article.getArticleId();
+			int userId = article.getUser().getUserId();
+			String key = RedisInfo.USERCOLLECTIONARTICLE+userId+":"+article.getArticleId();
 			articleDao.setRedisString(key, "1");
 		}
 	}

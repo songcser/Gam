@@ -27,6 +27,7 @@ public class RedisInfo {
 	public static final String USERARTICLELIST = "User:Article:List:";								//用户发布推文列表
 	public static final String USEROSLIST = "User:OS:List";											//运营人员和模拟用户列表
 	public static final String USERPRAISESET = "User:Praise:Set:";									//用户赞的推文集
+	public static final String USERPRAISEARTICLE = "User:Praise:Article:";							//用户赞推文标识
 	public static final String USERFOLLOWZSET = "User:Follow:ZSet:";								//用户关注列表
 	public static final String USERFANSZSET = "User:Fans:ZSet:";									//用户粉丝列表
 	public static final String OPERATIORCOUNT = "User:Operatior:Count";							//运营人员数量
