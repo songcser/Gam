@@ -26,9 +26,13 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import com.stark.web.define.EnumBase;
 import com.stark.web.define.EnumBase.NoticeStatus;
+import com.stark.web.define.EnumBase.NoticeType;
+import com.stark.web.entity.ActivityInfo;
 import com.stark.web.entity.NoticeInfo;
 import com.stark.web.entity.UserInfo;
 import com.stark.web.hunter.FileManager;
+import com.stark.web.service.ActivityManager;
+import com.stark.web.service.IActivityManager;
 import com.stark.web.service.IArticleManager;
 import com.stark.web.service.INoticeManager;
 import com.stark.web.service.IUserManager;
@@ -46,6 +50,9 @@ public class NoticeController {
 	
 	@Resource(name = "articleManager")
 	private IArticleManager articleManager;
+	
+	@Resource(name = "activityManager")
+	private IActivityManager activityManager;
 
 	@RequestMapping("/add")
 	public void add(NoticeInfo nInfo) {
@@ -208,10 +215,11 @@ public class NoticeController {
 		int showId = 0;
 		if(showFlag.equals("1")){
 			showId = Integer.parseInt(request.getParameter("activityId"));
-			WebManager.pushToAllExtShow(content,showId);
+			ActivityInfo activity = activityManager.getActivity(showId);
+			WebManager.pushToAllExtShow(content,showId,activity.getType());
 		}
 		else {
-			WebManager.pushToAll(content);
+			WebManager.pushToUser( userId, NoticeType.System.getIndex(), content);
 		}
 		
 		PrintWriter out = response.getWriter();

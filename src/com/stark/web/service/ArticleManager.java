@@ -243,7 +243,8 @@ public class ArticleManager implements IArticleManager {
 			ArticleInfo article = getArticle(articleId);
 			articleDao.addRedisUserPraiseCount(article.getUser().getUserId());
 			articleDao.addRedisArticleId(RedisInfo.ARTICLEPRAISELIST+articleId, userId);
-			
+			String key = RedisInfo.USERPRAISEARTICLE+userId+":"+articleId;
+			articleDao.setRedisString(key, "1");
 		}
 		return result;
 	}
@@ -273,6 +274,8 @@ public class ArticleManager implements IArticleManager {
 	public boolean isPraise(int userId, int articleId) {
 		String key = RedisInfo.USERPRAISEARTICLE+userId+":"+articleId;
 		String flag = articleDao.getRedisString(key);
+		//String ff =  articleDao.getRedisString("ddddddd");
+		//System.out.println(ff);
 		if(flag==null){
 			boolean result = articleDao.isParise(userId, articleId);
 			if(result){

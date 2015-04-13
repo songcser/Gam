@@ -78,6 +78,7 @@ public class FileManager {
 	public final static String activityPictureUrl = url + "Activity/images/";
 	public final static String chartletPictureUrl = url + "Chartlet/images/";
 	
+	public final static String openPicture = "OpenPicture/";
 	//public final static String articleHtmlUrl = "http://192.168."
 
 	private String dir = null;
@@ -264,7 +265,17 @@ public class FileManager {
 		else
 			return userPictureUrl + "default/female.png";
 	}
+	
+	public static String getOpenFilePath(){
+		String name = "openPicture.jpeg";
+		return openPicture + name;
+	}
 
+	public static String getOpeFileUrl(){
+		String name = "openPicture.jpeg";
+		return url + openPicture + name;
+	}
+	
 	private static OSSClient getClient() {
 		if (ossClient == null) {
 			ossClient = new OSSClient(endPoint, accessKeyId, accessKeySecret);
@@ -703,5 +714,10 @@ public class FileManager {
 
 	public static Object getHtmlUrl(int articleId) {
 		return "/article/showArticleDetial.do?articleId="+articleId;
+	}
+
+	public static void deleteOss(String path) {
+		OSSClient client = getClient();
+		client.deleteObject(bucketName, path);
 	}
 }

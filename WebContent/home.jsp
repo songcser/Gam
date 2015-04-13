@@ -24,6 +24,9 @@
 	<form id='formFile' name='formFile' method="post" action="../user/modifyAdmin.do" target='frameFile' enctype="multipart/form-data">
 		<input size="100" type="file" name="file" id="headFileId" style="display: none" onchange="addFile()" /> <input type="hidden" name="userId" value="${user.userId }">
 	</form>
+	<form id='openFormFile' name='openFormFile' method="post" action="changeOpenPicture.do" target='frameFile' enctype="multipart/form-data">
+        <input size="100" type="file" name="file" id="OpenFileId" style="display: none" onchange="addOpenFile()" />
+    </form>
 	<iframe id='frameFile' name='frameFile' style='display: none;'></iframe>
     <div class="row padding-left padding-right">
 	<div id="head" class="col-md-3 col-lg-3" >
@@ -39,6 +42,16 @@
 				</div>
 			</div>
 		</div>
+		<div class="panel  panel-success ">
+            <div class="panel-heading ">
+                <strong>开机页</strong>
+            </div>
+            <div class=" center-block" >
+                <a href="javascript:selectOpenPicture()" class="thumbnail" style="width:100%;"> 
+                <img src="${openPictueUrl}" class="img-thumbnail" id="OpenPic" >
+                </a>
+            </div>
+        </div>
 	</div>
 	<div class="col-md-9 col-lg-9 " style="padding-top: 100px;">
 		<div class="panel panel-default panel-success">
@@ -110,6 +123,10 @@
         document.forms[0].submit();
     }
 
+    function addOpenFile() {
+        document.forms[1].submit();
+    }
+    
     function selectUserHead() {
         $("#headFileId").click();
     }
@@ -120,6 +137,15 @@
     }
     function showUser(userId){
         window.location.href="showUser.do?userId="+userId; 
+    }
+    
+    function selectOpenPicture(){
+    	$("#OpenFileId").click();
+    }
+    
+    function callbackOpenFile(str){
+    	$("#OpenPic").attr("src", str);
+        //$("#openFormFile").reset();
     }
 </script>
 </body>

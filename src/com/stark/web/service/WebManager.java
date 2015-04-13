@@ -8,11 +8,15 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
+
+import com.stark.web.define.EnumBase.NoticeType;
 
 import cn.jpush.api.JPushClient;
 import cn.jpush.api.common.APIConnectionException;
@@ -95,14 +99,23 @@ public class WebManager {
 		return PushPayload.alertAll(content);
 	}
 	
-	public static void pushToAllExtShow(String content, int showId) {
+	public static void pushToAllExtShow(String content, int showId,int showType) {
 		JPushClient jpushClient = getPushClient();
-		PushPayload payload = pushToAll_show_all(content,showId);
+		Map<String,String> map = new HashMap<String,String>();
+		map.put("type", NoticeType.Show.getIndex()+"");
+		map.put("showId", showId+"");
+		map.put("showType", showType+"");
+		PushPayload payload = pushExtra(content,map);
 		
 		toPush(jpushClient,payload);
 	}
 	
 	private static PushPayload pushToAll_show_all(String content,int showId) {
+		Map<String,String> map = new HashMap<String,String>();
+		return pushExtra(content,map);
+	}
+	
+	private static PushPayload pushExtra(String content,Map<String,String> extra){
 		return PushPayload.newBuilder()
 				.setPlatform(Platform.ios())
 				.setAudience(Audience.all())
@@ -110,7 +123,7 @@ public class WebManager {
                         .addPlatformNotification(IosNotification.newBuilder()
                                 .setAlert(content)
                                 .setSound("happy")
-                                .addExtra("showId", ""+showId)
+                                .addExtras(extra)
                                 .build())
                         .build())
                  .build();
@@ -124,13 +137,35 @@ public class WebManager {
 	}
 	
 	public static PushPayload pushToUser_ios_android(int userId,String content){
-		System.out.println(userId+" "+content);
 		return PushPayload.newBuilder()
                 .setPlatform(Platform.all())
-                .setAudience(Audience.alias("190"))
-                .setNotification(Notification.alert(ALERT))
+                .setAudience(Audience.alias(userId+""))
+                .setNotification(Notification.alert(content))
                 .build();
 	}
+	public static void pushToUser(int userId, int type, String content) {
+		JPushClient jpushClient = getPushClient();
+		Map<String,String> map = new HashMap<String,String>();
+		map.put("type", type+"");
+		PushPayload payload = pushUserExtra(userId,content,map);
+		
+		toPush(jpushClient,payload);
+	}
+	
+	private static PushPayload pushUserExtra(int userId,String content, Map<String, String> extra) {
+		return PushPayload.newBuilder()
+				.setPlatform(Platform.ios())
+				.setAudience(Audience.alias(userId+""))
+				.setNotification(Notification.newBuilder()
+                        .addPlatformNotification(IosNotification.newBuilder()
+                                .setAlert(content)
+                                .setSound("happy")
+                                .addExtras(extra)
+                                .build())
+                        .build())
+                 .build();
+	}
+
 	public static PushPayload pushShowToUser(int userId,String content,int showId){
 		return PushPayload.newBuilder()
 				.setPlatform(Platform.ios())
@@ -242,6 +277,8 @@ public class WebManager {
 	private static String outTag(final String s) {
 		return s.replaceAll("<.*?>", "");
 	}
+
+	
 
 	
 }

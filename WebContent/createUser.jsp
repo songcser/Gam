@@ -16,6 +16,9 @@
 				</div>
 			</div>
 			<div class="form-group">
+                <label for="email">邮箱</label> <input type="email" class="form-control" id="email" name="email" size="50" />
+            </div>
+			<div class="form-group">
 				<label for="password">密码</label>
 				<div class="input-group">
 					<input type="text" class="form-control" id="password" name="password" size="50" /> <span class="input-group-btn"> <input class="btn" type="button" value="查看"
@@ -27,7 +30,7 @@
 			<div class="form-group">
 				<label for="homeTown">所在地</label> <input type="text" class="form-control" id="homeTown" name="homeTown" size="50" />
 			</div>
-
+            
 			<div class="form-group">
 				<label for="role">角色</label>
 				<div class="field">

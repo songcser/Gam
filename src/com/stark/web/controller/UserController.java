@@ -1463,6 +1463,7 @@ public class UserController {
 		}
 		map.put("result", 1);
 		ArticleInfo article = articleManager.getArticle(articleId);
+		System.out.println(article.getPraiseCount());
 		map.put("praiseCount", article.getPraiseCount());
 		List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
 		for(UserInfo user:users){

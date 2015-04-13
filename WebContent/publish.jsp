@@ -46,10 +46,10 @@ body {
 							<select name="activityId" id="showSelect" class="form-control" >
 								<c:if test="${!empty showList }">
 									<c:forEach items="${showList }" var="u">
-									   <c:if test="${u.type==2 }">
+									   <c:if test="${u.type==3 }">
 									   <option value="${u.activityId }" title="${u.type }">${u.subject } (用户可参加)</option>
 									   </c:if>
-										<c:if test="${u.type==3 }">
+										<c:if test="${u.type==2 }">
                                        <option value="${u.activityId }" title="${u.type }">${u.subject } (用户不可参加)</option>
                                        </c:if>
 									</c:forEach>
@@ -124,10 +124,10 @@ body {
 			$('input[type="radio"]:checked').parent('label').addClass('active');
 			$('#showDiv').collapse('show');
 			var title = $("#showSelect").find('option:selected').attr("title");
-			if(title=="2"){
+			if(title=="3"){
                 $('#richTextDiv').collapse('hide');
             }
-            else if(title=="3"){
+            else if(title=="2"){
                 $('#richTextDiv').collapse('show');
             }
 			isClick = true;
@@ -173,10 +173,10 @@ body {
 			$('#showSelect').change(
 				function() {
 					var title = $(this).children('option:selected').attr("title");
-					if(title=="2"){
+					if(title=="3"){
 						$('#richTextDiv').collapse('hide');
 					}
-					else if(title=="3"){
+					else if(title=="2"){
 						$('#richTextDiv').collapse('show');
 					}
 				});

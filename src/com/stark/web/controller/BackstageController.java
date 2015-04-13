@@ -1,10 +1,15 @@
 package com.stark.web.controller;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
@@ -13,6 +18,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import com.stark.web.define.EnumBase;
 import com.stark.web.define.EnumBase.ActivityType;
@@ -273,6 +281,8 @@ public class BackstageController {
 			return "/adminLogin";
 		}
 		List<UserInfo> lastUsers = userManager.getLastUsers(20);
+		String openFileUrl = FileManager.getOpeFileUrl();
+		request.setAttribute("openPictueUrl", openFileUrl);
 		request.setAttribute("lastUser", lastUsers);
 		addCount(request);
 		
@@ -456,4 +466,56 @@ public class BackstageController {
 		request.setAttribute("showList", acList);
 		return "notice";
 	}
+	
+	@RequestMapping("changeOpenPicture.do")
+	public void changeOpenPicture(HttpServletRequest request, HttpServletResponse response) throws IOException{
+		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());
+		PrintWriter out = response.getWriter();
+		String picUrl = "";
+		if (multipartResolver.isMultipart(request)) {
+
+			MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
+			// System.out.println(user);
+			Iterator<String> iter = multiRequest.getFileNames();
+			// String name = (String)multiRequest.getAttribute("name");
+			//String name = multiRequest.getParameter("name");
+			//int userId = Integer.parseInt(multiRequest.getParameter("userId"));
+			//userManager.updateUserName(userId, name);
+			// System.out.println(name);
+			while (iter.hasNext()) {
+				MultipartFile file = multiRequest.getFile((String) iter.next());
+				if (file != null) {
+					String fileName = file.getOriginalFilename();
+					if (fileName.equals(""))
+						continue;
+					
+					// System.out.println("File Name:"+file.getOriginalFilename());
+					String path = FileManager.getOpenFilePath();
+					
+					FileManager.deleteOss(path);
+					picUrl = FileManager.getOpeFileUrl();
+					try {
+					FileManager.upload(path, file);
+					//userManager.addUserHeadPic(userId, fileName);
+					//headUrl = FileManager.getUserPictureUrl(userId, fileName);
+					} catch (IllegalStateException e) {
+						e.printStackTrace();
+					}
+				}
+
+			}
+
+		}
+		out.print("<script language='javascript'>parent.callbackOpenFile('"+picUrl+"');</script>");
+		//map.put("result", 0);
+		out.flush();
+		out.close();
+	}
+	@RequestMapping("getOpenPicture.do")
+	public Map<String,Object> getOpenPicture(){
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("openPictureUrl", FileManager.getOpeFileUrl());
+		return map;
+	}
+	
 }

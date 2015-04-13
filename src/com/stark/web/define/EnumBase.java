@@ -95,8 +95,8 @@ public class EnumBase {
 	public enum ActivityType {
 		Banner("Banner", 0), 
 		TopRecommend("置顶推荐", 1),
-		Join("可参加",2),
-		NoJoin("不可参加",3);
+		NoJoin("不可参加",2),
+		Join("可参加",3);
 
 		private String name;
 		private int index;
@@ -470,7 +470,8 @@ public class EnumBase {
 		Comment("评论", 1), 
 		Praise("赞", 2), 
 		System("系统", 3), 
-		At("@", 4);
+		At("@", 4),
+		Show("节目单",5);
 
 		private String name;
 		private int index;
