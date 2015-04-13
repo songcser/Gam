@@ -89,7 +89,7 @@ public interface IRedisDAO {
 
 	public Double zscore(String key, String member);
 
-	public Long zrem(String key, Object ... member);
+	public Long zrem(String key, String ... member);
 
 	public Set<String> zrevrange(String key, int start, int stop);
 	

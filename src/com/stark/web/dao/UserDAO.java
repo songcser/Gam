@@ -485,7 +485,7 @@ public class UserDAO implements IUserDAO{
 				user.setRole(Integer.parseInt(role));
 			}
 			String sex = map.get(UserInfo.SEX);
-			if(role==null){
+			if(sex==null){
 				user.setSex(0);
 			}
 			else{
@@ -1063,7 +1063,7 @@ public class UserDAO implements IUserDAO{
 	public boolean updateUserInfo(int userId, String field, int value) {
 		String hql = "update UserInfo as u set u."+field+" =:value where u.userId=:userId";
 		Query query = sessionFactory.getCurrentSession().createQuery(hql);
-		query.setInteger("value", userId);
+		query.setInteger("value", value);
 		query.setInteger("userId", userId);
 		return query.executeUpdate()>0;
 	}

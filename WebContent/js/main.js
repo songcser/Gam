@@ -108,6 +108,9 @@ function createMediaDiv(art){
 	if(roleStr=="普通用户"){
 		mediaBody.append('<h4 class="media-heading"><strong>'+ art.name+'</strong><small> ('+roleStr+') <a href="javascript:markUser('+art.userId+')"><span class="glyphicon glyphicon-tag"></span></a></small></h4>');
 	}
+	else if(roleStr==null){
+		mediaBody.append('<h4 class="media-heading"><strong>'+ art.name+'</strong><small> ('+roleStr+') <a href="javascript:markUser('+art.userId+')"><span class="glyphicon glyphicon-tag"></span></a></small></h4>');
+	}
 	else{
 		mediaBody.append('<h4 class="media-heading"><strong>'+ art.name+'</strong><small> ('+roleStr+')</small></h4>');
 	}

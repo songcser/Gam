@@ -126,8 +126,9 @@
         	var color = colorList[i%colorList.length];
         	var date = strToDate(dia.date);
             var strDate = calculateDate(date);
-        	var mediaDiv = $('<div class="media padding-top padding-small-bottom radius-rounded '+color+'"></div>');
-            var mediaHead = $('<div class="media-left"><a href="javascript:showUser('+dia.userId+')"><img class="media-object img-circle" style="width:50px;height:50px" src="'+dia.headPic+'" alt="..."></a></div>');
+        	var mediaDiv = $('<div class="media padding-top radius-rounded '+color+'" style="margin-bottom:0px"></div>');
+            var mediaHead = $('<div class="media-left text-center"><a href="javascript:showUser('+dia.userId+')"><img class="media-object img-circle" style="width:50px;height:50px" src="'
+            +dia.headPic+'" alt="..."></a><p class="text-small margin-small-top text-muted">'+dia.userName+'</p></div>');
             var mediaBody = $('<div class="media-body"><p class="text-small text-muted">'+strDate+'</p><p>'+dia.content+'</p></div>');
             mediaDiv.append(mediaHead);
             mediaDiv.append(mediaBody);

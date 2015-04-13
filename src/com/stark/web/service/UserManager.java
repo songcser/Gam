@@ -90,6 +90,7 @@ public class UserManager implements IUserManager{
 	@Override
 	public UserInfo getUser(int id) {
 		UserInfo user = userDao.getRedisUser(id);
+		//System.out.println(user);
 		if(user==null){
 			user = userDao.getUserInfo(id);
 			if(user!=null){
@@ -845,11 +846,14 @@ public class UserManager implements IUserManager{
 	public List<UserInfo> getMarkUsers() {
 		String key = RedisInfo.USERMARKLIST;
 		List<String> ids = userDao.getRedisUsers(key);
-		List<UserInfo> list = idsToUserList(ids);
-		if(list!=null&&!list.isEmpty())
+		System.out.println(ids.size());
+		if(ids!=null&&!ids.isEmpty()){
+			List<UserInfo> list = idsToUserList(ids);
 			return list;
+		}
 		
 		List<UserInfo> users = userDao.getUsersByRole(UserRole.Mark.getIndex());
+		System.out.println(ids.size());
 		if(users!=null&&!users.isEmpty()){
 			for(UserInfo user:users)
 			userDao.addRedisUsers(key, user.getUserId());
@@ -900,6 +904,17 @@ public class UserManager implements IUserManager{
 			userDao.addRedisUsers(key, user.getUserId());
 		}
 		return users;
+	}
+
+	@Override
+	public int getOrganizationCount() {
+		String count = userDao.getRedisUserCount(RedisInfo.USERORGANIZATIONCOUNT);
+		if(count==null||count.equals("")){
+			int c = userDao.getUserCountByRole(UserRole.Organization.getIndex());
+			userDao.setRedisUserCount(RedisInfo.USERORGANIZATIONCOUNT,c);
+			return c;
+		}
+		return Integer.parseInt(count);
 	}
 
 	

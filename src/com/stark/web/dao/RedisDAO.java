@@ -425,7 +425,7 @@ public class RedisDAO implements IRedisDAO {
 		return redisTemplate.opsForZSet().score(key, member);
 	}
 	@Override
-	public Long zrem(String key, Object ... members) {
+	public Long zrem(String key, String ... members) {
 		return redisTemplate.opsForZSet().remove(key, members);
 	}
 	@Override

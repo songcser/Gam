@@ -69,6 +69,7 @@
 						<li class="list-group-item">运营人员<span class="float-right badge">${operatiorCount }</span></li>
 						<li class="list-group-item">模拟用户<span class="float-right badge">${simulationCount }</span></li>
 						<li class="list-group-item">真实用户<span class="float-right badge">${normalCount }</span></li>
+						<li class="list-group-item">机构用户<span class="float-right badge">${organizationCount }</span></li>
 					</ul>
 				</div>
 				<div class="panel-footer "></div>

@@ -1285,6 +1285,7 @@ public class ArticleManager implements IArticleManager {
 		
 		aMap.put("name", user.getName());
 		aMap.put("headPic", user.getHeadUrl());
+		//System.out.println(user.getRole());
 		aMap.put("userRole", UserRole.getName(user.getRole()));
 		String title = article.getTitle();
 		if(title!=null){

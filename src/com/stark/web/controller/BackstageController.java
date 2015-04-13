@@ -284,6 +284,7 @@ public class BackstageController {
 		int operCount = userManager.getOperatiorCount();
 		int simCount = userManager.getSimulationCount();
 		int norCount = userManager.getNormalCount();
+		int orgCount = userManager.getOrganizationCount();
 		int publishCount = articleManager.getPublishCount();
 		int exquisiteCount = articleManager.getExquisiteCount();
 		int magazineCount = articleManager.getMagazineCount();
@@ -298,6 +299,7 @@ public class BackstageController {
 		request.setAttribute("operatiorCount", operCount);
 		request.setAttribute("simulationCount", simCount);
 		request.setAttribute("normalCount", norCount);
+		request.setAttribute("organizationCount", orgCount);
 		request.setAttribute("publishCount", publishCount);
 		request.setAttribute("exquisiteCount", exquisiteCount);
 		request.setAttribute("magazineCount", magazineCount);

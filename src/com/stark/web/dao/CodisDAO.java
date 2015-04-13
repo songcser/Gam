@@ -343,9 +343,9 @@ public class CodisDAO implements IRedisDAO{
 	}
 
 	@Override
-	public Long zrem(String key, Object... member) {
+	public Long zrem(String key, String ... member) {
 		Jedis jedis = Jedis();
-		Long len = jedis.zrem(key, (String[])member);
+		Long len = jedis.zrem(key,member);
 		close(jedis);
 		return len;
 	}

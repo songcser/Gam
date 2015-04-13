@@ -132,4 +132,6 @@ public interface IUserManager {
 
 	public List<UserInfo> getPraiseUsers(int articleId, int page, int maxUserCount);
 
+	public int getOrganizationCount();
+
 }

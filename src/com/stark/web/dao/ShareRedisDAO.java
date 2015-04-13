@@ -3217,7 +3217,7 @@ public class ShareRedisDAO implements IRedisDAO{
 	}
 
 	@Override
-	public Long zrem(String key, Object... member) {
+	public Long zrem(String key, String ... member) {
 		 Long result = null;
 	        ShardedJedis shardedJedis = redisDataSource.getRedisClient();
 	        if (shardedJedis == null) {
@@ -3225,7 +3225,7 @@ public class ShareRedisDAO implements IRedisDAO{
 	        }
 	        boolean broken = false;
 	        try {
-	        	for(Object m :member ){
+	        	for(String m :member ){
 	        		result = shardedJedis.zrem(key, m+"");
 	        	}
 	            
