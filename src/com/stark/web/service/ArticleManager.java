@@ -240,6 +240,7 @@ public class ArticleManager implements IArticleManager {
 		//System.out.println(result);
 		if(result){
 			articleDao.addRedisPraise(userId, articleId);
+			articleDao.addRedisPraiseCount(articleId);
 			ArticleInfo article = getArticle(articleId);
 			articleDao.addRedisUserPraiseCount(article.getUser().getUserId());
 			articleDao.addRedisArticleId(RedisInfo.ARTICLEPRAISELIST+articleId, userId);

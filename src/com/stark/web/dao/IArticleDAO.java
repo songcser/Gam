@@ -264,4 +264,6 @@ public interface IArticleDAO {
 
 	public void setRedisString(String key ,String value);
 
+	public void addRedisPraiseCount(int articleId);
+
 }

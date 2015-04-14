@@ -709,7 +709,7 @@ public class ArticleDAO implements IArticleDAO {
 	public long addRedisPraise(int userId, int articleId) {
 		if(redisDao==null)
 			return 0;
-		redisDao.hincrby(ArticleInfo.getKey(articleId),ArticleInfo.PRAISECOUNT,1);
+		
 		return redisDao.sadd(RedisInfo.USERPRAISESET+userId,articleId+"");
 	}
 
@@ -1415,5 +1415,10 @@ public class ArticleDAO implements IArticleDAO {
 	@Override
 	public void setRedisString(String key, String value) {
 		redisDao.set(key, value);
+	}
+
+	@Override
+	public void addRedisPraiseCount(int articleId) {
+		redisDao.hincrby(ArticleInfo.getKey(articleId),ArticleInfo.PRAISECOUNT,1);		
 	}
 }

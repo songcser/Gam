@@ -935,7 +935,7 @@ public class UserController {
 			user.setStatus(UserStatus.OffLine.getIndex());
 			user.setHomeTown(multiRequest.getParameter("homeTown"));
 			user.setLastLogonDate(new Date());
-			user.setEmail("");
+			user.setEmail(multiRequest.getParameter("email"));
 			
 			user.setQqOpenId("");
 			user.setSinaOpenId("");
@@ -1463,7 +1463,7 @@ public class UserController {
 		}
 		map.put("result", 1);
 		ArticleInfo article = articleManager.getArticle(articleId);
-		System.out.println(article.getPraiseCount());
+		//System.out.println(article.getPraiseCount());
 		map.put("praiseCount", article.getPraiseCount());
 		List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
 		for(UserInfo user:users){

@@ -109,6 +109,7 @@
 	                $("#homeTown").val(user.homeTown);
 	                $("#signature").val(user.signature);
 	                // alert(user.role);
+	                $("#email").val(user.email);
 	                $("#role").val(user.role);
 	                $("#phoneNumber").val(user.phoneNumber);
 	                $("#password").val('');
