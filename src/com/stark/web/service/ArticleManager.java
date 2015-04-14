@@ -1853,4 +1853,15 @@ public class ArticleManager implements IArticleManager {
 		}
 		return null;
 	}
+
+	@Override
+	public void setValue(String key, String flag) {
+		articleDao.setRedisString(key, flag);
+	}
+
+	@Override
+	public String getValue(String key) {
+		
+		return articleDao.getRedisString(key);
+	}
 }

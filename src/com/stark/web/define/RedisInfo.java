@@ -70,4 +70,6 @@ public class RedisInfo {
 	public static final String CHARTLETDIALOGUELIST = "Chartlet:Dialogue:List";					//贴图台词列表
 	public static final String CHARTLETDIALOGUEUSER = "Chartlet:Dialogue:User";					//用户台词系列ID
 	
+	public static final String OPENPICTUREFLAG = "Open:Picture:Flag";
+	
 }

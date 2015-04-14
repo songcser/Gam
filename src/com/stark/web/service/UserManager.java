@@ -546,6 +546,7 @@ public class UserManager implements IUserManager{
 		map.put("articleCount", user.getArticleCount());
 		map.put("praiseCount", user.getPraiseCount());
 		map.put("noticeStatus", user.getNoticeStatus());
+		map.put("email", user.getEmail());
 		//map.put("type", new ArrayList<String>(user.getType()));
 		
 		return map;
@@ -869,14 +870,14 @@ public class UserManager implements IUserManager{
 	public List<UserInfo> getMarkUsers() {
 		String key = RedisInfo.USERMARKLIST;
 		List<String> ids = userDao.getRedisUsers(key);
-		System.out.println(ids.size());
+		//System.out.println(ids.size());
 		if(ids!=null&&!ids.isEmpty()){
 			List<UserInfo> list = idsToUserList(ids);
 			return list;
 		}
 		
 		List<UserInfo> users = userDao.getUsersByRole(UserRole.Mark.getIndex());
-		System.out.println(ids.size());
+		//System.out.println(ids.size());
 		if(users!=null&&!users.isEmpty()){
 			for(UserInfo user:users)
 			userDao.addRedisUsers(key, user.getUserId());

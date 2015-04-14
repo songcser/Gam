@@ -26,6 +26,7 @@ import com.stark.web.define.EnumBase;
 import com.stark.web.define.EnumBase.ActivityType;
 import com.stark.web.define.EnumBase.ArticleType;
 import com.stark.web.define.EnumBase.UserRole;
+import com.stark.web.define.RedisInfo;
 import com.stark.web.entity.ActivityInfo;
 import com.stark.web.entity.BackupInfo;
 import com.stark.web.entity.ChartletInfo;
@@ -514,8 +515,21 @@ public class BackstageController {
 	@RequestMapping("getOpenPicture.do")
 	public Map<String,Object> getOpenPicture(){
 		Map<String,Object> map = new HashMap<String,Object>();
-		map.put("openPictureUrl", FileManager.getOpeFileUrl());
+		//map.put("openPictureUrl", FileManager.getOpeFileUrl());
+		String key = RedisInfo.OPENPICTUREFLAG;
+		String value = articleManager.getValue(key);
+		if(value==null){
+			value="0";
+			articleManager.setValue(key,"0");
+		}
+		map.put("flag", value);
 		return map;
+	}
+	
+	@RequestMapping("setOpenPictureFlag.do")
+	public void setOpenPictureFlag(String flag){
+		String key = RedisInfo.OPENPICTUREFLAG;
+		articleManager.setValue(key,flag);
 	}
 	
 }

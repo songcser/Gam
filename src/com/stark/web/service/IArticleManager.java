@@ -187,4 +187,8 @@ public interface IArticleManager {
 
 	public ChartletInfo getUserChartlet();
 
+	public void setValue(String key,String flag);
+
+	public String getValue(String key);
+
 }
