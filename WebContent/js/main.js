@@ -377,6 +377,11 @@ function changeArticleType(articleId,type){
 	if(type==2){
 		return;
 	}
+
+	if(loginUserRole!=1){
+		alert("没有权限");
+		return;
+	}
 	currentArticle.Id = articleId;
 	
 	if(type==12){

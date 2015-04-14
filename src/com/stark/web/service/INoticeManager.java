@@ -21,5 +21,7 @@ public interface INoticeManager {
 
 	public List<NoticeInfo> getLastNotice(int userId, int type);
 
-	public int getUserNoticeStatus(int userId); 
+	public int getUserNoticeStatus(int userId);
+
+	public void setUserNoticeStatus(int userId, int i); 
 }

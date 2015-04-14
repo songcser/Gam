@@ -53,6 +53,7 @@ body {
 	<script src="../js/bootstrap.min.js"></script>
     <script src="../js/main.js"></script>
 	<script type="text/javascript">
+	   var loginUserRole = ${user.role};
 		var isAuditing = false;
 		var selectActivityType = 0;
 		var selectActivityId = 0;

@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
@@ -417,7 +418,8 @@ public class BackstageController {
 	
 	@RequestMapping("showManage.do")
 	public String showManage(HttpServletRequest request){
-		if(getLoginUser(request)==null){
+		UserInfo user = getLoginUser(request);
+		if(user==null){
 			return "/adminLogin";
 		}
 		List<ActivityInfo> acList = activityManager.getAllShowList();
@@ -428,19 +430,22 @@ public class BackstageController {
 		request.setAttribute("showList", acList);
 		request.setAttribute("types", types);
 		request.setAttribute("operations", operators);
+		request.setAttribute("user", user);
 		
 		return "show";
 	}
 	
 	@RequestMapping("moment.do")
 	public String moment(HttpServletRequest request){
-		if(getLoginUser(request)==null){
+		UserInfo user = getLoginUser(request);
+		if(user==null){
 			return "/adminLogin";
 		}
 		List<UserInfo> operators = userManager.getOperatiors();
 		List<ActivityInfo> acList = activityManager.getAllShowList();
 		request.setAttribute("operations", operators);
 		request.setAttribute("showList", acList);
+		request.setAttribute("user", user);
 		return "moment";
 	}
 	
@@ -513,6 +518,7 @@ public class BackstageController {
 		out.close();
 	}
 	@RequestMapping("getOpenPicture.do")
+	@ResponseBody
 	public Map<String,Object> getOpenPicture(){
 		Map<String,Object> map = new HashMap<String,Object>();
 		//map.put("openPictureUrl", FileManager.getOpeFileUrl());

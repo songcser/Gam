@@ -59,7 +59,7 @@ public class NoticeManager implements INoticeManager{
 	public List<NoticeInfo> getNoticeByUserId(int uid) {
 		List<String> ids = noticeDao.getRedisNoticeIds(RedisInfo.USERNOTICELIST+uid);
 		List<NoticeInfo> list = new ArrayList<NoticeInfo>();
-		noticeDao.setRedisUserNoticeStatus(uid, 0);
+		
 		if(ids!=null&&!ids.isEmpty()){
 			for(String id:ids){
 				NoticeInfo notice = getNotice(Integer.parseInt(id));
@@ -112,6 +112,11 @@ public class NoticeManager implements INoticeManager{
 	public int getUserNoticeStatus(int userId) {
 		
 		return noticeDao.getRedisUserNoticeStatus(userId);
+	}
+
+	@Override
+	public void setUserNoticeStatus(int userId, int i) {
+		noticeDao.setRedisUserNoticeStatus(userId, i);
 	}
 
 }

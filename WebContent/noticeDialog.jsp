@@ -29,7 +29,7 @@ function viewNotice(userId){
 	currentUser.userId = userId;
     $('#myModal').modal('show');
      $.ajax({
-            url : "/StarkPet/notice/getListByUserId.do?userId="+userId,
+            url : "/StarkPet/notice/getListByUserId2.do?userId="+userId,
             type : "get",
             //data:JSON.stringify(chartlet),
             success : function(noticeList) {

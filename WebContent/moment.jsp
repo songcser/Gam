@@ -49,6 +49,7 @@ body {
     <script src="../js/main.js"></script>
     <script type="text/javascript">
     var isAuditing = false;
+    var loginUserRole = ${user.role};
     var total = document.documentElement.clientHeight - 70;
     document.getElementById("mainBody").style.height = total + "px";
     function init() {

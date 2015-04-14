@@ -27,6 +27,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import com.stark.web.define.EnumBase;
 import com.stark.web.define.EnumBase.NoticeStatus;
 import com.stark.web.define.EnumBase.NoticeType;
+import com.stark.web.define.EnumBase.UserRole;
 import com.stark.web.entity.ActivityInfo;
 import com.stark.web.entity.NoticeInfo;
 import com.stark.web.entity.UserInfo;
@@ -141,6 +142,7 @@ public class NoticeController {
 			mainMap.put("result", 0);
 			return mainMap;
 		}
+		noticeManager.setUserNoticeStatus(userId,0);
 		//int status = noticeManager.getUserNoticeStatus(userId);
 		//mainMap.put("status", status);
 		DateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
@@ -198,7 +200,7 @@ public class NoticeController {
 		for (Iterator<UserInfo> iterator = userList.iterator(); iterator.hasNext();) {
 			UserInfo userInfo = iterator.next();
 			int role = userInfo.getRole() ;
-			if (role!= EnumBase.UserRole.Normal.getIndex()&&role!=EnumBase.UserRole.Simulation.getIndex()) {
+			if (role!= EnumBase.UserRole.Normal.getIndex()&&role!=EnumBase.UserRole.Mark.getIndex()) {
 				continue;
 			}
 			NoticeInfo notice = new NoticeInfo();
@@ -290,5 +292,66 @@ public class NoticeController {
 	public Map<String,Object> publishWithShow(int showId,@RequestBody NoticeInfo notice){
 		notice.setDate(new Date());
 		return null;
+	}
+	
+	@RequestMapping("/getListByUserId2.do")
+	@ResponseBody
+	public Map<String, Object> getListByUserId2(int userId) {
+		Map<String, Object> mainMap = new HashMap<String, Object>();
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		List<NoticeInfo> nList = noticeManager.getNoticeByUserId(userId);
+		if(nList==null){
+			mainMap.put("result", 0);
+			return mainMap;
+		}
+		UserInfo user = userManager.getUser(userId);
+		int role = user.getRole();
+		//int status = noticeManager.getUserNoticeStatus(userId);
+		//mainMap.put("status", status);
+		DateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+		for (Iterator<NoticeInfo> iterator = nList.iterator(); iterator.hasNext();) {
+			Map<String, Object> map = new HashMap<String, Object>();
+			NoticeInfo notice = iterator.next();
+			UserInfo sender = userManager.getUser(notice.getSender().getUserId());
+			map.put("noticeId", notice.getNoticeId());
+			map.put("type", notice.getType());
+			String contentString = notice.getContent();
+			if(contentString==null)
+				map.put("content", "");
+			else {
+				map.put("content", contentString);
+			}
+			if (notice.getType() == EnumBase.NoticeType.Comment.getIndex() || notice.getType() == EnumBase.NoticeType.Praise.getIndex()) {
+				int articleId = notice.getArticle().getArticleId();
+				List<String> pics = articleManager.getPicListById(articleId);
+				//System.out.println(pics.size());
+				map.put("articleId", articleId);
+				//System.out.println(article.getPicList().size());
+				if(pics!=null&&!pics.isEmpty()){
+					map.put("thumbImg", pics.get(0));
+				}
+				
+			}
+			
+			map.put("status", notice.getStatus());
+			map.put("date", format.format(notice.getDate()));
+			if (notice.getType() != EnumBase.NoticeType.System.getIndex()) {
+				
+				map.put("senderId",sender.getUserId());
+				map.put("senderName", sender.getName());
+				map.put("senderHeadPic", sender.getHeadUrl());
+			}
+			if(role!=UserRole.Normal.getIndex()&&role!=UserRole.Mark.getIndex()){
+				noticeManager.updateStatus(notice.getNoticeId(),NoticeStatus.Readed.getIndex());
+			}
+			list.add(map);
+		}
+		if(role!=UserRole.Normal.getIndex()&&role!=UserRole.Mark.getIndex()){
+			//noticeManager.updateStatus(notice.getNoticeId(),NoticeStatus.Readed.getIndex());
+			noticeManager.setUserNoticeStatus(userId,0);
+		}
+		mainMap.put("result", 1);
+		mainMap.put("notices", list);
+		return mainMap;
 	}
 }

@@ -63,6 +63,8 @@ body{
 	var total = document.documentElement.clientHeight-80;
 	document.getElementById("mainBody").style.height=total+"px";
 	
+	var loginUserRole = ${user.role};
+	
 	function searchByName(){
 		//var name = $("#searchName").val();
 		//window.location = "searchByName.do?name="+name;
