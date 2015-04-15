@@ -20,7 +20,9 @@ body {
 	<div class="container">
 		<div id="createArticleDiv" class="center-block " style="width: 80%">
 			<form id='articleFormFile' name='formFile' method="post" action="../article/addArticle.do" target='frameFile' enctype="multipart/form-data">
+			<c:if test="${!empty operations }">
 				<input type="hidden" id="userId" name="userId" value="${operations.get(0).userId }" />
+				</c:if>
 				<div class="btn-group margin-bottom">
 					<label class="btn btn-primary active"> <input type="radio" name="articleType" id="commonMode" autocomplete="off" value="0" checked onclick="selectCommonMode()">
 						普通
@@ -32,13 +34,15 @@ body {
 					<div class="panel-body">
 
 						<div class="form-group" style="height: 90px">
+						<c:if test="${!empty operations }">
 							<div class="pull-left">
 								<a style="width: 80px; height: 80px" class="thumbnail" href="javascript:selectUser()"> <img id="headImg" style="width: 70px; height: 70px"
 									src="${operations.get(0).getHeadUrl() }" alt="" class="img-circle">
 								</a>
+								
 							</div>
 							<div id="userName" class="pull-left margin-left margin-top text-gray">${operations.get(0).name }</div>
-
+                        </c:if>
 						</div>
 
 						<div id="showDiv" class="form-group collapse">

@@ -2,7 +2,8 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <div class="block-inline">
 	<input type="text" class="input radius-rounded" id="dialogueChartletTitle" />
-	<button class="btn bg-sub margin-left" onclick="createDialogueChartlet()">创建台词系列</button>
+	<button class="btn bg-sub margin-left" onclick="createDialogueChartlet(3)">创建台词系列</button>
+	<button class="btn bg-sub margin-left" onclick="createDialogueChartlet(4)">创建用户台词系列</button>
 </div>
 <div role="tabpanel" class="padding-big-top">
 	<ul id="dialogueUL" class="nav nav-tabs" role="tablist">
@@ -57,8 +58,8 @@
 	</div>
 </div>
 <script type="text/javascript">
-	function createDialogueChartlet() {
-		var type = 3;
+	function createDialogueChartlet(t) {
+		var type = t;
 		chartletType = "dialogueChartletList";
 		var title = $("#dialogueChartletTitle").val();
 		if (title == "") {

@@ -151,16 +151,19 @@ public class ArticleController {
 			if(dialogueSize!=null&&!dialogueSize.equals("")){
 				int size = Integer.parseInt(dialogueSize);
 				ChartletInfo chartlet = articleManager.getUserChartlet();
-				for(int i=0;i<size;i++){
-					String dcontent = multiRequest.getParameter("dialogue"+i);
-					DialogueInfo dialogue = new DialogueInfo();
-					dialogue.setUser(user);
-					dialogue.setChartlet(chartlet);
-					dialogue.setContent(dcontent);
-					dialogue.setNumber(0);
-					dialogue.setDate(new Date());
-					articleManager.addDialogue(dialogue);
+				if(chartlet!=null){
+					for(int i=0;i<size;i++){
+						String dcontent = multiRequest.getParameter("dialogue"+i);
+						DialogueInfo dialogue = new DialogueInfo();
+						dialogue.setUser(user);
+						dialogue.setChartlet(chartlet);
+						dialogue.setContent(dcontent);
+						dialogue.setNumber(0);
+						dialogue.setDate(new Date());
+						articleManager.addDialogue(dialogue);
+					}
 				}
+				
 			}
 			
 			addFansArticleZSet(userId);

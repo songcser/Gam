@@ -375,13 +375,14 @@ public class BackstageController {
 	
 	@RequestMapping("recommend.do")
 	public String recommend(HttpServletRequest request){
-		if(getLoginUser(request)==null){
+		UserInfo user = getLoginUser(request);
+		if(user==null){
 			return "/adminLogin";
 		}
 		List<UserInfo> operators = userManager.getOperatiors();
 		
 		request.setAttribute("operations", operators);
-		
+		request.setAttribute("user", user);
 		return "recommend";
 	}
 	
