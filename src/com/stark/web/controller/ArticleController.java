@@ -42,6 +42,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import com.stark.web.define.EnumBase;
 import com.stark.web.define.RedisInfo;
+import com.stark.web.define.EnumBase.ActivityType;
 import com.stark.web.define.EnumBase.ArticleType;
 import com.stark.web.define.EnumBase.ChartletStatus;
 import com.stark.web.define.EnumBase.ChartletType;
@@ -1770,5 +1771,45 @@ public class ArticleController {
 		//request.setAttribute("user", user);
 		
 		return "article";
+	}
+	
+	@RequestMapping("outShare.do")
+	public String outShare(int articleId, HttpServletRequest request) {
+		if (articleId == 0)
+			return "";
+		ArticleInfo article = articleManager.getArticle(articleId);
+		UserInfo user = userManager.getUser(article.getUser().getUserId());
+		
+		int articleType = 0;
+		
+		int type = article.getType();
+		if(type==ArticleType.DayExquisite.getIndex()||type==ArticleType.ExquisiteMagazine.getIndex()
+				||type==ArticleType.ExquisiteMagazineReport.getIndex()||type==ArticleType.DayExquisiteReport.getIndex()){
+			articleType = 1;
+		}
+		if(type==ArticleType.Activity.getIndex()||type==ArticleType.ActivityExquisite.getIndex()){
+			ActivityInfo activity = activityManager.getActivity(article.getActivity().getActivityId());
+			if(activity.getType()==ActivityType.NoJoin.getIndex()){
+				articleType = 1;
+			}
+		}
+		if(articleType==0){
+			List<String> picList = articleManager.getPicListById(article.getArticleId());
+			request.setAttribute("pictures", picList);
+		}
+		else {
+			String path = FileManager.getArticleHtmlPath(articleId, article.getRichText());
+			String content = FileManager.getContent( path);
+			if(content==null){
+				content ="没有内容";
+			}
+			request.setAttribute("content", content);
+		}
+		request.setAttribute("article", article);
+		request.setAttribute("user", user);
+		
+		request.setAttribute("type", articleType);
+		//System.out.println(pics.size());
+		return "newShare";
 	}
 }

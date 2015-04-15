@@ -236,6 +236,9 @@ public class ArticleManager implements IArticleManager {
 
 	@Override
 	public boolean praise(int userId, int articleId) {
+		if(!isPraise(userId,articleId)){
+			return false;
+		}
 		boolean result = articleDao.praise(userId, articleId);
 		//System.out.println(result);
 		if(result){
