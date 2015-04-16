@@ -3,18 +3,17 @@ var isShowHeader = false;
 var selectUserFlag = "";
 var currentUser = new Object();
 var currentArticle = new Object();
-function selectUser(userId,userName,page){
-	page = parseInt(page);
-	if(page<0)
-		return;
+function selectUser(userId,userName,role){
 	$("#addOperationDiv").css({
 		display : "none"
 	});
 	$("#articlesDiv").css({
 		display : "block"
 	});
+	if(role!=0&&role!=7){
+		setReply();
+	}
 	
-	setReply();
 	//$("#secondDiv").scrollTop = 0;
 	currentUser.userId = userId;
 	currentUser.name = userName;
@@ -22,7 +21,7 @@ function selectUser(userId,userName,page){
 	$("#articleUserId").val(userId);
     $("#articleUserName").val(userName);
     var url = "/StarkPet/article/getArticlesByUserId.do?userId="+ userId+"&";
-	showArticleList(url,page);
+	showArticleList(url,0);
 }
 function showArticleList(url,page){
 	var div = document.getElementById('articleList'); 

@@ -58,7 +58,7 @@ body {
 		</div>
 	</div>
 	<iframe id='frameFile' name='frameFile' style='display: none;'></iframe>
-	<script src="../js/bootstrap.min.js"></script>
+	<script src="../js/bootstrap.js"></script>
 	<script src="../js/main.js"></script>
 	<script type="text/javascript">
 		//var total = document.documentElement.clientHeight-80;

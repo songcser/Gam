@@ -102,7 +102,7 @@ body {
 	</div>
 	<iframe id='frameFile' name='frameFile' style='display: none;'></iframe>
 	<%@ include file="selectUserList.jsp"%>
-	<script src="../js/bootstrap.min.js"></script>
+	<script src="../js/bootstrap.js"></script>
 	<script type="text/javascript" src="../js/main.js"></script>
 	<script type="text/javascript">
 		var isClick = false;

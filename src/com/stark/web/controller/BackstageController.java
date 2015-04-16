@@ -139,6 +139,7 @@ public class BackstageController {
 		
 		if(operators!=null){
 			request.setAttribute("operations", operators);
+			request.setAttribute("userList", operators);
 		}
 		
 		request.setAttribute("user", user);
@@ -353,10 +354,16 @@ public class BackstageController {
 	
 	@RequestMapping("searchByName.do")
 	public String searchByName(String name,HttpServletRequest request){
+		UserInfo user = getLoginUser(request);
+		if(user==null){
+			return "adminLogin";
+		}
+		List<UserInfo> operators = userManager.getOperatiors();
 		List<UserInfo> users = userManager.getUserByName(name);
 		if(users!=null){
-			request.setAttribute("operations", users);
+			request.setAttribute("userList", users);
 		}
+		request.setAttribute("operations", operators);
 		request.setAttribute("webIcon", FileManager.getWebIcon());
 		request.setAttribute("roles", UserRole.values());
 		return "user";
@@ -364,10 +371,18 @@ public class BackstageController {
 	
 	@RequestMapping("markUser.do")
 	public String getMarkUser(HttpServletRequest request){ 
+		UserInfo user = getLoginUser(request);
+		if(user==null){
+			return "adminLogin";
+		}
+		List<UserInfo> operators = userManager.getOperatiors();
 		List<UserInfo> users = userManager.getMarkUsers();
 		if(users!=null){
-			request.setAttribute("operations", users);
+			
+			request.setAttribute("userList", users);
 		}
+		
+		request.setAttribute("operations", operators);
 		request.setAttribute("webIcon", FileManager.getWebIcon());
 		request.setAttribute("roles", UserRole.values());
 		return "user";
@@ -412,8 +427,9 @@ public class BackstageController {
 		UserInfo user = userManager.getUser(userId);
 		List<UserInfo> list = new ArrayList<UserInfo>();
 		list.add(user);
-		
-		request.setAttribute("operations", list);
+		List<UserInfo> operators = userManager.getOperatiors();
+		request.setAttribute("operations", operators);
+		request.setAttribute("userList", list);
 		return "user";
 	}
 	

@@ -45,7 +45,7 @@ body {
     <%@ include file="sliderShow.jsp"%>
     <%@ include file="selectUserList.jsp"%>
      <%@ include file="moveArticle.jsp"%>
-    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/bootstrap.js"></script>
     <script src="../js/main.js"></script>
     <script type="text/javascript">
     var isAuditing = false;

@@ -10,11 +10,11 @@
 			<td style="width:12%" nowrap><strong>角色</strong></td>
 			<td style="width:40%" nowrap><strong>编辑</strong></td>
 		</tr>
-		<c:if test="${!empty operations }">
-			<c:forEach items="${operations }" var="u">
+		<c:if test="${!empty userList }">
+			<c:forEach items="${userList }" var="u">
 				<tr>
 					<td style="text-align: center; vertical-align: middle;">${u.userId }</td>
-					<td style="text-align: center; vertical-align: middle;"><a href="javascript:selectUser('${u.userId }','${u.name }','0')"> <img src="${u.getHeadUrl()}"
+					<td style="text-align: center; vertical-align: middle;"><a href="javascript:selectUser('${u.userId }','${u.name }','${u.role }')"> <img src="${u.getHeadUrl()}"
 							style="height: 50px; width: 50px" class="img-circle " />
 					</a></td>
 					<td style="text-align: center; vertical-align: middle;word-break:keep-all; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${u.name }</td>
