@@ -116,7 +116,8 @@ public class ArticleController {
 			ArticleInfo article = new ArticleInfo();
 			
 			String activityId = request.getParameter("activityId");
-			//System.out.println(activityId);
+			
+			System.out.println(activityId);
 			MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
 			int userId = Integer.parseInt(multiRequest.getParameter("userId"));
 			UserInfo user = userManager.getUser(userId);
@@ -1777,7 +1778,9 @@ public class ArticleController {
 	public String outShare(int articleId, HttpServletRequest request) {
 		if (articleId == 0)
 			return "";
+		SimpleDateFormat sdf = WebManager.getDateFormat();
 		ArticleInfo article = articleManager.getArticle(articleId);
+		
 		UserInfo user = userManager.getUser(article.getUser().getUserId());
 		
 		int articleType = 0;
@@ -1807,7 +1810,7 @@ public class ArticleController {
 		}
 		request.setAttribute("article", article);
 		request.setAttribute("user", user);
-		
+		request.setAttribute("date", sdf.format(article.getDate()));
 		request.setAttribute("type", articleType);
 		//System.out.println(pics.size());
 		return "newShare";

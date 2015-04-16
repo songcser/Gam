@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.stark.web.dao.INoticeDAO;
 import com.stark.web.define.EnumBase.NoticeType;
+import com.stark.web.define.EnumBase.UserRole;
 import com.stark.web.define.RedisInfo;
 import com.stark.web.define.EnumBase.NoticeStatus;
 import com.stark.web.entity.NoticeInfo;
@@ -26,7 +27,10 @@ public class NoticeManager implements INoticeManager{
 			noticeDao.setRedisUserNoticeStatus(nInfo.getUser().getUserId(),1);
 			int type = nInfo.getType();
 			if(type==NoticeType.At.getIndex()||type==NoticeType.Follow.getIndex()||type==NoticeType.Praise.getIndex()||type==NoticeType.Comment.getIndex()){
-				WebManager.pushToUser(nInfo.getUser().getUserId(),type, nInfo.getContent());
+				if(nInfo.getUser().getRole()==UserRole.Normal.getIndex()){
+					WebManager.pushToUser(nInfo.getUser().getUserId(),type, nInfo.getContent());
+				}
+				
 			}
 		}
 		return id;

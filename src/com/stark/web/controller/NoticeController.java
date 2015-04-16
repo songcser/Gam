@@ -272,6 +272,8 @@ public class NoticeController {
 	@RequestMapping("publish.do")
 	@ResponseBody
 	public Map<String,Object> publish(@RequestBody NoticeInfo notice){
+		UserInfo user = userManager.getUser(notice.getUser().getUserId());
+		notice.setUser(user);
 		notice.setDate(new Date());
 		notice.setStatus(EnumBase.NoticeStatus.NoRead.getIndex());
 		int id = noticeManager.addNotice(notice);
@@ -280,7 +282,7 @@ public class NoticeController {
 			map.put("result", 0);
 		}
 		//WebManager.JPush();
-		WebManager.pushToUser(notice.getUser().getUserId(), notice.getContent());
+		//WebManager.pushToUser(notice.getUser().getUserId(), notice.getContent());
 		map.put("result", 1);
 		SimpleDateFormat sdf = WebManager.getDateFormat();
 		map.put("date", sdf.format(new Date()));

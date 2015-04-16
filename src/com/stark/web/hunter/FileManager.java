@@ -184,7 +184,7 @@ public class FileManager {
 	}
 
 	public static String getShareUrl(int articleId) {
-		return "/article/outsideShare.do?articleId=" + articleId;
+		return "/article/outShare.do?articleId=" + articleId;
 	}
 
 	public static String getChartletPicturePath(int chartletId, String fileName) {

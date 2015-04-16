@@ -15,7 +15,6 @@ img{
     height: auto !important; 
     box-sizing: border-box !important; 
     word-wrap: break-word !important; 
-    width: 100% !important; 
     visibility: visible !important;
 }
 ul{
@@ -29,26 +28,43 @@ div{
     max-width: 100%; 
     overflow:hide;
 }
+
+@media (min-width: 1200px) {
+    #bodyMain{
+        width:700px;
+    }
+ }
+ 
+ @media ( max-width : 768px) {
+    img{
+        width: 100% !important; 
+    }
+}
 </style>
 </head>
-<body >
-<div id="bodyMain" style="margin-bottom:70px;margin-top:15px" class="container " >
-
+<body style="background-color:#B0E2FF">
+<div id="bodyMain" style="padding-left:5px;padding-right:5px;padding-bottom:70px;padding-top:15px;background-color:#fff" class="container " >
 <article>
 ${content }
 </article>
 </div>
 <script src="../js/jquery-1.11.2.min.js"></script>
 <script type="text/javascript">
-var current = $("#bodyMain") ;
-$(current).find("img").each(function(i){ 
-	$(this).attr("style","width: 100%"); 
-	$(this).attr("style","height: auto"); 
-});
-$(current).find("iframe").load(function(i){ 
-    //$(this).height("auto"); 
-    $(this).width($(current).width()); 
-});
+
+window.onload = function () {
+	var u = navigator.userAgent;
+	if (u.indexOf('Android') > -1 ||u.indexOf('iPhone') > -1||u.indexOf('Windows Phone') > -1) {//安卓手机
+		var current = $("#bodyMain") ;
+		$(current).find("img").each(function(i){ 
+		    $(this).attr("style","width: 100%"); 
+		    $(this).attr("style","height: auto"); 
+		});
+		$(current).find("iframe").load(function(i){ 
+		    //$(this).height("auto"); 
+		    $(this).width($(current).width()); 
+		});
+	} 
+}
 </script>
 </body>
 </html>

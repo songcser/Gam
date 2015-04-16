@@ -86,20 +86,23 @@ public class ArticleManager implements IArticleManager {
 			if(aInfo.getActivity()!=null){
 				articleDao.addActivityArticleId(aInfo.getActivity().getActivityId(),id);
 			}
-			
+			UserInfo user = aInfo.getUser();
 			articleDao.addRedisArticle(aInfo);
-			articleDao.addRedisUserArticleList(aInfo.getUser().getUserId(),aInfo.getArticleId());
+			articleDao.addRedisUserArticleList(user.getUserId(),aInfo.getArticleId());
 			articleDao.addRedisUpdateList(id);
-			articleDao.addRedisUserArticleCount(aInfo.getUser().getUserId());
+			articleDao.addRedisUserArticleCount(user.getUserId());
 			SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
 			articleDao.addRedisArticleId(RedisInfo.ARTICLEDATELIST+sdf.format(aInfo.getDate()), id);
-			addSetArticleId(RedisInfo.USERFOLLOWARTICLEZSET+aInfo.getUser().getUserId(),id,id+"");
+			addSetArticleId(RedisInfo.USERFOLLOWARTICLEZSET+user.getUserId(),id,id+"");
 			//int userId = aInfo.getUser().getUserId();
-			
+			//if(user.getRole()!=UserRole.Normal.getIndex()&&user.getRole()!=UserRole.Mark.getIndex()){
+			//}
 			int type = aInfo.getType();
 			if(type==ArticleType.Publish.getIndex()){
 				articleDao.addRedisArticleCount(RedisInfo.ARTICLEPUBLISHCOUNT);
 				articleDao.addRedisArticleId(RedisInfo.ARTICLEMOMENTLIST, id);
+				String key = RedisInfo.ARTICLEOPERTORLIST;
+				articleDao.addRedisArticleId(key, id);
 			}
 			else if(type==ArticleType.Forward.getIndex()){
 				
@@ -140,6 +143,8 @@ public class ArticleManager implements IArticleManager {
 			else if(type == ArticleType.NoAuditingActivity.getIndex()){
 				articleDao.addRedisArticleCount(RedisInfo.ARTICLENOAUDITINGCOUNT);
 				articleDao.addRedisActivityAllList(aInfo.getActivity().getActivityId(),id);
+				String key = RedisInfo.ACTIVITYNOAUDITINGLIST+aInfo.getActivity().getActivityId();
+				articleDao.addRedisArticleId(key, id);
 				
 			}
 			else if(type == ArticleType.Activity.getIndex()){
@@ -155,6 +160,8 @@ public class ArticleManager implements IArticleManager {
 			}
 			else if(type== ArticleType.CommonNoAuditing.getIndex()){
 				articleDao.addRedisArticleId(RedisInfo.ARTICLENOAUDITINGMOMENTLIST, id);
+				String key = RedisInfo.ARTICLECOMMONLIST;
+				articleDao.addRedisArticleId(key, id);
 			}
 		}
 
@@ -1438,7 +1445,6 @@ public class ArticleManager implements IArticleManager {
 		int size = idsToArticleList(ids,articles);
 		if(size==maxResults)
 			return articlesToMap(articles,userId);
-		
 		List<ArticleInfo> alist = articleDao.getFollowArticle(userId, page*maxResults+size,maxResults-size);
 		if(alist==null){
 			Map<String,Object> map = new HashMap<String,Object>();
