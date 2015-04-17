@@ -14,5 +14,7 @@
 	  <import resource="classpath*:config/spring/spring-activity.xml"/> 
 	  <!--
 	  <import resource="classpath*:config/spring/spring-redis.xml"/>
+	  <bean id="webManager" class="com.stark.web.service.WebManager"/> 
 	  -->
+	  
 </beans>

@@ -145,6 +145,9 @@ public class UserManager implements IUserManager{
 
 	@Override
 	public boolean addFollow(RelUserFollow rel) {
+		if(isFollow(rel.getUser().getUserId(),rel.getFollow().getUserId())){
+			return false;
+		}
 		boolean result = userDao.addFollow(rel);
 		if(result){
 			//addFollowingCount(rel.getUser().getUserId());
@@ -477,6 +480,8 @@ public class UserManager implements IUserManager{
 			
 			subFollowingCount(userId);
 			subFansCount(followId);
+			String key = RedisInfo.USERFOLLOWFLAG+userId+":"+followId;
+			userDao.setRedisString(key, "0");
 		}
 		return result;
 	}

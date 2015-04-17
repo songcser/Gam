@@ -66,7 +66,7 @@
 			<aop:pointcut id="controllerPoint" expression="execution(* com.stark.web.controller..*.*(..))" />
 			<!-- <aop:before method="before" pointcut="execution(public * com.stark.web.controller..*.*(..)) and args(..)" /> -->
 			<!-- <aop:before method="beforeRedisDao" pointcut="execution(public * com.stark.web.dao.ShareRedisDAO.*(..)) and args(..)" /> -->
-			<!-- <aop:before method="beforeRedisDao" pointcut="execution(public * com.stark.web.dao.CodisDAO.*(..)) and args(..)" /> -->
+			 <aop:before method="beforeRedisDao" pointcut="execution(public * com.stark.web.dao.CodisDAO.*(..)) and args(..)" /> 
 			<!-- <aop:around pointcut-ref="controllerPoint" method="doAround" /> -->
 			<!-- <aop:after-throwing method="afterThrowing" throwing="throwable" pointcut="execution(public * com.stark.web.dao..*.*(..)) and args(..)" /> -->
 			<!-- <aop:before method="beforeDao" pointcut="execution(public * com.stark.web.dao..*.*(..)) and args(..)" /> -->
@@ -81,4 +81,18 @@
 		</property>
 	</bean>
 
+	<bean id="threadPool" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+		<!-- 核心线程数 -->
+		<property name="corePoolSize" value="10" />
+		<!-- 最大线程数 -->
+		<property name="maxPoolSize" value="50" />
+		<!-- 队列最大长度 >=mainExecutor.maxSize -->
+		<property name="queueCapacity" value="1000" />
+		<!-- 线程池维护线程所允许的空闲时间 -->
+		<property name="keepAliveSeconds" value="300" />
+		<!-- 线程池对拒绝任务(无线程可用)的处理策略 -->
+		<property name="rejectedExecutionHandler">
+			<bean class="java.util.concurrent.ThreadPoolExecutor$CallerRunsPolicy" />
+		</property>
+	</bean>
 </beans>    

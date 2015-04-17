@@ -16,6 +16,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,8 +32,6 @@ import com.stark.web.define.EnumBase.UserRole;
 import com.stark.web.entity.ActivityInfo;
 import com.stark.web.entity.NoticeInfo;
 import com.stark.web.entity.UserInfo;
-import com.stark.web.hunter.FileManager;
-import com.stark.web.service.ActivityManager;
 import com.stark.web.service.IActivityManager;
 import com.stark.web.service.IArticleManager;
 import com.stark.web.service.INoticeManager;
@@ -54,6 +53,12 @@ public class NoticeController {
 	
 	@Resource(name = "activityManager")
 	private IActivityManager activityManager;
+	
+	@Resource(name="threadPool")
+	private ThreadPoolTaskExecutor threadPool;
+	
+	@Resource
+	private WebManager webManager;
 
 	@RequestMapping("/add")
 	public void add(NoticeInfo nInfo) {
@@ -187,41 +192,44 @@ public class NoticeController {
 	}
 
 	@RequestMapping("systemNotice.do")
-	public void systemNotice(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	public void systemNotice(final HttpServletRequest request, HttpServletResponse response) throws IOException {
 		System.out.println("/notice/systemNotice.do");
-		String content = request.getParameter("systemArticle");
-		int userId = Integer.parseInt(request.getParameter("userId"));
-		String showFlag = request.getParameter("showFlag");
-		
-		UserInfo sender = new UserInfo(userId);
+		final String content = request.getParameter("systemArticle");
+		final int userId = Integer.parseInt(request.getParameter("userId"));
+		final String showFlag = request.getParameter("showFlag");
+		final String activityId = request.getParameter("activityId");
+		final UserInfo sender = new UserInfo(userId);
+		final List<UserInfo> userList = userManager.getAllUser();
+		threadPool.execute(new Runnable() {
+			public void run() {
+				for (Iterator<UserInfo> iterator = userList.iterator(); iterator.hasNext();) {
+					UserInfo userInfo = iterator.next();
+					int role = userInfo.getRole() ;
+					if (role!= EnumBase.UserRole.Normal.getIndex()&&role!=EnumBase.UserRole.Mark.getIndex()) {
+						continue;
+					}
+					NoticeInfo notice = new NoticeInfo();
+					notice.setUser(userInfo);
+					notice.setSender(sender);
+					//notice.setArticle(new ArticleInfo());
+					notice.setContent(content);
+					notice.setDate(new Date());
+					notice.setType(EnumBase.NoticeType.System.getIndex());
+					notice.setStatus(EnumBase.NoticeStatus.NoRead.getIndex());
 
-		List<UserInfo> userList = userManager.getAllUser();
-		//System.out.println(userList.size());
-		for (Iterator<UserInfo> iterator = userList.iterator(); iterator.hasNext();) {
-			UserInfo userInfo = iterator.next();
-			int role = userInfo.getRole() ;
-			if (role!= EnumBase.UserRole.Normal.getIndex()&&role!=EnumBase.UserRole.Mark.getIndex()) {
-				continue;
+					noticeManager.addNotice(notice);
+				}
 			}
-			NoticeInfo notice = new NoticeInfo();
-			notice.setUser(userInfo);
-			notice.setSender(sender);
-			//notice.setArticle(new ArticleInfo());
-			notice.setContent(content);
-			notice.setDate(new Date());
-			notice.setType(EnumBase.NoticeType.System.getIndex());
-			notice.setStatus(EnumBase.NoticeStatus.NoRead.getIndex());
-
-			noticeManager.addNotice(notice);
-		}
+		});
+		//System.out.println(userList.size());
 		int showId = 0;
-		if(showFlag.equals("1")){
-			showId = Integer.parseInt(request.getParameter("activityId"));
+		if(showFlag.equals("1")&&activityId!=null){
+			showId = Integer.parseInt(activityId);
 			ActivityInfo activity = activityManager.getActivity(showId);
-			WebManager.pushToAllExtShow(content,showId,activity.getType());
+			webManager.pushToAllExtShow(content,showId,activity.getType());
 		}
 		else {
-			WebManager.pushToUser( userId, NoticeType.System.getIndex(), content);
+			webManager.pushToUser( userId, NoticeType.System.getIndex(), content);
 		}
 		
 		PrintWriter out = response.getWriter();
@@ -266,21 +274,20 @@ public class NoticeController {
 	
 	@RequestMapping("test.do")
 	public void test(int page){
-		WebManager.JPush();
 	}
 	
 	@RequestMapping("publish.do")
 	@ResponseBody
-	public Map<String,Object> publish(@RequestBody NoticeInfo notice){
+	public Map<String,Object> publish(@RequestBody final NoticeInfo notice){
 		UserInfo user = userManager.getUser(notice.getUser().getUserId());
 		notice.setUser(user);
 		notice.setDate(new Date());
 		notice.setStatus(EnumBase.NoticeStatus.NoRead.getIndex());
-		int id = noticeManager.addNotice(notice);
+		//final int id =0 ;
+		noticeManager.addNotice(notice);
+		webManager.pushToUser( notice.getUser().getUserId(),notice.getType(), notice.getContent());
+		
 		Map<String,Object> map = new HashMap<String,Object>();
-		if(id<=0){
-			map.put("result", 0);
-		}
 		//WebManager.JPush();
 		//WebManager.pushToUser(notice.getUser().getUserId(), notice.getContent());
 		map.put("result", 1);

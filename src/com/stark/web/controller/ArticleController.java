@@ -103,6 +103,9 @@ public class ArticleController {
 
 	@Resource(name = "commentManager")
 	private ICommentManager commentManager;
+	
+	@Resource
+	private WebManager webManager;
 
 	@RequestMapping("/publish.do")
 	@ResponseBody
@@ -946,6 +949,7 @@ public class ArticleController {
 			notice.setStatus(NoticeStatus.NoRead.getIndex());
 			//System.out.println(userId);
 			noticeManager.addNotice(notice);
+			webManager.pushToUser( article.getUser().getUserId(),NoticeType.Praise.getIndex());
 		}
 		// String ret = "{\"result\":\""+(result?1:0) +"\"}";
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -965,6 +969,7 @@ public class ArticleController {
 		map.put("result", 1);
 		Set<Integer> praises = userPraises.getUsersId();
 		int articleId = userPraises.getObjectId();
+		ArticleInfo article = articleManager.getArticle(articleId);
 		int count =0;
 		if(praises!=null&&articleId!=0){
 			for(int userId:praises){
@@ -975,8 +980,7 @@ public class ArticleController {
 				count++;
 				result = articleManager.praise(userId, articleId);
 				if (result) {
-					ArticleInfo article = articleManager.getArticle(articleId);
-
+					
 					NoticeInfo notice = new NoticeInfo();
 					notice.setUser(new UserInfo(article.getUser().getUserId()));
 					notice.setSender(new UserInfo(userId));
@@ -989,6 +993,7 @@ public class ArticleController {
 					noticeManager.addNotice(notice);
 				}
 			}
+			webManager.pushToUser( article.getUser().getUserId(),NoticeType.Praise.getIndex());
 		}
 		map.put("count", count);
 		return map;

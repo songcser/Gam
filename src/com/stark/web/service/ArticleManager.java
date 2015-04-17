@@ -28,6 +28,7 @@ import org.springframework.stereotype.Component;
 import com.stark.web.dao.IArticleDAO;
 import com.stark.web.dao.IUserDAO;
 import com.stark.web.define.EnumBase.ChartletType;
+import com.stark.web.define.EnumBase.NoticeType;
 import com.stark.web.define.EnumBase.UserRole;
 import com.stark.web.define.RedisInfo;
 import com.stark.web.define.EnumBase.ArticleType;
@@ -243,7 +244,7 @@ public class ArticleManager implements IArticleManager {
 
 	@Override
 	public boolean praise(int userId, int articleId) {
-		if(!isPraise(userId,articleId)){
+		if(isPraise(userId,articleId)){
 			return false;
 		}
 		boolean result = articleDao.praise(userId, articleId);
@@ -256,6 +257,7 @@ public class ArticleManager implements IArticleManager {
 			articleDao.addRedisArticleId(RedisInfo.ARTICLEPRAISELIST+articleId, userId);
 			String key = RedisInfo.USERPRAISEARTICLE+userId+":"+articleId;
 			articleDao.setRedisString(key, "1");
+			
 		}
 		return result;
 	}

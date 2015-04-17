@@ -25,13 +25,13 @@ public class NoticeManager implements INoticeManager{
 			noticeDao.addRedisNotice(nInfo);
 			noticeDao.addRedisUserList(nInfo.getUser().getUserId(),nInfo.getNoticeId());
 			noticeDao.setRedisUserNoticeStatus(nInfo.getUser().getUserId(),1);
-			int type = nInfo.getType();
-			if(type==NoticeType.At.getIndex()||type==NoticeType.Follow.getIndex()||type==NoticeType.Praise.getIndex()||type==NoticeType.Comment.getIndex()){
-				if(nInfo.getUser().getRole()==UserRole.Normal.getIndex()){
-					WebManager.pushToUser(nInfo.getUser().getUserId(),type, nInfo.getContent());
-				}
+			//int type = nInfo.getType();
+			//if(type==NoticeType.At.getIndex()||type==NoticeType.Follow.getIndex()||type==NoticeType.Praise.getIndex()||type==NoticeType.Comment.getIndex()){
+				//if(nInfo.getUser().getRole()==UserRole.Normal.getIndex()){
+					//WebManager.pushToUser(nInfo.getUser().getUserId(),type, nInfo.getContent());
+				//}
 				
-			}
+			//}
 		}
 		return id;
 	}

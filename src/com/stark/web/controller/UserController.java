@@ -50,6 +50,7 @@ import com.stark.web.service.INoticeManager;
 import com.stark.web.service.IPetManager;
 import com.stark.web.service.ITagManager;
 import com.stark.web.service.IUserManager;
+import com.stark.web.service.WebManager;
 
 @Controller
 @RequestMapping("/user")
@@ -72,7 +73,9 @@ public class UserController {
 	
 	@Resource(name = "activityManager")
 	private IActivityManager activityManager;
-
+	
+	@Resource
+	private WebManager webManager;
 	// @Resource(name="redisManager")
 	// private IRedisManager redisManager;
 
@@ -604,7 +607,7 @@ public class UserController {
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("userId", userInfo.getUserId());
 			map.put("name", userInfo.getName());
-			boolean isFollow = userManager.isFollow(userInfo.getUserId(),userId);
+			boolean isFollow = userManager.isFollow(userId,userInfo.getUserId());
 			map.put("followStatus", isFollow ? 1 : 0);
 			map.put("headPic", userInfo.getHeadUrl());
 
@@ -703,7 +706,7 @@ public class UserController {
 			notice.setStatus(NoticeStatus.NoRead.getIndex());
 			
 			noticeManager.addNotice(notice);
-			
+			webManager.pushToUser( followId,NoticeType.Follow.getIndex());
 		}
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("result", result);
@@ -1169,6 +1172,7 @@ public class UserController {
 						notice.setStatus(NoticeStatus.NoRead.getIndex());
 						
 						noticeManager.addNotice(notice);
+						webManager.pushToUser( followId,NoticeType.Follow.getIndex());
 						
 					}
 				}

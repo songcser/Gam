@@ -28,6 +28,7 @@ import com.stark.web.service.IArticleManager;
 import com.stark.web.service.ICommentManager;
 import com.stark.web.service.INoticeManager;
 import com.stark.web.service.IUserManager;
+import com.stark.web.service.WebManager;
 
 @Controller
 @RequestMapping("/comment")
@@ -45,6 +46,9 @@ public class CommentController {
 	
 	@Resource(name="userManager")
 	private IUserManager userManager;
+	
+	@Resource
+	private WebManager webManager;
 	
 	@RequestMapping("/publish.do")
 	@ResponseBody
@@ -71,6 +75,7 @@ public class CommentController {
 				notice.setStatus(NoticeStatus.NoRead.getIndex());
 				//System.out.println(userId);
 				noticeManager.addNotice(notice);
+				webManager.pushToUser( notice.getUser().getUserId(),notice.getType());
 			}
 			
 			
@@ -88,6 +93,7 @@ public class CommentController {
 					notice.setStatus(NoticeStatus.NoRead.getIndex());
 					//System.out.println(userId);
 					noticeManager.addNotice(notice);
+					webManager.pushToUser( notice.getUser().getUserId(),notice.getType());
 				}
 			}
 		}

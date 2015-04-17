@@ -14,7 +14,11 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.annotation.Resource;
+
 import org.apache.log4j.Logger;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.stereotype.Component;
 
 import com.stark.web.define.EnumBase.NoticeType;
 
@@ -30,39 +34,52 @@ import cn.jpush.api.push.model.audience.Audience;
 import cn.jpush.api.push.model.notification.IosNotification;
 import cn.jpush.api.push.model.notification.Notification;
 
+@Component
 public class WebManager {
 	private static Logger logger = Logger.getLogger(WebManager.class);
 	private final static String masterSecret = "adec968251666c5982c3cce3";
 	private final static String appKey = "408183a3a7fd461efc860cda";
 	private final static String ALERT = "hello world";
 	
-	public static void JPush(){
-		JPushClient jpushClient = new JPushClient(masterSecret, appKey, 3);
-		PushPayload payload = buildPushObject_android_tag_alertWithTitle();
-		
+	@Resource(name="threadPool")
+	private ThreadPoolTaskExecutor threadPool;
+	
+	public void setThreadPool(ThreadPoolTaskExecutor threadPool){
+		this.threadPool = threadPool;
+	}
+	
+	public void JPush(){
+		final JPushClient jpushClient = new JPushClient(masterSecret, appKey, 3);
+		final PushPayload payload = buildPushObject_android_tag_alertWithTitle();
 		toPush(jpushClient,payload);
+		
 	}
 	
 	private static JPushClient getPushClient(){
 		return new JPushClient(masterSecret, appKey, 3);
 	}
 	
-	private static void toPush(JPushClient jpushClient,PushPayload payload){
-		try {
-            PushResult result = jpushClient.sendPush(payload);
-            logger.info("Got result - " + result);
+	private  void toPush(final JPushClient jpushClient,final PushPayload payload){
+		threadPool.execute(new Runnable() {
+			public void run() {
+				try {
+		            PushResult result = jpushClient.sendPush(payload);
+		            logger.info("Got result - " + result);
 
-        } catch (APIConnectionException e) {
-            // Connection error, should retry later
-        	logger.error("Connection error, should retry later", e);
+		        } catch (APIConnectionException e) {
+		            // Connection error, should retry later
+		        	logger.error("Connection error, should retry later", e);
 
-        } catch (APIRequestException e) {
-            // Should review the error, and fix the request
-        	logger.error("Should review the error, and fix the request", e);
-        	logger.info("HTTP Status: " + e.getStatus());
-        	logger.info("Error Code: " + e.getErrorCode());
-        	logger.info("Error Message: " + e.getErrorMessage());
-        }
+		        } catch (APIRequestException e) {
+		            // Should review the error, and fix the request
+		        	logger.error("Should review the error, and fix the request", e);
+		        	logger.info("HTTP Status: " + e.getStatus());
+		        	logger.info("Error Code: " + e.getErrorCode());
+		        	logger.info("Error Message: " + e.getErrorMessage());
+		        }
+			}
+		});
+		
 	}
 	
 	public static PushPayload buildPushObject_all_all_alert() {
@@ -88,7 +105,7 @@ public class WebManager {
                  .build();
 	}
 	
-	public static void pushToAll(String content){
+	public  void pushToAll(String content){
 		JPushClient jpushClient = new JPushClient(masterSecret, appKey, 3);
 		PushPayload payload = pushToAll_all(content);
 		
@@ -99,7 +116,7 @@ public class WebManager {
 		return PushPayload.alertAll(content);
 	}
 	
-	public static void pushToAllExtShow(String content, int showId,int showType) {
+	public  void pushToAllExtShow(String content, int showId,int showType) {
 		JPushClient jpushClient = getPushClient();
 		Map<String,String> map = new HashMap<String,String>();
 		map.put("type", NoticeType.Show.getIndex()+"");
@@ -129,10 +146,28 @@ public class WebManager {
                  .build();
 	}
 
-	public static void pushToUser(int userId,String content){
+	public  void pushToUser(int userId,String content){
 		JPushClient jpushClient = new JPushClient(masterSecret, appKey, 3);
 		PushPayload payload = pushToUser_ios_android(userId,content);
 		
+		toPush(jpushClient,payload);
+	}
+	
+	public void pushToUser(int userId, int type) {
+		JPushClient jpushClient = getPushClient();
+		Map<String,String> map = new HashMap<String,String>();
+		map.put("type", type+"");
+		String content = "有通知";
+		if(type==NoticeType.Comment.getIndex()){
+			content="有人评论了你";
+		}
+		else if(type==NoticeType.Praise.getIndex()){
+			content="有人赞了你";
+		}
+		else if(type==NoticeType.Follow.getIndex()){
+			content="有人关注了你";
+		}
+		PushPayload payload = pushUserExtra(userId,content,map);
 		toPush(jpushClient,payload);
 	}
 	
@@ -143,7 +178,7 @@ public class WebManager {
                 .setNotification(Notification.alert(content))
                 .build();
 	}
-	public static void pushToUser(int userId, int type, String content) {
+	public  void pushToUser(int userId, int type, String content) {
 		JPushClient jpushClient = getPushClient();
 		Map<String,String> map = new HashMap<String,String>();
 		map.put("type", type+"");
@@ -161,6 +196,7 @@ public class WebManager {
                                 .setAlert(content)
                                 .setSound("happy")
                                 .addExtras(extra)
+                                .incrBadge(1)
                                 .build())
                         .build())
                  .build();
@@ -277,6 +313,8 @@ public class WebManager {
 	private static String outTag(final String s) {
 		return s.replaceAll("<.*?>", "");
 	}
+
+	
 
 	
 
