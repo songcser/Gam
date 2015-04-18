@@ -1043,8 +1043,10 @@ public class ArticleDAO implements IArticleDAO {
 
 	@Override
 	public boolean deleteChartlet(int chartletId) {
+		//ChartletInfo chartlet = new ChartletInfo(chartletId);
 		String hql = "delete from ChartletInfo as c where c.chartletId=:chartletId";
 		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		//sessionFactory.getCurrentSession().delete(chartlet);
 		query.setInteger("chartletId", chartletId);
 		
 		return query.executeUpdate()>0;
@@ -1421,5 +1423,12 @@ public class ArticleDAO implements IArticleDAO {
 	@Override
 	public void addRedisPraiseCount(int articleId) {
 		redisDao.hincrby(ArticleInfo.getKey(articleId),ArticleInfo.PRAISECOUNT,1);		
+	}
+
+	@Override
+	public void addRedisAllChartletR(String key, int chartletId) {
+		if(redisDao==null)
+			return ;
+		redisDao.rpush(key, chartletId+"");
 	}
 }

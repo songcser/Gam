@@ -266,4 +266,6 @@ public interface IArticleDAO {
 
 	public void addRedisPraiseCount(int articleId);
 
+	public void addRedisAllChartletR(String key, int chartletId);
+
 }

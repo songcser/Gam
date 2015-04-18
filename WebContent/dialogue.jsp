@@ -3,7 +3,7 @@
 <div class="block-inline">
 	<input type="text" class="input radius-rounded" id="dialogueChartletTitle" />
 	<button class="btn bg-sub margin-left" onclick="createDialogueChartlet(3)">创建台词系列</button>
-	<button class="btn bg-sub margin-left" onclick="createDialogueChartlet(4)">创建用户台词系列</button>
+	<button id="createUserDialogueBtn" class="btn bg-sub margin-left" onclick="createDialogueChartlet(4)">创建用户台词系列</button>
 </div>
 <div role="tabpanel" class="padding-big-top">
 	<ul id="dialogueUL" class="nav nav-tabs" role="tablist">
@@ -16,6 +16,9 @@
 		</c:forEach>
 		<c:forEach items="${chartlets }" var="o" varStatus="s">
             <c:if test="${o.type=='4'}">
+                <script>
+                $("#createUserDialogueBtn").remove();
+                </script>
                 <li role="presentation">
                 <a href="#dialogue${o.chartletId }" aria-controls="dialogue${o.chartletId }" role="tab" data-toggle="tab" title="${o.chartletId }" name="${o.type }">${o.title }</a>
                 </li>

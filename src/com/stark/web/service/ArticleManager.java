@@ -651,6 +651,14 @@ public class ArticleManager implements IArticleManager {
 		if(chartletId>0){
 			articleDao.addRedisChartlet(chartlet);
 			articleDao.addRedisAllChartlet(RedisInfo.CHARTLETALLLIST, chartletId);
+			if(chartlet.getType()==ChartletType.Dialogue.getIndex()){
+				String key = RedisInfo.CHARTLETDIALOGUELIST;
+				articleDao.addRedisAllChartlet(key,chartlet.getChartletId());
+			}
+			else if(chartlet.getType()==ChartletType.Bubble.getIndex()){
+				String key = RedisInfo.CHARTLETBUBBLELIST;
+				articleDao.addRedisAllChartlet(key,chartlet.getChartletId());
+			}
 		}
 		return chartletId;
 	}
@@ -1209,6 +1217,12 @@ public class ArticleManager implements IArticleManager {
 				removeChartletPicture(Integer.parseInt(id));
 			}
 		}
+		
+		List<DialogueInfo> dlist = getDialogueListByChartletId(chartletId);
+		for(DialogueInfo dia : dlist){
+			deleteDialogue(dia.getDialogueId());
+		}
+		
 		boolean result = articleDao.deleteChartlet(chartletId);
 		if(result){
 			articleDao.removeRedisChartlet(chartletId);
@@ -1842,7 +1856,7 @@ public class ArticleManager implements IArticleManager {
 			for(int i=size-1;i>=0;i--){
 				ChartletInfo chartlet = list.get(i);
 				articleDao.addRedisChartlet(chartlet);
-				articleDao.addRedisAllChartlet(key,chartlet.getChartletId());
+				articleDao.addRedisAllChartletR(key,chartlet.getChartletId());
 			}
 		}
 		return list;
