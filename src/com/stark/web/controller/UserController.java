@@ -1022,6 +1022,11 @@ public class UserController {
 			
 			user.setHomeTown(multiRequest.getParameter("homeTown"));
 			
+			String email = multiRequest.getParameter("email");
+			if(email!=null&&!email.equals("")){
+				user.setEmail(email);
+			}
+			
 			Iterator<String> iter = multiRequest.getFileNames();
 
 			while (iter.hasNext()) {

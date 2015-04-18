@@ -826,6 +826,10 @@ public class UserDAO implements IUserDAO{
 		else{
 			map.put(UserInfo.HEADPIC, uInfo.getHeadPic());
 		}
+		
+		if(uInfo.getEmail()!=null){
+			map.put(UserInfo.EMAIL, uInfo.getEmail());
+		}
 		//int count = getFollowCount(uInfo.getUserId());
 		map.put(UserInfo.FOLLOWINGCOUNT, uInfo.getFollowingCount()+"");
 		//count = getFansCount(uInfo.getUserId());
