@@ -1770,7 +1770,7 @@ public class ArticleManager implements IArticleManager {
 			for(int i=size-1;i>=0;i--){
 				ChartletInfo chartlet = list.get(i);
 				articleDao.addRedisChartlet(chartlet);
-				articleDao.addRedisAllChartlet(key,chartlet.getChartletId());
+				articleDao.addRedisAllChartletR(key,chartlet.getChartletId());
 			}
 		}
 		return list;

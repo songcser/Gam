@@ -16,6 +16,7 @@ import org.hibernate.criterion.Restrictions;
 
 import com.stark.web.define.RedisInfo;
 import com.stark.web.define.EnumBase.ArticleType;
+import com.stark.web.define.EnumBase.ChartletType;
 import com.stark.web.entity.ActivityInfo;
 import com.stark.web.entity.ArticleInfo;
 import com.stark.web.entity.ArticlePublishTimeLine;
@@ -411,8 +412,10 @@ public class ArticleDAO implements IArticleDAO {
 
 	@Override
 	public List<ChartletInfo> getAllChartlet() {
-		String hql = "from ChartletInfo as c order by c.chartletId desc";
+		String hql = "from ChartletInfo as c where c.type!=:type1 and c.type!=:type2 order by c.chartletId desc";
 		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		query.setInteger("type1", ChartletType.Dialogue.getIndex());
+		query.setInteger("type2", ChartletType.UserDialogue.getIndex());
 		return query.list();
 	}
 

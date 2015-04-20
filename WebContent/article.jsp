@@ -26,23 +26,37 @@ li{
 }
 div{
     max-width: 100%; 
-    overflow:hide;
+}
+
+iframe{
+    margin: 0px; 
+    padding: 0px; 
+    width:100% !important;
+    max-width: 100% !important; 
+    height: auto !important; 
 }
 
 @media (min-width: 1200px) {
+    body{
+        background-color:#B0E2FF;
+    }
     #bodyMain{
         width:700px;
+        
     }
  }
  
- @media ( max-width : 768px) {
+@media ( max-width : 768px) {
+    body{
+        background-color:#fff
+    }
     img{
         width: 100% !important; 
     }
 }
 </style>
 </head>
-<body style="background-color:#B0E2FF">
+<body style="">
 <div id="bodyMain" style="padding-left:5px;padding-right:5px;padding-bottom:70px;padding-top:15px;background-color:#fff" class="container " >
 <article>
 ${content }
@@ -55,16 +69,18 @@ window.onload = function () {
 	var u = navigator.userAgent;
 	if (u.indexOf('Android') > -1 ||u.indexOf('iPhone') > -1||u.indexOf('Windows Phone') > -1) {//安卓手机
 		var current = $("#bodyMain") ;
-		$(current).find("img").each(function(i){ 
-		    $(this).attr("style","width: 100%"); 
-		    $(this).attr("style","height: auto"); 
-		});
+		//$(current).find("img").each(function(i){ 
+		    //$(this).attr("style","width: 100%"); 
+		    //$(this).attr("style","height: auto"); 
+		//});
 		$(current).find("iframe").load(function(i){ 
-		    //$(this).height("auto"); 
+		    $(this).height("auto"); 
 		    $(this).width($(current).width()); 
 		});
 	} 
 }
+
+
 </script>
 </body>
 </html>
