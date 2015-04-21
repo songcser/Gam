@@ -476,7 +476,12 @@ public class BackstageController {
 			List<RelChartletPicture> pictures = articleManager.getChartletPictures(chartlet.getChartletId());
 			chartlet.setPicList(pictures);
 		}
+		List<ChartletInfo> dialogues = articleManager.getDialogueList();
+		ChartletInfo uds = articleManager.getUserChartlet();
+		
+		request.setAttribute("dialogues", dialogues);
 		request.setAttribute("chartlets", chartlets);
+		request.setAttribute("userDialogues", uds);
 		return "chartlet";
 	}
 	

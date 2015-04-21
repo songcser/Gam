@@ -21,16 +21,23 @@ body {
 		<div id="chartletDiv" class="panel-group">
 			<div class="panel panel-default">
 				<div class="panel-heading" role="tab" id="headingOne">
-					<button type="button" class="btn btn-primary" data-toggle="collapse" data-parent="#chartletDiv" data-target="#wordChartlet" aria-expanded="false" aria-controls="wordChartlet"
-						id="wordChartletBtn">字帖</button>
+					
 					<button type="button" class="btn btn-primary" data-toggle="collapse" data-parent="#chartletDiv" data-target="#pictureChartlet" aria-expanded="false"
 						aria-controls="pictureChartlet" id="pictureChartletBtn">图贴</button>
+					<button type="button" class="btn btn-primary" data-toggle="collapse" data-parent="#chartletDiv" data-target="#wordChartlet" aria-expanded="false" aria-controls="wordChartlet"
+                        id="wordChartletBtn">字帖</button>
 					<button type="button" class="btn btn-primary" data-toggle="collapse" data-parent="#chartletDiv" data-target="#dialogChartlet" aria-expanded="false"
 						aria-controls="dialogChartlet" id="dialogChartletBtn" onclick="clickBubbleBtn()">气泡框</button>
 					<button type="button" class="btn btn-primary" data-toggle="collapse" data-parent="#chartletDiv" data-target="#dialogueChartlet" aria-expanded="false"
                         aria-controls="dialogueChartlet" id="dialogueChartletBtn" onclick="clickDialogueBtn()">台词</button>
+                    
 				</div>
-				<div id="wordChartlet" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+				<div id="pictureChartlet" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">
+                    <div class="panel-body">
+                            <%@include file="pictureChartlet.jsp"%>
+                    </div>
+                </div>
+				<div id="wordChartlet" class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingOne">
 					<div class="panel-body">
 						<%@include file="wordChartlet.jsp"%>
 					</div>
@@ -39,11 +46,7 @@ body {
                     <input type="hidden" id="addChartletId" name="chartletId">
                     <input type="file" id="addChartletPictureFile" name="file" onchange="addFile()" style="display: none" />
                 </form>
-				<div id="pictureChartlet" class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingTwo">
-					<div class="panel-body">
-							<%@include file="pictureChartlet.jsp"%>
-					</div>
-				</div>
+				
 				<div id="dialogChartlet" class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingThree">
 					<div class="panel-body">
 						<%@include file="bubbleChartlet.jsp"%>

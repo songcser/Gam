@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.imageio.ImageIO;
 
@@ -719,5 +720,15 @@ public class FileManager {
 	public static void deleteOss(String path) {
 		OSSClient client = getClient();
 		client.deleteObject(bucketName, path);
+	}
+	
+	public static String toGUID(){
+		UUID uuid = UUID.randomUUID();
+		return uuid.toString();
+	}
+	
+	public static String random(int seed){
+		int num = (int) (Math.random() * seed);
+		return num+"";
 	}
 }

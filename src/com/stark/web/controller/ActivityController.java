@@ -225,8 +225,8 @@ public class ActivityController {
 				if (file != null) {
 					String fileName = file.getOriginalFilename();
 					String name = file.getName();
-					System.out.println(name);
-					System.out.println(fileName);
+					//System.out.println(name);
+					//System.out.println(fileName);
 					if (fileName.equals("")||"".equals(name))
 						continue;
 					// System.out.println("File Name:"+file.getOriginalFilename());
@@ -235,11 +235,12 @@ public class ActivityController {
 					if(index>0){
 						filepix = name.substring(index);
 					}
+					fileName = FileManager.random(3)+fileName;
 					String path = FileManager.getActivityPicturePath(activityId, fileName);
-					System.out.println(path);
+					//System.out.println(path);
 					try {
 					FileManager.upload(path, file);
-					System.out.println(activityType);
+					//System.out.println(activityType);
 					if("banner".equals(activityType)){
 						activityManager.addBannerPic(activityId, fileName+filepix);
 					}

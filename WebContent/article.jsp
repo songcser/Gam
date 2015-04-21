@@ -31,7 +31,7 @@ div{
 iframe{
     margin: 0px; 
     padding: 0px; 
-    width:100% !important;
+    width:700px !important;
     max-width: 100% !important; 
     height: auto !important; 
 }
@@ -74,8 +74,8 @@ window.onload = function () {
 		    //$(this).attr("style","height: auto"); 
 		//});
 		$(current).find("iframe").load(function(i){ 
-		    $(this).height("auto"); 
-		    $(this).width($(current).width()); 
+		    //$(this).height("auto"); 
+		    //$(this).width($(current).width()); 
 		});
 	} 
 }

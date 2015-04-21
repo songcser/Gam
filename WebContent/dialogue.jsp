@@ -7,23 +7,19 @@
 </div>
 <div role="tabpanel" class="padding-big-top">
 	<ul id="dialogueUL" class="nav nav-tabs" role="tablist">
-		<c:forEach items="${chartlets }" var="o" varStatus="s">
-			<c:if test="${o.type=='3'}">
+		<c:forEach items="${dialogues }" var="o" varStatus="s">
 				<li role="presentation" id="chartletli${o.chartletId }">
 				<a href="#dialogue${o.chartletId }" aria-controls="dialogue${o.chartletId }" role="tab" data-toggle="tab" title="${o.chartletId }" name="${o.type }" >${o.title }</a>
 				</li>
-			</c:if>
 		</c:forEach>
-		<c:forEach items="${chartlets }" var="o" varStatus="s">
-            <c:if test="${o.type=='4'}">
+            <c:if test="${userDialogues!=null}">
                 <script>
                 $("#createUserDialogueBtn").remove();
                 </script>
                 <li role="presentation">
-                <a href="#dialogue${o.chartletId }" aria-controls="dialogue${o.chartletId }" role="tab" data-toggle="tab" title="${o.chartletId }" name="${o.type }">${o.title }</a>
+                <a href="#dialogue${userDialogues.chartletId }" aria-controls="dialogue${userDialogues.chartletId }" role="tab" data-toggle="tab" title="${userDialogues.chartletId }" name="${userDialogues.type }">${userDialogues.title }</a>
                 </li>
             </c:if>
-        </c:forEach>
 	</ul>
 	<div id="dialogueTabContent" class="tab-content ">
 	   <div class="row" id="editDialogueDiv">
@@ -40,24 +36,20 @@
 		</div>
 		</div>
 		</div>
-		<c:forEach items="${chartlets }" var="o" varStatus="s">
-			<c:if test="${o.type=='3'}">
+		<c:forEach items="${dialogues }" var="o" varStatus="s">
 				<div role="tabpanel" class="tab-pane margin-big-top" id="dialogue${o.chartletId }">
 				    <div class="row">
 				        <div class="col-lg-6 col-md-10 " id="dialogueList${o.chartletId }"></div>
 				    </div>
 				</div>
-			</c:if>
 		</c:forEach>
-		<c:forEach items="${chartlets }" var="o" varStatus="s">
-            <c:if test="${o.type=='4'}">
-                <div role="tabpanel" class="tab-pane margin-big-top" id="dialogue${o.chartletId }">
+            <c:if test="${userDialogues!=null}">
+                <div role="tabpanel" class="tab-pane margin-big-top" id="dialogue${userDialogues.chartletId }">
                     <div class="row">
-                        <div class="col-lg-6 col-md-10" id="dialogueList${o.chartletId }"></div>
+                        <div class="col-lg-6 col-md-10" id="dialogueList${userDialogues.chartletId }"></div>
                     </div>
                 </div>
             </c:if>
-        </c:forEach>
 	</div>
 </div>
 <script type="text/javascript">

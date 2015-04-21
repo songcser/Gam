@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<div class="modal fade" id="sliderDialog" tabindex="-1" role="dialog" aria-labelledby="sliderLabel" aria-hidden="true">
+<div class="modal " id="sliderDialog" tabindex="-1" role="dialog" aria-labelledby="sliderLabel" aria-hidden="true">
 	<div class="modal-dialog" id="sliderModalId">
 		<div class="modal-content " id="sliderContentId">
 			<div id="slidershow" class="carousel slide padding-top padding-bottom" data-ride="carousel" style="height:100%">
