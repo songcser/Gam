@@ -171,7 +171,7 @@ public class ArticleController {
 				
 			}
 			
-			addFansArticleZSet(userId);
+			addFansArticleZSet(userId,articleId);
 			map.put("articleId", articleId);
 			map.put("shareUrl", FileManager.getShareUrl(articleId));
 			Iterator<String> iter = multiRequest.getFileNames();
@@ -256,6 +256,14 @@ public class ArticleController {
 				int articleId = article.getArticleId();
 				articleManager.addSetArticleId(key,articleId,articleId+"");
 			}
+		}
+	}
+	private void addFansArticleZSet(int userId,int articleId) {
+		List<UserInfo> fans = userManager.getAllFansList(userId);
+		
+		for(UserInfo user :fans){
+			String key = RedisInfo.USERFOLLOWARTICLEZSET+user.getUserId();
+			articleManager.addSetArticleId(key,articleId,articleId+"");
 		}
 	}
 	private String filterContent(String content) {
@@ -1053,7 +1061,7 @@ public class ArticleController {
 					String path = FileManager.getArticleHtmlPath(articleId, htmlName);
 					FileManager.upload(path, is, richText.length());
 				}
-				addFansArticleZSet(userId);
+				addFansArticleZSet(userId,articleId);
 				Iterator<String> iter = multiRequest.getFileNames();
 				int i=0;
 				while (iter.hasNext()) {
