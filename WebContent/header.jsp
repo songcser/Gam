@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
 <div class="navbar navbar-inverse navbar-fixed-top " role="navigation">
   　<div class="navbar-header">
-  　    <a href="##" class="navbar-brand">友哈</a>
+  　    <a href="http://www.uha.so" class="navbar-brand">友哈</a>
   　</div>
     <ul id="navul" class="nav navbar-nav ">
        <li ><a href="toMain.do">首页</a></li>

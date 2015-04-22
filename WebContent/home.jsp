@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link type="image/ico" href="../images/favicon.ico" rel="shortcut icon" />
 <link href="../images/favicon.ico" rel="bookmark icon" />
-<title>Uha 首页</title>
+<title>友哈-首页</title>
 <link rel="stylesheet" href="../css/bootstrap.css">
 <script src="../js/jquery-1.11.2.min.js"></script>
 <style type="text/css">
