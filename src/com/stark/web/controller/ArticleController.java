@@ -1777,10 +1777,14 @@ public class ArticleController {
 		//UserInfo user = userManager.getUser(article.getUser().getUserId());
 		String path = FileManager.getArticleHtmlPath(articleId, article.getRichText());
 		String content = FileManager.getContent( path);
-		if(content==null){
-			content ="没有内容";
+		if(content==null||content.equals("")){
+			List<String> picList = articleManager.getPicListById(article.getArticleId());
+			request.setAttribute("pictures", picList);
 		}
-		request.setAttribute("content", content);
+		else {
+			request.setAttribute("content", content);
+		}
+		
 		request.setAttribute("article", article);
 		//request.setAttribute("user", user);
 		
@@ -1816,10 +1820,9 @@ public class ArticleController {
 		else {
 			String path = FileManager.getArticleHtmlPath(articleId, article.getRichText());
 			String content = FileManager.getContent( path);
-			if(content==null){
-				content ="没有内容";
-			}
+			//if(content!=null){
 			request.setAttribute("content", content);
+			//}
 		}
 		request.setAttribute("article", article);
 		request.setAttribute("user", user);

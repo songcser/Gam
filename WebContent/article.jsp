@@ -59,6 +59,16 @@ iframe{
 <body style="">
 <div id="bodyMain" style="padding-left:5px;padding-right:5px;padding-bottom:70px;padding-top:15px;background-color:#fff" class="container " >
 <article>
+ <c:if test="${content!=null }">
+              ${content }
+          </c:if>
+          <c:if test="${content==null }">
+              <c:forEach items="${pictures }" var="pic">
+                    <div style="margin-top:10px">
+                        <img style="max-width: 100% !important" alt="" src="${pic }" />
+                    </div>
+                </c:forEach>
+          </c:if>
 ${content }
 </article>
 </div>

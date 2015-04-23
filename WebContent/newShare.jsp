@@ -119,7 +119,16 @@ div.iconDiv {
 			</c:if>
 		</c:if> 
 		<c:if test="${type==1 }">
-			<div style="margin-left:5px;margin-right:5px">${content }</div>
+		  <c:if test="${content!=null }">
+		      <div style="margin-left:5px;margin-right:5px">${content }</div>
+		  </c:if>
+		  <c:if test="${content==null }">
+		      <c:forEach items="${pictures }" var="pic">
+                    <div class="margin">
+                        <img style="max-width: 100% !important" alt="" src="${pic }" />
+                    </div>
+                </c:forEach>
+		  </c:if>
 		</c:if> 
 		</article>
 		<div class="iconDiv ">
