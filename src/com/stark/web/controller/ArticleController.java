@@ -1820,9 +1820,9 @@ public class ArticleController {
 		else {
 			String path = FileManager.getArticleHtmlPath(articleId, article.getRichText());
 			String content = FileManager.getContent( path);
-			//if(content!=null){
-			request.setAttribute("content", content);
-			//}
+			if(content!=null&&!content.equals("")){
+				request.setAttribute("content", content);
+			}
 		}
 		request.setAttribute("article", article);
 		request.setAttribute("user", user);
