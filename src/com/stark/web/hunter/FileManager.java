@@ -53,7 +53,7 @@ public class FileManager {
 
 	private static Logger logger = Logger.getLogger(FileManager.class);
 	private static OSSClient ossClient;
-	private final static String bucketName = "starktest";
+	private final static String bucketName = "starkpet";
 	//private final static String shareUrl = "http://www.uha.so/";
 	// private static String url = "http://192.168.10.107/";
 	private final static String url = "http://" + bucketName + ".oss-cn-hangzhou.aliyuncs.com/";
@@ -290,6 +290,7 @@ public class FileManager {
 		try {
 			OSSClient client = getClient();
 			ObjectMetadata meta = new ObjectMetadata();
+			meta.setContentType("utf-8");
 			meta.setContentLength(length);
 			result = client.putObject(bucketName, key, input, meta);
 		} catch (Exception e) {
@@ -687,7 +688,7 @@ public class FileManager {
 			while ((i = objectContent.read()) != -1) {  
 			    baos.write(i);  
 			}  
-			String content = baos.toString();
+			String content = baos.toString("UTF-8");
 			// 处理 Object
 			
 			// 关闭流

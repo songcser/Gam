@@ -29,6 +29,7 @@ import javax.imageio.ImageReader;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -74,6 +75,7 @@ import com.stark.web.service.WordFilter;
 @RequestMapping("/article")
 public class ArticleController {
 
+	private static Logger logger = Logger.getLogger(FileManager.class);
 	private static int maxResults = 10;
 	private static int maxResults2 = 20;
 	private static String ourShareUrl = "/article/outsideShare?articleId=";
@@ -1055,11 +1057,13 @@ public class ArticleController {
 					out.close();
 					return ;
 				}
+				//logger.error(richText);
 				if(richText!=null){
-					InputStream is = new ByteArrayInputStream(richText.getBytes());
+					byte[] bytes = richText.getBytes("UTF-8");
+					InputStream is = new ByteArrayInputStream(bytes);
 					
 					String path = FileManager.getArticleHtmlPath(articleId, htmlName);
-					FileManager.upload(path, is, richText.length());
+					FileManager.upload(path, is, bytes.length);
 				}
 				addFansArticleZSet(userId,articleId);
 				Iterator<String> iter = multiRequest.getFileNames();

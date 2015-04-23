@@ -136,7 +136,7 @@ div.iconDiv {
                 <img id="logImg" class="pull-left" style="margin-left:15px" src="../images/LOGO-ok.png">
                 <div id="downText" class=" pull-left margin-left">
                     <p  >Uha</p>
-                    <p style="">蓝星人的新鲜事</p>
+                    <p style="">这个世界我哈过</p>
                 </div>
                 <div id="downloadDiv" class="pull-right">
                     <a href="javascript:downloadApp()"><img id="downloadImg" src="../images/download3.png"></a>
