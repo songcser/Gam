@@ -173,6 +173,38 @@ window.onload = function () {
         $(this).width($(current).width()); 
     });
 }
+function isWeiXin() {
+    var ua = window.navigator.userAgent.toLowerCase();
+    if (ua.match(/MicroMessenger/i) == 'micromessenger') {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function downloadApp() {
+    //window.location.href="http://www.uha.so/"; 
+    window.location.href="http://a.app.qq.com/o/simple.jsp?pkgname=com.starkpet.pa";
+    /*
+    if (!isWeiXin()) {
+        window.location.href="http://www.uha.so/"; 
+        
+    } else {
+        //$("#guidePic").css({
+        //    display : "block"
+        //});
+        var u = navigator.userAgent;
+        if (u.indexOf('Android') > -1 || u.indexOf('Linux') > -1) {//安卓手机
+         window.location.href = "http://a.app.qq.com/o/simple.jsp?pkgname=com.starkpet.pa";
+        } else if (u.indexOf('iPhone') > -1) {//苹果手机
+         window.location.href = "https://itunes.apple.com/cn/app/uha-chong-wu-meng-you-she-qun/id959345766?mt=8";
+        } else if (u.indexOf('Windows Phone') > -1) {//winphone手机
+        alert("winphone手机现不支持,谢谢");
+        // window.location.href = "mobile/index.html";
+        }
+
+    }*/
+}
 </script>
 </body>
 </html>

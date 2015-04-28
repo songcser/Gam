@@ -7,9 +7,9 @@
 	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<!--<property name="driverClass" value="net.bull.javamelody.JdbcDriver"/> -->
 		<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-		<property name="url" value="jdbc:mysql://rds73irf2uyzzi2.mysql.rds.aliyuncs.com:3306/starkpet"/>
-		<property name="username" value="stark"/>
-		<property name="password" value="STark3peT"/>
+		<property name="url" value="jdbc:mysql://localhost:3306/starkpet"/>
+		<property name="username" value="root"/>
+		<property name="password" value="starkpet"/>
 	</bean>
 	
 	<!--
