@@ -430,6 +430,7 @@ public class BackstageController {
 		List<UserInfo> operators = userManager.getOperatiors();
 		request.setAttribute("operations", operators);
 		request.setAttribute("userList", list);
+		request.setAttribute("roles", UserRole.values());
 		return "user";
 	}
 	

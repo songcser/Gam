@@ -117,7 +117,15 @@
 	                $("#signature").val(user.signature);
 	                // alert(user.role);
 	                $("#email").val(user.email);
-	                $("#role").val(user.role);
+	                if(user.role=="0"){
+	                	$("#role").empty();
+	                	var option = $("<option>").val(0).text("普通用户");
+	                	$("#role").append(option)
+	                }
+	                else{
+	                	$("#role").val(user.role);
+	                }
+	                
 	                $("#phoneNumber").val(user.phoneNumber);
 	                $("#password").val('');
 	                pwd = user.password;
