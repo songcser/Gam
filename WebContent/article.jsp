@@ -36,6 +36,11 @@ iframe{
     height: auto !important; 
 }
 
+video{
+    background:#000;
+    max-width:100% !important;
+}
+
 @media (min-width: 1200px) {
     body{
         background-color:#B0E2FF;

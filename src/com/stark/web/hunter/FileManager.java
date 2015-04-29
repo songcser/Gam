@@ -291,6 +291,7 @@ public class FileManager {
 			OSSClient client = getClient();
 			ObjectMetadata meta = new ObjectMetadata();
 			meta.setContentType("utf-8");
+			meta.setCacheControl(2592000+"");
 			meta.setContentLength(length);
 			result = client.putObject(bucketName, key, input, meta);
 		} catch (Exception e) {
@@ -388,7 +389,7 @@ public class FileManager {
 				return "";
 			}
 			String suffix = MIMEType.getSuffix( connection.getContentType() );
-			FileManager.uploadoss(path+suffix, connection.getInputStream(), connection.getContentLength());
+			uploadoss(path+suffix, connection.getInputStream(), connection.getContentLength());
 			return suffix;
 			
 		} catch (IOException e) {

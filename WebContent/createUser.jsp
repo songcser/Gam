@@ -50,6 +50,13 @@
 									</c:if>
 								</c:forEach>
 							</c:if>
+							<c:if test="${user.role=='0' }">
+							     <c:forEach items="${roles }" var="o">
+                                    <c:if test="${o.index=='0'}">
+                                        <option value="${o.index}">${o.name}</option>
+                                    </c:if>
+                                </c:forEach>
+							</c:if>
 						</c:if>
 					</select>
 				</div>
