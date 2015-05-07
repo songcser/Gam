@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Uha 宠物萌友社群</title>
+<title>友哈 这个世界我哈过</title>
 <link rel="stylesheet" href="../css/bootstrap.css">
 <style type="text/css">
 * {

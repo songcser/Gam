@@ -122,7 +122,7 @@ public class ArticleController {
 			
 			String activityId = request.getParameter("activityId");
 			
-			System.out.println(activityId);
+			//System.out.println(activityId);
 			MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
 			int userId = Integer.parseInt(multiRequest.getParameter("userId"));
 			UserInfo user = userManager.getUser(userId);
@@ -248,17 +248,6 @@ public class ArticleController {
 		
 		map.put("result", 1);
 		return map;
-	}
-	private void addFansArticleZSet(int userId) {
-		List<UserInfo> fans = userManager.getAllFansList(userId);
-		String key = RedisInfo.USERFOLLOWARTICLEZSET+userId;
-		for(UserInfo user :fans){
-			List<ArticleInfo> articles = articleManager.getAllArticleByUserId(user.getUserId());
-			for(ArticleInfo article:articles){
-				int articleId = article.getArticleId();
-				articleManager.addSetArticleId(key,articleId,articleId+"");
-			}
-		}
 	}
 	private void addFansArticleZSet(int userId,int articleId) {
 		List<UserInfo> fans = userManager.getAllFansList(userId);

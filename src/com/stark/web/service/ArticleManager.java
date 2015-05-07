@@ -975,14 +975,17 @@ public class ArticleManager implements IArticleManager {
 				
 				int userId = article.getUser().getUserId();
 				List<UserInfo> fans = userManager.getAllFansList(userId);
-				String key = RedisInfo.USERFOLLOWARTICLEZSET+userId;
+				
 				for(UserInfo user :fans){
-					List<ArticleInfo> articles = getAllArticleByUserId(user.getUserId());
-					for(ArticleInfo a:articles){
-						int aid = a.getArticleId();
-						removeSetArticleId(key,aid+"");
-					}
+					String key = RedisInfo.USERFOLLOWARTICLEZSET+user.getUserId();
+					//List<ArticleInfo> articles = getAllArticleByUserId(user.getUserId());
+					//for(ArticleInfo a:articles){
+					//	int aid = a.getArticleId();
+					removeSetArticleId(key,articleId+"");
+					//}
 				}
+				String key = RedisInfo.USERFOLLOWARTICLEZSET+userId;
+				removeSetArticleId(key,articleId+"");
 				//articleDao.removeRedisArticleList(RedisInfo.ARTICLEMOMENTLIST, articleId);
 			}
 			else if(type==ArticleType.ActivityExquisite.getIndex()){

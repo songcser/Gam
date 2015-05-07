@@ -57,6 +57,8 @@ public class FileManager {
 	//private final static String shareUrl = "http://www.uha.so/";
 	// private static String url = "http://192.168.10.107/";
 	private final static String url = "http://" + bucketName + ".oss-cn-hangzhou.aliyuncs.com/";
+	//private final static String url = "http://image.uha.so/";
+	
 	private final static String localPath = "/home/stark/FileStore/";
 	private final static String webIcon = "http://www.uha.so/icon/uha.ico";
 
@@ -547,7 +549,6 @@ public class FileManager {
 				}
 			}
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 
