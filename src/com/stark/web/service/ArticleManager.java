@@ -1378,8 +1378,15 @@ public class ArticleManager implements IArticleManager {
 		List<String> pics = getPicListById(articleId);
 		aMap.put("pictures", pics);
 		aMap.put("browseCount", article.getBrowseCount());
-		
+		String richText = article.getRichText();
+		if(richText==null||richText.equals("")||!richText.endsWith(".html")){
+			aMap.put("htmlUrl", FileManager.getHtmlUrl(articleId));
+		}
+		else {
+			aMap.put("htmlUrl", FileManager.getHtmlUrl(articleId,richText));
+		}
 		aMap.put("url", FileManager.getHtmlUrl(articleId));
+		//aMap.put("htmlUrl", FileManager.getHtmlUrl2(articleId));
 		aMap.put("shareUrl", FileManager.getShareUrl(articleId));
 		//aMap.put("articles", aMap);
 		return aMap;
@@ -1892,5 +1899,15 @@ public class ArticleManager implements IArticleManager {
 	public String getValue(String key) {
 		
 		return articleDao.getRedisString(key);
+	}
+
+	@Override
+	public void createArticleHtml() {
+		List<ArticleInfo> list = articleDao.getHtmlArticleList();
+		for(ArticleInfo article :list){
+			int articleId = article.getArticleId();
+			String path = FileManager.getArticleHtmlPath(articleId, article.getRichText());
+			String content = FileManager.getContent( path);
+		}
 	}
 }

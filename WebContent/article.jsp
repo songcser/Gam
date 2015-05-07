@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>${article.title }</title>
-<link rel="stylesheet" href="../css/bootstrap.min.css">
+
 <style type="text/css">
 img{
     margin: 0px; 
@@ -62,7 +62,7 @@ video{
 </style>
 </head>
 <body style="">
-<div id="bodyMain" style="padding-left:5px;padding-right:5px;padding-bottom:70px;padding-top:15px;background-color:#fff" class="container " >
+<div id="bodyMain" style="margin:auto;padding-left:5px;padding-right:5px;padding-bottom:70px;padding-top:15px;background-color:#fff"  >
 <article>
  <c:if test="${content!=null }">
               ${content }

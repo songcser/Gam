@@ -724,7 +724,7 @@ public class FileManager {
 	}
 
 	public static Object getHtmlUrl(int articleId) {
-		return shareUrl +"article/showArticleDetial.do?articleId="+articleId;
+		return "/article/showArticleDetial.do?articleId="+articleId;
 	}
 
 	public static void deleteOss(String path) {
@@ -740,5 +740,17 @@ public class FileManager {
 	public static String random(int seed){
 		int num = (int) (Math.random() * seed);
 		return num+"";
+	}
+
+	public static String getHtmlUrl(int articleId,String path) {
+		return url +"Article/html/"+articleId+"/"+path;
+	}
+
+	public static String getPreRichText() {
+		StringBuilder pre = new StringBuilder();
+		pre.append("<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">");
+		pre.append("<html><head>");
+		pre.append("");
+		return pre.toString();
 	}
 }

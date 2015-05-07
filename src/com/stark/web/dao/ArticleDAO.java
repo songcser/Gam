@@ -1434,4 +1434,11 @@ public class ArticleDAO implements IArticleDAO {
 			return ;
 		redisDao.rpush(key, chartletId+"");
 	}
+
+	@Override
+	public List<ArticleInfo> getHtmlArticleList() {
+		String hql = "from ArticleInfo as a where a.richText!='' and a.richText!=null";
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		return query.list();
+	}
 }

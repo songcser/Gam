@@ -18,7 +18,21 @@
 			    autoFloatEnabled: true
 	});
 	function setRichTextContent(){
-		$("#richTextContent").val(ue.getContent());
+		var content = ue.getContent();
+		
+		var pre = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">'
+			  + '<html><head>'
+			  + '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">'
+			  + '<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">'
+			  + '<title>'+$("#title").val()+'</title>'
+			  + '<link rel="stylesheet" href="http://image.uha.so/Article/web/css/article.css">'
+			  + '</head>'
+			  + '<body>'
+			  + '<div id="bodyMain" style="margin:auto;padding-left:5px;padding-right:5px;padding-bottom:70px;padding-top:15px;background-color:#fff">'
+			  + '<article>';
+		var foot = '</article></div></body></html>';
+		content = pre + content + foot;
+		$("#richTextContent").val(content);
 	}
 	
 	function resetRichTextContent(){

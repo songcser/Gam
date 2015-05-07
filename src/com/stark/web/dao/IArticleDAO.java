@@ -268,4 +268,6 @@ public interface IArticleDAO {
 
 	public void addRedisAllChartletR(String key, int chartletId);
 
+	public List<ArticleInfo> getHtmlArticleList();
+
 }

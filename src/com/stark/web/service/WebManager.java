@@ -310,6 +310,22 @@ public class WebManager {
 		return outTag(title);
 	}
 	
+	public static String getHtmlArticle(String str) {
+		String regex;
+		String title = "";
+		final List<String> list = new ArrayList<String>();
+		regex = "<article.*?</article>";
+		final Pattern pa = Pattern.compile(regex, Pattern.CANON_EQ);
+		final Matcher ma = pa.matcher(str);
+		while (ma.find()) {
+			list.add(ma.group());
+		}
+		for (int i = 0; i < list.size(); i++) {
+			title = title + list.get(i);
+		}
+		return outTag(title);
+	}
+	
 	private static String outTag(final String s) {
 		return s.replaceAll("<.*?>", "");
 	}

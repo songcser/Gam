@@ -1034,7 +1034,7 @@ public class ArticleController {
 				String richText = multiRequest.getParameter("richText");
 				
 				SimpleDateFormat sdf = WebManager.getDateFormat();
-				String htmlName = sdf.format(new Date());
+				String htmlName = sdf.format(new Date())+".html";
 				article.setRichText(htmlName);
 				
 				int articleId = articleManager.addArticle(article);
@@ -1048,6 +1048,7 @@ public class ArticleController {
 				}
 				//logger.error(richText);
 				if(richText!=null){
+					//String preRichText = FileManager.getPreRichText();
 					byte[] bytes = richText.getBytes("UTF-8");
 					InputStream is = new ByteArrayInputStream(bytes);
 					
@@ -1811,9 +1812,13 @@ public class ArticleController {
 			request.setAttribute("pictures", picList);
 		}
 		else {
-			String path = FileManager.getArticleHtmlPath(articleId, article.getRichText());
+			String richText = article.getRichText();
+			String path = FileManager.getArticleHtmlPath(articleId, richText);
 			String content = FileManager.getContent( path);
 			if(content!=null&&!content.equals("")){
+				if(richText.endsWith(".html")){
+					content = WebManager.getHtmlArticle(content);
+				}
 				request.setAttribute("content", content);
 			}
 		}
@@ -1823,5 +1828,13 @@ public class ArticleController {
 		request.setAttribute("type", articleType);
 		//System.out.println(pics.size());
 		return "newShare";
+	}
+	
+	@RequestMapping("createArticleHtml.do")
+	@ResponseBody
+	public Map<String,Object> createArticleHtml(){
+		Map<String,Object> map = new HashMap<String,Object>();
+		articleManager.createArticleHtml();
+		return map;
 	}
 }

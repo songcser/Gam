@@ -191,4 +191,6 @@ public interface IArticleManager {
 
 	public String getValue(String key);
 
+	public void createArticleHtml();
+
 }
