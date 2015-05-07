@@ -1458,7 +1458,7 @@ public class ArticleController {
 	
 	@RequestMapping("getRecommendList2.0.do")
 	@ResponseBody
-	public Map<String,Object> getRecommendList2(int userId,int page){
+	public Map<String,Object> getRecommendList2(Integer userId,int page){
 		//System.out.println(userId);
 		Map<String,Object> map = new HashMap<String,Object>();
 		map = articleManager.getRecommendList(userId,page,maxResults2);
@@ -1467,7 +1467,7 @@ public class ArticleController {
 	
 	@RequestMapping("getShowArticleList2.0.do")
 	@ResponseBody
-	public Map<String,Object> getShowArticleList2(int showId,int userId,int page){
+	public Map<String,Object> getShowArticleList2(int showId,Integer userId,int page){
 		Map<String,Object> map = articleManager.getShowArticleList(showId,userId,page,maxResults2);
 		ActivityInfo act = activityManager.getActivity(showId);
 		if (page == 0) {

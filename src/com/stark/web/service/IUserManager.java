@@ -134,4 +134,6 @@ public interface IUserManager {
 
 	public int getOrganizationCount();
 
+	public void uploadQQHeadPic();
+
 }

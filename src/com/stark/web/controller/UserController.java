@@ -1488,4 +1488,12 @@ public class UserController {
 		map.put("users", list);
 		return map;
 	}
+	
+	@RequestMapping("uploadQQHeadPic.do")
+	@ResponseBody
+	public Map<String,Object> uploadQQHeadPic(){
+		Map<String,Object> map = new HashMap<String,Object>();
+		userManager.uploadQQHeadPic();
+		return map;
+	}
 }

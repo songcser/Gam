@@ -946,5 +946,13 @@ public class UserManager implements IUserManager{
 		return Integer.parseInt(count);
 	}
 
+	@Override
+	public void uploadQQHeadPic() {
+		//SimpleDateFormat sdf = WebManager.getDateFormat();
+		//String imageName = sdf.format(new Date());
+		//String path = FileManager.getUserPicturePath(userId, imageName);
+		String suffix = FileManager.uploadURL("User/Temp", "http://wx.qlogo.cn/mmopen/PiajxSqBRaEIfMCtGDicyQJq4sqtJhWOPYPLCJLImwLmqr3kM59GzxmCdTQKubfo0Ve6mkQ0pdpYg4Wib5FwYia4GQ/0");
+	}
+
 	
 }

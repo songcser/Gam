@@ -970,6 +970,7 @@ public class ArticleManager implements IArticleManager {
 				articleDao.addRedisArticleId(RedisInfo.ARTICLEDELETELIST, articleId);
 				articleDao.removeRedisArticleList(RedisInfo.ARTICLEMOMENTLIST, articleId);
 				articleDao.removeRedisArticleList(RedisInfo.ARTICLERECOMMENDLIST, articleId);
+				articleDao.removeRedisArticleList(RedisInfo.ARTICLENOAUDITINGMOMENTLIST,articleId);
 				articleDao.removeRedisArticleList(RedisInfo.ACTIVITYARTICLEALLLIST+showId, articleId);
 				articleDao.removeRedisArticleList(RedisInfo.ACTIVITYARTICLEAUDITINGLIST+showId, articleId);
 				

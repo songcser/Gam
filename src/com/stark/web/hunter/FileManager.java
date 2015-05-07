@@ -59,6 +59,9 @@ public class FileManager {
 	private final static String url = "http://" + bucketName + ".oss-cn-hangzhou.aliyuncs.com/";
 	//private final static String url = "http://image.uha.so/";
 	
+	private final static String shareUrl = "http://192.168.1.125:8080/StarkPet/";
+	//private final static String shareUrl = "http://www.uha.so/StarkPet";
+	
 	private final static String localPath = "/home/stark/FileStore/";
 	private final static String webIcon = "http://www.uha.so/icon/uha.ico";
 
@@ -386,12 +389,16 @@ public class FileManager {
 			connection = (HttpURLConnection) url.openConnection();
 			connection.setInstanceFollowRedirects( true );
 			connection.setUseCaches( true );
+			int timeout = 1000*60*3;
+			connection.setConnectTimeout(timeout);
+			connection.setReadTimeout(timeout);
 			
 			if ( connection.getResponseCode() !=HttpURLConnection.HTTP_OK) {
 				return "";
 			}
 			String suffix = MIMEType.getSuffix( connection.getContentType() );
-			uploadoss(path+suffix, connection.getInputStream(), connection.getContentLength());
+			int len = connection.getContentLength();
+			uploadoss(path+suffix, connection.getInputStream(),len );
 			return suffix;
 			
 		} catch (IOException e) {
@@ -717,7 +724,7 @@ public class FileManager {
 	}
 
 	public static Object getHtmlUrl(int articleId) {
-		return "/article/showArticleDetial.do?articleId="+articleId;
+		return shareUrl +"article/showArticleDetial.do?articleId="+articleId;
 	}
 
 	public static void deleteOss(String path) {
