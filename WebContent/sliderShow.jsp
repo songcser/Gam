@@ -2,7 +2,7 @@
 <div class="modal " id="sliderDialog" tabindex="-1" role="dialog" aria-labelledby="sliderLabel" aria-hidden="true">
 	<div class="modal-dialog" id="sliderModalId">
 		<div class="modal-content " id="sliderContentId">
-			<div id="slidershow" class="carousel slide padding-top padding-bottom" data-ride="carousel" style="height:100%">
+			<div id="slidershow" class="carousel slide padding-top padding-bottom"  style="height:100%">
 				<!-- 设置图片轮播的顺序 -->
 				<ol class="carousel-indicators" id="carouselIndicators">
 					
@@ -11,8 +11,8 @@
 				<div class="carousel-inner " style="height:100%" id="carouselinner">
 					
 				</div>
-				<a class="left carousel-control " href="#slidershow" role="button" data-slide="prev"> <span class="glyphicon glyphicon-chevron-left"></span>
-				</a> <a class="right carousel-control" href="#slidershow" role="button" data-slide="next"> <span class="glyphicon glyphicon-chevron-right"></span>
+				<a class="left carousel-control " href="javascript:sliderShowPrev()" role="button" data-slide="prev"> <span class="glyphicon glyphicon-chevron-left"></span>
+				</a> <a class="right carousel-control" href="javascript:sliderShowNext()" role="button" data-slide="next"> <span class="glyphicon glyphicon-chevron-right"></span>
 				</a>
 			</div>
 		</div>
@@ -45,4 +45,14 @@ document.getElementById("sliderModalId").style.width=width+"px";
 			$("#carouselinner").append(itemDiv);
 		}
 	}
+	
+	function sliderShowPrev(){
+		$("#slidershow").carousel('prev');
+	}
+	function sliderShowNext(){
+		$("#slidershow").carousel('next');
+	}
+	$('#sliderDialog').on('hidden.bs.modal', function (e) {
+		$("#slidershow").carousel('pause');
+	})
 </script>

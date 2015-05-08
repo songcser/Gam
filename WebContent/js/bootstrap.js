@@ -434,7 +434,9 @@ if (typeof jQuery === 'undefined') {
     var slidEvent = $.Event('slid.bs.carousel', { relatedTarget: relatedTarget, direction: direction }) // yes, "slid"
     if ($.support.transition && this.$element.hasClass('slide')) {
       $next.addClass(type)
-      $next[0].offsetWidth // force reflow
+      if($next[0]!=undefined&&$next[0].offsetWidth!=undefined){
+    	  $next[0].offsetWidth
+      } // force reflow
       $active.addClass(direction)
       $next.addClass(direction)
       $active
