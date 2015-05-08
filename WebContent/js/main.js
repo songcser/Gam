@@ -116,7 +116,7 @@ function createMediaDiv(art){
 	var title = art.title;
 	
 	if(title!=""){
-		mediaBody.append('<p ><a href="../article/showArticleDetial.do?articleId='+art.articleId+'" target="_blank" class="text-big text-muted">标题: '+title+'</a></p>');
+		mediaBody.append('<p ><a href="'+art.htmlUrl+'" target="_blank" class="text-big text-muted">标题: '+title+'</a></p>');
 	}
 	mediaBody.append('<p>'+art.content+'</p>');
 	mediaDiv.append(mediaBody);

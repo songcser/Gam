@@ -726,6 +726,10 @@ public class FileManager {
 	public static Object getHtmlUrl(int articleId) {
 		return "/article/showArticleDetial.do?articleId="+articleId;
 	}
+	
+	public static Object getHtmlUrl2(int articleId){
+		return shareUrl + "article/showArticleDetial.do?articleId="+articleId;
+	}
 
 	public static void deleteOss(String path) {
 		OSSClient client = getClient();

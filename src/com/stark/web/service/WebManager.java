@@ -310,7 +310,7 @@ public class WebManager {
 		return outTag(title);
 	}
 	
-	public static String getHtmlArticle(String str) {
+	public static String getHtmlArticlePattern(String str) {
 		String regex;
 		String title = "";
 		final List<String> list = new ArrayList<String>();
@@ -324,6 +324,13 @@ public class WebManager {
 			title = title + list.get(i);
 		}
 		return outTag(title);
+	}
+	
+	public static String getHtmlArticle(String str){
+		int beginIndex = str.indexOf("<article>");
+		int endIndex = str.indexOf("</article>");
+		
+		return str.substring(beginIndex, endIndex);
 	}
 	
 	private static String outTag(final String s) {

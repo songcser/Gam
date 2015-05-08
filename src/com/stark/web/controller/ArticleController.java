@@ -1797,7 +1797,7 @@ public class ArticleController {
 		int articleType = 0;
 		
 		int type = article.getType();
-		if(type==ArticleType.DayExquisite.getIndex()||type==ArticleType.ExquisiteMagazine.getIndex()
+		if(type==ArticleType.DayExquisite.getIndex()||type==ArticleType.ExquisiteMagazine.getIndex()||type==ArticleType.ExquisiteNoAuditing.getIndex()
 				||type==ArticleType.ExquisiteMagazineReport.getIndex()||type==ArticleType.DayExquisiteReport.getIndex()){
 			articleType = 1;
 		}
@@ -1807,6 +1807,7 @@ public class ArticleController {
 				articleType = 1;
 			}
 		}
+		System.out.println(articleType);
 		if(articleType==0){
 			List<String> picList = articleManager.getPicListById(article.getArticleId());
 			request.setAttribute("pictures", picList);
@@ -1817,8 +1818,10 @@ public class ArticleController {
 			String content = FileManager.getContent( path);
 			if(content!=null&&!content.equals("")){
 				if(richText.endsWith(".html")){
+					//System.out.println("####"+content);
 					content = WebManager.getHtmlArticle(content);
 				}
+				//System.out.println("$$$$"+content);
 				request.setAttribute("content", content);
 			}
 		}

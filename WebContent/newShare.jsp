@@ -12,6 +12,38 @@
     padding:0px;
     margin:0px;
 }
+img{
+    margin: 0px; 
+    padding: 0px; 
+    max-width: 100%; 
+    height: auto !important; 
+    box-sizing: border-box !important; 
+    word-wrap: break-word !important; 
+    visibility: visible !important;
+}
+ul{
+    margin: 0px; 
+    padding: 0px; 
+}
+li{
+    list-style-type:none
+}
+div{
+    max-width: 100%; 
+}
+
+iframe{
+    margin: 0px; 
+    padding: 0px; 
+    width:700px !important;
+    max-width: 100% !important; 
+    height: auto !important; 
+}
+
+video{
+    background:#000;
+    max-width:100% !important;
+}
 div.iconDiv {
     position: fixed;
     bottom: 0px;

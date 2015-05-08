@@ -1380,7 +1380,7 @@ public class ArticleManager implements IArticleManager {
 		aMap.put("browseCount", article.getBrowseCount());
 		String richText = article.getRichText();
 		if(richText==null||richText.equals("")||!richText.endsWith(".html")){
-			aMap.put("htmlUrl", FileManager.getHtmlUrl(articleId));
+			aMap.put("htmlUrl", FileManager.getHtmlUrl2(articleId));
 		}
 		else {
 			aMap.put("htmlUrl", FileManager.getHtmlUrl(articleId,richText));
