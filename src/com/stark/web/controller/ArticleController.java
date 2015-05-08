@@ -1807,7 +1807,7 @@ public class ArticleController {
 				articleType = 1;
 			}
 		}
-		System.out.println(articleType);
+		//System.out.println(articleType);
 		if(articleType==0){
 			List<String> picList = articleManager.getPicListById(article.getArticleId());
 			request.setAttribute("pictures", picList);
@@ -1825,6 +1825,12 @@ public class ArticleController {
 				request.setAttribute("content", content);
 			}
 		}
+		String title = article.getTitle();
+		if(title==null||title.equals("")){
+			title = "UHA 这个世界我哈过";
+		}
+		
+		request.setAttribute("title", title);
 		request.setAttribute("article", article);
 		request.setAttribute("user", user);
 		request.setAttribute("date", sdf.format(article.getDate()));

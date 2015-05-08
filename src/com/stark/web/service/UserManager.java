@@ -927,7 +927,7 @@ public class UserManager implements IUserManager{
 		List<UserInfo> list = idsToUserList(ids);
 		if(list!=null&&!list.isEmpty())
 			return list;
-		List<UserInfo> users = userDao.getPraiseUser(articleId);
+		List<UserInfo> users = userDao.getPraiseUser(articleId,page,maxUserCount);
 		if(users!=null&&!users.isEmpty()){
 			for(UserInfo user:users)
 			userDao.addRedisUsers(key, user.getUserId());

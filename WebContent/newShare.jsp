@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>友哈 这个世界我哈过</title>
+<title>${title }</title>
 <link rel="stylesheet" href="../css/bootstrap.css">
 <style type="text/css">
 * {
@@ -167,7 +167,7 @@ div.iconDiv {
             <div >
                 <img id="logImg" class="pull-left" style="margin-left:15px" src="../images/LOGO-ok.png">
                 <div id="downText" class=" pull-left margin-left">
-                    <p  >Uha</p>
+                    <p  >UHA</p>
                     <p style="">这个世界我哈过</p>
                 </div>
                 <div id="downloadDiv" class="pull-right">

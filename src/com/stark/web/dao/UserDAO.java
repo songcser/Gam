@@ -1107,6 +1107,17 @@ public class UserDAO implements IUserDAO{
 		redisDao.set(key, value);
 	}
 
+	@Override
+	public List<UserInfo> getPraiseUser(int articleId, int page, int maxUserCount) {
+		String hql = "select u from UserInfo as u join u.praiseArticle as a where a.articleId = ?";
+		//String sql = "select u.* from USERINFO as u,ARTICLEINFO as a,RELARTICLEINFO as rel where u.Id = rel.USERID and rel.ARTICLEID = a.ID and a.ID = ?";
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		query.setInteger(0, articleId);
+		query.setFirstResult(page*maxUserCount);
+		query.setMaxResults(maxUserCount);
+		return query.list();
+	}
+
 
 	
 }
