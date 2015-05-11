@@ -1268,6 +1268,23 @@ public class ArticleManager implements IArticleManager {
 		}
 		for(int i=0;i<fromList.size();i++){
 			ArticleInfo article = fromList.get(i);
+			if(article.getType()==ArticleType.Delete.getIndex()){
+				continue;
+			}
+			articleDao.addRedisArticle(article);
+			articleDao.addRedisArticleIdR(key, article.getArticleId());
+			//setArticleCount(article);
+			toList.add(article);
+		}
+		return true;
+	}
+	
+	private boolean listToListAndAddRedisIdNoDelete(String key,List<ArticleInfo> fromList,List<ArticleInfo> toList) {
+		if(fromList==null){
+			return false;
+		}
+		for(int i=0;i<fromList.size();i++){
+			ArticleInfo article = fromList.get(i);
 			articleDao.addRedisArticle(article);
 			articleDao.addRedisArticleIdR(key, article.getArticleId());
 			//setArticleCount(article);
@@ -1277,6 +1294,18 @@ public class ArticleManager implements IArticleManager {
 	}
 
 	private int idsToArticleList(List<String> ids, List<ArticleInfo> list) {
+		if(ids!=null&&!ids.isEmpty()){
+    		for(String id:ids){
+    			ArticleInfo article = getArticle(Integer.parseInt(id));
+    			if(article!=null&&article.getType()!=ArticleType.Delete.getIndex()){
+    				list.add(article);
+    			}
+    		}
+    		return ids.size();
+		}
+		return 0;
+	}
+	private int idsToArticleListNoDelete(List<String> ids, List<ArticleInfo> list) {
 		if(ids!=null&&!ids.isEmpty()){
     		for(String id:ids){
     			ArticleInfo article = getArticle(Integer.parseInt(id));
@@ -1490,6 +1519,9 @@ public class ArticleManager implements IArticleManager {
 		}
 		for(int i=0;i<fromList.size();i++){
 			ArticleInfo article = fromList.get(i);
+			if(article.getType()==ArticleType.Delete.getIndex()){
+				continue;
+			}
 			articleDao.addRedisArticle(article);
 			int articleId = article.getArticleId();
 			
@@ -1508,7 +1540,7 @@ public class ArticleManager implements IArticleManager {
 		if(ids!=null&&!ids.isEmpty()){
     		for(String id:ids){
     			ArticleInfo article = getArticle(Integer.parseInt(id));
-    			if(article!=null){
+    			if(article!=null&&article.getType()!=ArticleType.Delete.getIndex()){
     				list.add(article);
     			}
     		}
@@ -1523,7 +1555,7 @@ public class ArticleManager implements IArticleManager {
 		Map<String, Object> map = new HashMap<String,Object>();
 		String key = RedisInfo.USERCOLLECTIONLIST+userId;
 		List<String> ids = articleDao.getRedisArticleIds(key, page, maxResults);
-		int size = idsToArticleList(ids,articles);
+		int size = idsToArticleListNoDelete(ids,articles);
 		UserInfo user = userManager.getUser(userId);
 		if(size==maxResults||user.getArticleCount()==page*maxResults+size){
 			List<Map<String, Object>> list = articlesToPictureList(articles);
@@ -1535,7 +1567,7 @@ public class ArticleManager implements IArticleManager {
 		List<ArticleInfo> alist = articleDao.getCollectionList(userId,page*maxResults+size,maxResults-size);
 		if(alist!=null&&!alist.isEmpty()){
 			
-			listToListAndAddRedisId(key,alist,articles);
+			listToListAndAddRedisIdNoDelete(key,alist,articles);
 			
 		}
 		map.put("result", 1);
@@ -1548,6 +1580,9 @@ public class ArticleManager implements IArticleManager {
 	
 	private void collectionArticles(List<ArticleInfo> articles) {
 		for(ArticleInfo article:articles){
+			if(article.getType()==ArticleType.Delete.getIndex()){
+				continue;
+			}
 			int userId = article.getUser().getUserId();
 			String key = RedisInfo.USERCOLLECTIONARTICLE+userId+":"+article.getArticleId();
 			articleDao.setRedisString(key, "1");
@@ -1684,7 +1719,7 @@ public class ArticleManager implements IArticleManager {
 		List<ArticleInfo> articles = new ArrayList<ArticleInfo>();
 		String key = RedisInfo.ARTICLEDELETELIST;
 		List<String> ids = articleDao.getRedisArticleIds(key, page, maxResults);
-		int size = idsToArticleList(ids,articles);
+		int size = idsToArticleListNoDelete(ids,articles);
 		if(size==maxResults)
 			return articlesToMap(articles,0);
 		
@@ -1692,7 +1727,7 @@ public class ArticleManager implements IArticleManager {
 		types.add(ArticleType.Delete.getIndex());
 		List<ArticleInfo> tlist = articleDao.getArticleByType(types, page*maxResults+size, maxResults-size);
 		
-		listToListAndAddRedisId(key,tlist,articles);
+		listToListAndAddRedisIdNoDelete(key,tlist,articles);
 		
 		return articlesToMap(articles,0);
 	}

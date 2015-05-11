@@ -420,6 +420,7 @@ public class UserController {
 			}
 
 			if(userManager.updateUser(user)){
+				map = userManager.userToMap(user);
 				map.put("headPic", FileManager.getUserPictureUrl(user.getUserId(), user.getHeadPic()));
 				map.put("result", 1);
 			}
