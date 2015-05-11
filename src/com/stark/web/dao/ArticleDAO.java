@@ -96,7 +96,7 @@ public class ArticleDAO implements IArticleDAO {
 
 	@Override
 	public List<ArticleInfo> getFollowArticle(int uid, int start, int stop) {
-		String hql = "select distinct a from RelUserFollow as rel, ArticleInfo as a where (rel.user.userId =:userId and rel.follow.userId = a.user.userId) or a.user.userId=:uId";
+		String hql = "select distinct a from RelUserFollow as rel, ArticleInfo as a where ((rel.user.userId =:userId and rel.follow.userId = a.user.userId) or a.user.userId=:uId) and a.type!=:type order by a.articleId desc";
 		//String hql = "select a from RelUserFollow as rel, ArticleInfo as a where rel.user.userId =:userId and rel.follow.userId = a.user.userId ";
 		// String hql1 =
 		// "select a,aptl from RelUserFollow as ruf,ArticlePublishTimeLine as aptl,ArticleInfo as a"
@@ -108,6 +108,7 @@ public class ArticleDAO implements IArticleDAO {
 
 		query.setInteger("userId", uid);
 		query.setInteger("uId", uid);
+		query.setInteger("type", ArticleType.Delete.getIndex());
 		query.setFirstResult(start);
 		query.setMaxResults(stop);
 

@@ -216,10 +216,10 @@ public class ArticleManager implements IArticleManager {
 		if(tlist!=null){
 			//size = alist.size();
 			for(int i=0;i<tlist.size();i++){
-				ArticleInfo article = tlist.get(i);
+				ArticleInfo article = getArticle(tlist.get(i).getArticleId());
 				setArticleCount(article);
 				alist.add(article);
-				articleDao.addRedisArticle(article);
+				//articleDao.addRedisArticle(article);
 				articleDao.addRedisUserArticleRList(uid,article.getArticleId());
 			}
 			
@@ -525,8 +525,8 @@ public class ArticleManager implements IArticleManager {
 			List<ArticleInfo> tlist = articleDao.getArticleByType(types, page*maxResults+size, maxResults-size);
 			if(tlist!=null){
 				for(int i=0;i<tlist.size();i++){
-					ArticleInfo article = tlist.get(i);
-					articleDao.addRedisArticle(article);
+					ArticleInfo article = getArticle(tlist.get(i).getArticleId());
+					//articleDao.addRedisArticle(article);
 					articleDao.addRedisExquisitesRList(article.getArticleId());
 					list.add(article);
 					setArticleCount(article);
@@ -563,8 +563,8 @@ public class ArticleManager implements IArticleManager {
 			List<ArticleInfo> tlist = articleDao.getArticleByType(types, page*maxResults+size, maxResults-size);
 			if(tlist!=null){
 				for(int i=0;i<tlist.size();i++){
-					ArticleInfo article = tlist.get(i);
-					articleDao.addRedisArticle(article);
+					ArticleInfo article = getArticle(tlist.get(i).getArticleId());
+					//articleDao.addRedisArticle(article);
 					articleDao.addRedisUpdateRList(article.getArticleId());
 					list.add(article);
 					setArticleCount(article);
@@ -595,8 +595,8 @@ public class ArticleManager implements IArticleManager {
 			List<ArticleInfo> tlist = articleDao.getArticleByType(types, page*maxResults+size, maxResults-size);
 			if(tlist!=null&&!tlist.isEmpty()){
 				for(int i=0;i<tlist.size();i++){
-					ArticleInfo article = tlist.get(i);
-					articleDao.addRedisArticle(article);
+					ArticleInfo article = getArticle(tlist.get(i).getArticleId());
+					//articleDao.addRedisArticle(article);
 					articleDao.addRedisMagazineRList(article.getArticleId());
 					setArticleCount(article);
 					list.add(article);
@@ -625,8 +625,8 @@ public class ArticleManager implements IArticleManager {
 		List<ArticleInfo> tlist = articleDao.getListByActivityId(activityId, page*maxResults+size, maxResults-size);
 		if(tlist!=null&&!tlist.isEmpty()){
 			for(int i=0;i<tlist.size();i++){
-				ArticleInfo article = tlist.get(i);
-				articleDao.addRedisArticle(article);
+				ArticleInfo article = getArticle(tlist.get(i).getArticleId());
+				//articleDao.addRedisArticle(article);
 				articleDao.addRedisArticleIdR(RedisInfo.ACTIVITYARTICLEAUDITINGLIST+activityId, article.getArticleId());
 				setArticleCount(article);
 				list.add(article);
@@ -766,8 +766,8 @@ public class ArticleManager implements IArticleManager {
 		System.out.println(tlist.size());
 		if(tlist!=null&&!tlist.isEmpty()){
 			for(int i=0;i<tlist.size();i++){
-				ArticleInfo article = tlist.get(i);
-				articleDao.addRedisArticle(article);
+				ArticleInfo article = getArticle(tlist.get(i).getArticleId());
+				//articleDao.addRedisArticle(article);
 				//setArticleCount(article);
 				list.add(article);
 				long len = articleDao.addRedisArticleIdR(key, article.getArticleId());
@@ -805,9 +805,9 @@ public class ArticleManager implements IArticleManager {
 		List<ArticleInfo> tlist = articleDao.getArticlesByDate(startDate, endDate,page*maxResults+size, maxResults-size);
 		if(tlist!=null&&!tlist.isEmpty()){
 			for(int i=0;i<tlist.size();i++){
-				ArticleInfo article = tlist.get(i);
+				ArticleInfo article = getArticle(tlist.get(i).getArticleId());
 				//setArticleCount(article);
-				articleDao.addRedisArticle(article);
+				//articleDao.addRedisArticle(article);
 				if(article!=null){
 					int atype = article.getType();
 					for(int t:types){
@@ -1138,9 +1138,9 @@ public class ArticleManager implements IArticleManager {
 		List<ArticleInfo> tlist = articleDao.getAllListByActivityId(activityId, page*maxResults+size, maxResults-size);
 		if(tlist!=null&&!tlist.isEmpty()){
 			for(int i=0;i<tlist.size();i++){
-				ArticleInfo article = tlist.get(i);
+				ArticleInfo article = getArticle(tlist.get(i).getArticleId());
 				//setArticleCount(article);
-				articleDao.addRedisArticle(article);
+				//articleDao.addRedisArticle(article);
 				articleDao.addRedisArticleIdR(RedisInfo.ACTIVITYARTICLEALLLIST+activityId, article.getArticleId());
 				list.add(article);
 			}
@@ -1267,11 +1267,11 @@ public class ArticleManager implements IArticleManager {
 			return false;
 		}
 		for(int i=0;i<fromList.size();i++){
-			ArticleInfo article = fromList.get(i);
+			ArticleInfo article = getArticle(fromList.get(i).getArticleId());
 			if(article.getType()==ArticleType.Delete.getIndex()){
 				continue;
 			}
-			articleDao.addRedisArticle(article);
+			//articleDao.addRedisArticle(article);
 			articleDao.addRedisArticleIdR(key, article.getArticleId());
 			//setArticleCount(article);
 			toList.add(article);
@@ -1284,8 +1284,8 @@ public class ArticleManager implements IArticleManager {
 			return false;
 		}
 		for(int i=0;i<fromList.size();i++){
-			ArticleInfo article = fromList.get(i);
-			articleDao.addRedisArticle(article);
+			ArticleInfo article = getArticle(fromList.get(i).getArticleId());
+			//articleDao.addRedisArticle(article);
 			articleDao.addRedisArticleIdR(key, article.getArticleId());
 			//setArticleCount(article);
 			toList.add(article);
@@ -1502,11 +1502,11 @@ public class ArticleManager implements IArticleManager {
 		if(size==maxResults)
 			return articlesToMap(articles,userId);
 		List<ArticleInfo> alist = articleDao.getFollowArticle(userId, page*maxResults+size,maxResults-size);
-		if(alist==null){
-			Map<String,Object> map = new HashMap<String,Object>();
-			map.put("result", 0);
-			return map;
-		}
+		//if(alist==null){
+		//	Map<String,Object> map = new HashMap<String,Object>();
+			//map.put("result", 0);
+		//	return map;
+		//}
 		
 		listToZSetAndAddRedisId(key,alist,articles);
 		
@@ -1518,11 +1518,11 @@ public class ArticleManager implements IArticleManager {
 			return false;
 		}
 		for(int i=0;i<fromList.size();i++){
-			ArticleInfo article = fromList.get(i);
+			ArticleInfo article = getArticle(fromList.get(i).getArticleId());
 			if(article.getType()==ArticleType.Delete.getIndex()){
 				continue;
 			}
-			articleDao.addRedisArticle(article);
+			//articleDao.addRedisArticle(article);
 			int articleId = article.getArticleId();
 			
 			addSetArticleId(key,articleId,articleId+"");
@@ -1611,18 +1611,23 @@ public class ArticleManager implements IArticleManager {
 	
 	private List<Integer> getCommonArticleTypeList(){
 		List<Integer> list = new ArrayList<Integer>(); 
-		list.add(ArticleType.Publish.getIndex());
-		list.add(ArticleType.Forward.getIndex());
-		list.add(ArticleType.DayExquisite.getIndex());
-		list.add(ArticleType.FashionMagazine.getIndex());
-		list.add(ArticleType.ExquisiteMagazine.getIndex());
-		list.add(ArticleType.Report.getIndex());
-		list.add(ArticleType.DayExquisiteReport.getIndex());
-		list.add(ArticleType.FashionMagazineReport.getIndex());
-		list.add(ArticleType.ExquisiteMagazineReport.getIndex());
-		list.add(ArticleType.NoAuditingActivity.getIndex());
-		list.add(ArticleType.Activity.getIndex());
-		
+		for(ArticleType type : ArticleType.values()){
+			if(type!=ArticleType.Delete){
+				list.add(type.getIndex());
+			}
+		}
+//		list.add(ArticleType.Publish.getIndex());
+//		list.add(ArticleType.Forward.getIndex());
+//		list.add(ArticleType.DayExquisite.getIndex());
+//		list.add(ArticleType.FashionMagazine.getIndex());
+//		list.add(ArticleType.ExquisiteMagazine.getIndex());
+//		list.add(ArticleType.Report.getIndex());
+//		list.add(ArticleType.DayExquisiteReport.getIndex());
+//		list.add(ArticleType.FashionMagazineReport.getIndex());
+//		list.add(ArticleType.ExquisiteMagazineReport.getIndex());
+//		list.add(ArticleType.NoAuditingActivity.getIndex());
+//		list.add(ArticleType.Activity.getIndex());
+//		list.add(ArticleType.)
 		return list;
 	}
 
@@ -1938,11 +1943,11 @@ public class ArticleManager implements IArticleManager {
 
 	@Override
 	public void createArticleHtml() {
-		List<ArticleInfo> list = articleDao.getHtmlArticleList();
-		for(ArticleInfo article :list){
-			int articleId = article.getArticleId();
-			String path = FileManager.getArticleHtmlPath(articleId, article.getRichText());
-			String content = FileManager.getContent( path);
-		}
+		//List<ArticleInfo> list = articleDao.getHtmlArticleList();
+		//for(ArticleInfo article :list){
+		//	int articleId = article.getArticleId();
+		//	String path = FileManager.getArticleHtmlPath(articleId, article.getRichText());
+		//	String content = FileManager.getContent( path);
+		//}
 	}
 }
