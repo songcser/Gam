@@ -53,6 +53,7 @@ public class FileManager {
 
 	private static Logger logger = Logger.getLogger(FileManager.class);
 	private static OSSClient ossClient;
+	
 	private final static String bucketName = "starktest";
 	//private final static String bucketName = "starkpet";
 	//private final static String shareUrl = "http://www.uha.so/";

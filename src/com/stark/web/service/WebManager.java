@@ -88,7 +88,7 @@ public class WebManager {
 	
 	public static PushPayload test(){
 		return PushPayload.newBuilder()
-				.setPlatform(Platform.ios())
+				.setPlatform(Platform.all())
 				.setAudience(Audience.alias("93"))
 				.setNotification(Notification.newBuilder()
                         .addPlatformNotification(IosNotification.newBuilder()
@@ -127,14 +127,9 @@ public class WebManager {
 		toPush(jpushClient,payload);
 	}
 	
-	private static PushPayload pushToAll_show_all(String content,int showId) {
-		Map<String,String> map = new HashMap<String,String>();
-		return pushExtra(content,map);
-	}
-	
 	private static PushPayload pushExtra(String content,Map<String,String> extra){
 		return PushPayload.newBuilder()
-				.setPlatform(Platform.ios())
+				.setPlatform(Platform.all())
 				.setAudience(Audience.all())
 				.setNotification(Notification.newBuilder()
                         .addPlatformNotification(IosNotification.newBuilder()
@@ -189,7 +184,7 @@ public class WebManager {
 	
 	private static PushPayload pushUserExtra(int userId,String content, Map<String, String> extra) {
 		return PushPayload.newBuilder()
-				.setPlatform(Platform.ios())
+				.setPlatform(Platform.all())
 				.setAudience(Audience.alias(userId+""))
 				.setNotification(Notification.newBuilder()
                         .addPlatformNotification(IosNotification.newBuilder()
@@ -204,7 +199,7 @@ public class WebManager {
 
 	public static PushPayload pushShowToUser(int userId,String content,int showId){
 		return PushPayload.newBuilder()
-				.setPlatform(Platform.ios())
+				.setPlatform(Platform.all())
 				.setAudience(Audience.alias(userId+""))
 				.setNotification(Notification.newBuilder()
                         .addPlatformNotification(IosNotification.newBuilder()
@@ -223,7 +218,7 @@ public class WebManager {
 	
 	public static PushPayload buildPushObject_ios_tagAnd_alertWithExtrasAndMessage() {
         return PushPayload.newBuilder()
-                .setPlatform(Platform.ios())
+                .setPlatform(Platform.all())
                 .setAudience(Audience.tag_and("tag1", "tag_all"))
                 .setNotification(Notification.newBuilder()
                         .addPlatformNotification(IosNotification.newBuilder()
@@ -242,7 +237,7 @@ public class WebManager {
 	
 	public static PushPayload buildPushObject_android_tag_alertWithTitle() {
         return PushPayload.newBuilder()
-                .setPlatform(Platform.ios())
+                .setPlatform(Platform.all())
                 .setAudience(Audience.alias("190"))
                 .setNotification(Notification.ios("hello", null))
                 .build();
