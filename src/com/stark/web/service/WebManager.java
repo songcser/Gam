@@ -31,6 +31,7 @@ import cn.jpush.api.push.model.Options;
 import cn.jpush.api.push.model.Platform;
 import cn.jpush.api.push.model.PushPayload;
 import cn.jpush.api.push.model.audience.Audience;
+import cn.jpush.api.push.model.notification.AndroidNotification;
 import cn.jpush.api.push.model.notification.IosNotification;
 import cn.jpush.api.push.model.notification.Notification;
 
@@ -137,6 +138,10 @@ public class WebManager {
                                 .setSound("happy")
                                 .addExtras(extra)
                                 .build())
+                        .addPlatformNotification(AndroidNotification.newBuilder()
+                        		.setAlert(content)
+                        		.addExtras(extra)
+                        		.build())
                         .build())
                  .build();
 	}
@@ -193,6 +198,10 @@ public class WebManager {
                                 .addExtras(extra)
                                 .incrBadge(1)
                                 .build())
+                        .addPlatformNotification(AndroidNotification.newBuilder()
+                        		.setAlert(content)
+                        		.addExtras(extra)
+                        		.build())
                         .build())
                  .build();
 	}
@@ -208,6 +217,10 @@ public class WebManager {
                                 .setSound("happy")
                                 .addExtra("showId", ""+showId)
                                 .build())
+                        .addPlatformNotification(AndroidNotification.newBuilder()
+                        		.setAlert(content)
+                        		.addExtra("showId",""+showId)
+                        		.build())
                         .build())
                  .setMessage(Message.content(content))
                  .setOptions(Options.newBuilder()
