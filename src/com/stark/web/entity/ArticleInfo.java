@@ -25,6 +25,7 @@ public class ArticleInfo {
 	public static String REFERENCE = "Reference";
 	public static String BROWSECOUNT = "BrowseCount";
 	public static String TITLE = "Title";
+	public static String STATUS = "Status";
 	public static String RICHTEXT = "RichText";
 	public static String COLLECTIONCOUNT = "CollectionCount";
 

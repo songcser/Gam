@@ -1839,6 +1839,60 @@ public class ArticleController {
 		return "newShare";
 	}
 	
+	@RequestMapping("outShareByUser.do")
+	public String outShareByUser(int articleId,int userId, HttpServletRequest request) {
+		if (articleId == 0)
+			return "";
+		SimpleDateFormat sdf = WebManager.getDateFormat();
+		ArticleInfo article = articleManager.getArticle(articleId);
+		
+		UserInfo user = userManager.getUser(article.getUser().getUserId());
+		
+		int articleType = 0;
+		
+		int type = article.getType();
+		if(type==ArticleType.DayExquisite.getIndex()||type==ArticleType.ExquisiteMagazine.getIndex()||type==ArticleType.ExquisiteNoAuditing.getIndex()
+				||type==ArticleType.ExquisiteMagazineReport.getIndex()||type==ArticleType.DayExquisiteReport.getIndex()){
+			articleType = 1;
+		}
+		if(type==ArticleType.Activity.getIndex()||type==ArticleType.ActivityExquisite.getIndex()){
+			ActivityInfo activity = activityManager.getActivity(article.getActivity().getActivityId());
+			if(activity.getType()==ActivityType.NoJoin.getIndex()){
+				articleType = 1;
+			}
+		}
+		//System.out.println(articleType);
+		if(articleType==0){
+			List<String> picList = articleManager.getPicListById(article.getArticleId());
+			request.setAttribute("pictures", picList);
+		}
+		else {
+			String richText = article.getRichText();
+			String path = FileManager.getArticleHtmlPath(articleId, richText);
+			String content = FileManager.getContent( path);
+			if(content!=null&&!content.equals("")){
+				if(richText.endsWith(".html")){
+					//System.out.println("####"+content);
+					content = WebManager.getHtmlArticle(content);
+				}
+				//System.out.println("$$$$"+content);
+				request.setAttribute("content", content);
+			}
+		}
+		String title = article.getTitle();
+		if(title==null||title.equals("")){
+			title = "UHA 这个世界我哈过";
+		}
+		
+		request.setAttribute("title", title);
+		request.setAttribute("article", article);
+		request.setAttribute("user", user);
+		request.setAttribute("date", sdf.format(article.getDate()));
+		request.setAttribute("type", articleType);
+		//System.out.println(pics.size());
+		return "newShare";
+	}
+	
 	@RequestMapping("createArticleHtml.do")
 	@ResponseBody
 	public Map<String,Object> createArticleHtml(){

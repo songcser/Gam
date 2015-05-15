@@ -315,6 +315,8 @@ public class ArticleDAO implements IArticleDAO {
 		map.put(ArticleInfo.TYPE, aInfo.getType()+"");
 		map.put(ArticleInfo.CONTENT, aInfo.getContent());
 		map.put(ArticleInfo.REFERENCE, aInfo.getReference());
+		map.put(ArticleInfo.STATUS, aInfo.getStatus()+"");
+		
 		SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMddHHmmss");
 		//System.out.println(sdf.format(aInfo.getDate()));
 		map.put(ArticleInfo.DATE, sdf.format(aInfo.getDate()));
@@ -635,6 +637,15 @@ public class ArticleDAO implements IArticleDAO {
 				article.setUser(new UserInfo(Integer.parseInt(aMap.get(ArticleInfo.USERID))));
 				article.setType(Integer.parseInt(aMap.get(ArticleInfo.TYPE)));
 				article.setContent(aMap.get(ArticleInfo.CONTENT));
+				
+				String status = aMap.get(ArticleInfo.STATUS);
+				if(status!=null){
+					article.setStatus(Integer.parseInt(status));
+				}
+				else {
+					article.setStatus(0);
+				}
+				
 				SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMddHHmmss");
 				
 				try {
@@ -760,6 +771,15 @@ public class ArticleDAO implements IArticleDAO {
 		article.setType(Integer.parseInt(aMap.get(ArticleInfo.TYPE)));
 		article.setContent(aMap.get(ArticleInfo.CONTENT));
 		article.setReference(aMap.get(ArticleInfo.REFERENCE));
+		
+		String status = aMap.get(ArticleInfo.STATUS);
+		if(status!=null){
+			article.setStatus(Integer.parseInt(status));
+		}
+		else {
+			article.setStatus(0);
+		}
+		
 		SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMddHHmmss");
 		
 		try {
