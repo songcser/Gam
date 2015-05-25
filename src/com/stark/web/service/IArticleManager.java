@@ -193,4 +193,10 @@ public interface IArticleManager {
 
 	public void createArticleHtml();
 
+	public void addArticleCount(String key);
+
+	public void addArticleCount(String key, int size);
+
+	public void descArticleCount(String string, int size);
+
 }

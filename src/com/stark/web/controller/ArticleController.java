@@ -255,6 +255,7 @@ public class ArticleController {
 		for(UserInfo user :fans){
 			String key = RedisInfo.USERFOLLOWARTICLEZSET+user.getUserId();
 			articleManager.addSetArticleId(key,articleId,articleId+"");
+			articleManager.addArticleCount(RedisInfo.USERFOLLOWARTICLECOUNT+user.getUserId());
 		}
 	}
 	private String filterContent(String content) {

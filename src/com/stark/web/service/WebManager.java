@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,6 +17,14 @@ import java.util.regex.Pattern;
 
 import javax.annotation.Resource;
 
+import net.sf.json.JSONObject;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
@@ -41,6 +50,21 @@ public class WebManager {
 	private final static String masterSecret = "adec968251666c5982c3cce3";
 	private final static String appKey = "408183a3a7fd461efc860cda";
 	private final static String ALERT = "hello world";
+	
+	private final static String weiboAppId = "wx6e066355567b7f61";
+	private final static String weiboAppSecret = "2d8266c90d9e085c83c324528aabd4a9";
+	private final static String REDIRECT_URI = "http://www.uha.so/StrakPet/article/outShare.do?articleId=123";
+	private final static String SCOPE = "snsapi_userinfo";
+	
+	
+	public static String  getCodeRequest = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=APPID&redirect_uri=REDIRECT_URI&response_type=code&scope=SCOPE&state=STATE#wechat_redirect";
+	
+	private static String get_access_token_url="https://api.weixin.qq.com/sns/oauth2/access_token?" +
+	        "appid=APPID" +
+	        "&secret=SECRET&" +
+	        "code=CODE&grant_type=authorization_code";
+	
+	private static String get_userinfo="https://api.weixin.qq.com/sns/userinfo?access_token=ACCESS_TOKEN&openid=OPENID&lang=zh_CN";
 	
 	@Resource(name="threadPool")
 	private ThreadPoolTaskExecutor threadPool;
@@ -345,9 +369,82 @@ public class WebManager {
 		return s.replaceAll("<.*?>", "");
 	}
 
-	
+	public static void Oauth2WeiXin(String code){
+		 get_access_token_url=get_access_token_url.replace("APPID", weiboAppId);
+	     get_access_token_url=get_access_token_url.replace("SECRET", weiboAppSecret);
+	     get_access_token_url=get_access_token_url.replace("CODE", code);
+	     
+	     String json=getUrl(get_access_token_url);
+	     
+	     JSONObject jsonObject=JSONObject.fromObject(json);
+	     String access_token=jsonObject.getString("access_token");
+	     String openid=jsonObject.getString("openid");
+	        
+	     get_userinfo=get_userinfo.replace("ACCESS_TOKEN", access_token);
+	     get_userinfo=get_userinfo.replace("OPENID", openid);
+	        
+	     String userInfoJson=getUrl(get_userinfo);
+	        
+	     JSONObject userInfoJO=JSONObject.fromObject(userInfoJson);
+	        
+	     String user_openid=userInfoJO.getString("openid");
+	     System.out.println(user_openid);
+	     String user_nickname=userInfoJO.getString("nickname");
+	     System.out.println(user_nickname);
+	     String user_sex=userInfoJO.getString("sex");
+	     System.out.println(user_sex);
+	     String user_province=userInfoJO.getString("province");
+	     System.out.println(user_province);
+	     String user_city=userInfoJO.getString("city");
+	     System.out.println(user_city);
+	     String user_country=userInfoJO.getString("country");
+	     System.out.println(user_country);
+	     String user_headimgurl=userInfoJO.getString("headimgurl");
+	     System.out.println(user_headimgurl);
+	}
 
+	public static String getUrl(String url){
+        String result = null;
+        try {
+            // 根据地址获取请求
+            HttpGet request = new HttpGet(url);
+            // 获取当前客户端对象
+            HttpClient httpClient = new DefaultHttpClient();
+            // 通过请求对象获取响应对象
+            HttpResponse response = httpClient.execute(request);
+            
+            // 判断网络连接状态码是否正常(0--200都数正常)
+            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+                result= EntityUtils.toString(response.getEntity());
+            } 
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return result;
+    }
 	
+	public static String getCodeRequest(){ 
+        String result = null; 
+        
+        getCodeRequest  = getCodeRequest.replace("APPID", urlEnodeUTF8(weiboAppId)); 
+        getCodeRequest  = getCodeRequest.replace("REDIRECT_URI",urlEnodeUTF8(REDIRECT_URI)); 
+        getCodeRequest = getCodeRequest.replace("SCOPE", SCOPE); 
+        getCodeRequest = getCodeRequest.replace("STATUS", SCOPE); 
 
-	
+        result = getCodeRequest; 
+        return result; 
+    } 
+
+
+    public static String urlEnodeUTF8(String str){ 
+        String result = str; 
+        try { 
+            result = URLEncoder.encode(str,"UTF-8"); 
+        } catch (Exception e) { 
+            e.printStackTrace(); 
+        } 
+
+        return result; 
+    } 
 }

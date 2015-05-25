@@ -5,8 +5,19 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
+<script src="http://res.wx.qq.com/connect/zh_CN/htmledition/js/wxLogin.js"></script>
 <script type="text/javascript" src="../js/jquery-1.7.1.min.js"></script>
     <script type="text/javascript">
+    var obj = new WxLogin({
+        id:"login_container", 
+        appid: "wx6e066355567b7f61", 
+        scope: "snsapi_login", 
+        redirect_uri: "http://www.uha.so/StarkPet/article/outShare.do?articleId=2833",
+        state: "1",
+        style: "",
+        href: ""
+      });
+    
     $(document).ready(function(){
         $("#add").click(function(){
           

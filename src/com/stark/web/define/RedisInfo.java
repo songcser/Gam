@@ -54,6 +54,7 @@ public class RedisInfo {
 	public static final String USERNORMALLIST = "User:Normal:List";								//普通用户有序集
 	public static final String USERALLSET = "User:ALL:Set";										//所有用户集
 	public static final String USERORGANIZATIONLIST = "User:Organization:List";					//机构用户列表
+	public static final String USERFOLLOWARTICLECOUNT = "User:Follow:Article:Count:";			//用户关注列表的数量
 	
 	public static final String ACTIVITYBANNERLIST="Activity:Banner:List";							//活动banner列表
 	public static final String ACTIVITYTOPLIST = "Activity:Top:List";								//活动置顶推荐列表

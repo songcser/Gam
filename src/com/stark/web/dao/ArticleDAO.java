@@ -1462,4 +1462,34 @@ public class ArticleDAO implements IArticleDAO {
 		Query query = sessionFactory.getCurrentSession().createQuery(hql);
 		return query.list();
 	}
+
+	@Override
+	public int getFollowArticleCount(int userId) {
+		String hql = "select count(distinct a.articleId) from RelUserFollow as rel, ArticleInfo as a where ((rel.user.userId =:userId and rel.follow.userId = a.user.userId) or a.user.userId=:uId) and a.type!=:type order by a.articleId desc";
+		//String hql = "select a from RelUserFollow as rel, ArticleInfo as a where rel.user.userId =:userId and rel.follow.userId = a.user.userId ";
+		// String hql1 =
+		// "select a,aptl from RelUserFollow as ruf,ArticlePublishTimeLine as aptl,ArticleInfo as a"
+		// +
+		// " where ruf.user.userId = ? and ruf.follow.userId = aptl.user.userId and aptl.article.articleId = a.articleId"
+		// + " ORDER BY aptl.date";
+
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+
+		query.setInteger("userId", userId);
+		query.setInteger("uId", userId);
+		query.setInteger("type", ArticleType.Delete.getIndex());
+		
+		String result = query.uniqueResult()+"";
+		return Integer.parseInt(result);
+	}
+
+	@Override
+	public void addRedisArticleCount(String key, int size) {
+		redisDao.incrBy(key,size);
+	}
+
+	@Override
+	public void decRedisArticleCount(String key, int size) {
+		redisDao.decrBy(key,size);
+	}
 }

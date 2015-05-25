@@ -27693,7 +27693,7 @@ UE.ui = baidu.editor.ui = {};
         'blockquote', 'pasteplain', 'pagebreak',
         'selectall', 'print','horizontal', 'removeformat', 'time', 'date', 'unlink',
         'insertparagraphbeforetable', 'insertrow', 'insertcol', 'mergeright', 'mergedown', 'deleterow',
-        'deletecol', 'splittorows', 'splittocols', 'splittocells', 'mergecells', 'deletetable', 'drafts'];
+        'deletecol', 'splittorows', 'splittocols', 'splittocells', 'mergecells', 'deletetable', 'drafts','insertmusic'];
 
     for (var i = 0, ci; ci = btnCmds[i++];) {
         ci = ci.toLowerCase();
@@ -28480,6 +28480,35 @@ UE.ui = baidu.editor.ui = {};
         return ui;
     };
 
+    editorui["insertmusic"] = function (editor) {
+        var name = 'insertmusic',
+            ui = new editorui.Button({
+                className:'edui-for-' + name,
+                title:editor.options.labelMap[name] || editor.getLang("labelMap." + name) || '',
+                onclick:function () {},
+                theme:editor.options.theme,
+                showText:false
+            });
+        editorui.buttons[name] = ui;
+        editor.addListener('ready', function() {
+            var b = ui.getDom('body'),
+                iconSpan = b.children[0];
+            editor.fireEvent('simpleuploadbtnready', iconSpan);
+        });
+        editor.addListener('selectionchange', function (type, causeByUi, uiReady) {
+            var state = editor.queryCommandState(name);
+            if (state == -1) {
+                ui.setDisabled(true);
+                ui.setChecked(false);
+            } else {
+                if (!uiReady) {
+                    ui.setDisabled(false);
+                    ui.setChecked(state);
+                }
+            }
+        });
+        return ui;
+    };
 })();
 
 

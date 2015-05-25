@@ -458,4 +458,26 @@ public class RedisDAO implements IRedisDAO {
 		return redisTemplate.opsForSet().add(new String(key),new String(member));
 	}
 	
+	public long incrBy(final byte[] key,final long size) {
+		return redisTemplate.execute(new RedisCallback<Long>() {
+			public Long doInRedis(RedisConnection connection) throws DataAccessException {
+				return connection.incrBy(key, size);
+			}
+		});
+	}
+	@Override
+	public Long incrBy(String key, long size) {
+		return incrBy(key.getBytes(),size);
+	}
+	@Override
+	public Long decrBy(String key, long size) {
+		return decrBy(key.getBytes(),size);
+	}
+	public Long decrBy(final byte[] key,final long size) {
+		return redisTemplate.execute(new RedisCallback<Long>() {
+			public Long doInRedis(RedisConnection connection) throws DataAccessException {
+				return connection.decrBy(key, size);
+			}
+		});
+	}
 }

@@ -270,4 +270,10 @@ public interface IArticleDAO {
 
 	public List<ArticleInfo> getHtmlArticleList();
 
+	public int getFollowArticleCount(int userId);
+
+	public void addRedisArticleCount(String key, int size);
+
+	public void decRedisArticleCount(String key, int size);
+
 }

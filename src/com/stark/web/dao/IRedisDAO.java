@@ -98,4 +98,8 @@ public interface IRedisDAO {
 	public Long sadd(String key, String member);
 
 	Long sadd(byte[] key, byte[] member);
+
+	public Long incrBy(String key, long size);
+
+	public Long decrBy(String key, long size);
 }

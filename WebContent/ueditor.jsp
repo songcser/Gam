@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <input type="hidden" name="richText" id="richTextContent">
+
 <script id="container" name="content" type="text/plain">
 </script>
 <script type="text/javascript" src="../ueditor/ueditor.config.js"></script>
@@ -9,14 +10,20 @@
 <script type="text/javascript">
 	var ue = UE.getEditor('container',{
 			    toolbars: [
-			        ['fullscreen', 'source', 'undo', 'redo','simpleupload','insertimage','insertvideo','music','bold', 'italic', 'underline', 
-			         'fontborder','forecolor','strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch', 
+			        ['fullscreen', 'source', 'undo', 'redo','simpleupload','insertimage','insertvideo','music','insertmusic','attachment','bold', 'italic', 'underline', 
+			         'fontborder','strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch', 
 			         'autotypeset', 'blockquote', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 
 			         'insertunorderedlist', 'selectall', 'cleardoc','snapscreen','link','scrawl']
 			    ],
 			    autoHeightEnabled: true,
 			    autoFloatEnabled: true
 	});
+	
+	  //baidu.editor.commands['insertmusic'] = { execCommand: function() { 
+		//  this.execCommand('insertHtml', "<img src='http://www.hougelou.com/images/logo.png' />"); return true;
+		//  }, queryCommandState: function() { } };
+	
+    
 	function setRichTextContent(){
 		var content = ue.getContent();
 		

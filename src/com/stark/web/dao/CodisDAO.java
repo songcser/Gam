@@ -385,4 +385,20 @@ public class CodisDAO implements IRedisDAO{
 	private void close(Jedis jedis){
 		jedis.close();
 	}
+
+	@Override
+	public Long incrBy(String key, long size) {
+		Jedis jedis = Jedis();
+		Long len = jedis.incrBy(key,size);
+		close(jedis);
+		return len;
+	}
+
+	@Override
+	public Long decrBy(String key, long size) {
+		Jedis jedis = Jedis();
+		Long len = jedis.decrBy(key,size);
+		close(jedis);
+		return len;
+	}
 }

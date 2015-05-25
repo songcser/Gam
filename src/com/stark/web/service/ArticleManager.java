@@ -95,6 +95,7 @@ public class ArticleManager implements IArticleManager {
 			SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
 			articleDao.addRedisArticleId(RedisInfo.ARTICLEDATELIST+sdf.format(aInfo.getDate()), id);
 			addSetArticleId(RedisInfo.USERFOLLOWARTICLEZSET+user.getUserId(),id,id+"");
+			articleDao.addRedisArticleCount(RedisInfo.USERFOLLOWARTICLECOUNT+user.getUserId());
 			//int userId = aInfo.getUser().getUserId();
 			//if(user.getRole()!=UserRole.Normal.getIndex()&&user.getRole()!=UserRole.Mark.getIndex()){
 			//}
@@ -1497,9 +1498,17 @@ public class ArticleManager implements IArticleManager {
 	public Map<String, Object> getFollowArticleList(int userId, int page, int maxResults) {
 		List<ArticleInfo> articles = new ArrayList<ArticleInfo>();
 		String key = RedisInfo.USERFOLLOWARTICLEZSET+userId;
+		String countStr = articleDao.getRedisString(RedisInfo.USERFOLLOWARTICLECOUNT+userId);
+		int count = 0;
+		if(countStr!=null){
+			count = Integer.parseInt(countStr);
+		}
+		else {
+			count = articleDao.getFollowArticleCount(userId);
+		}
 		Set<String> ids = articleDao.getRedisFollowArticleIdSet(key, page, maxResults);
 		int size = idsToArticleList(ids,articles);
-		if(size==maxResults)
+		if(size==maxResults||page*maxResults+size<=count)
 			return articlesToMap(articles,userId);
 		List<ArticleInfo> alist = articleDao.getFollowArticle(userId, page*maxResults+size,maxResults-size);
 		//if(alist==null){
@@ -1949,5 +1958,20 @@ public class ArticleManager implements IArticleManager {
 		//	String path = FileManager.getArticleHtmlPath(articleId, article.getRichText());
 		//	String content = FileManager.getContent( path);
 		//}
+	}
+
+	@Override
+	public void addArticleCount(String key) {
+		articleDao.addRedisArticleCount(key);
+	}
+
+	@Override
+	public void addArticleCount(String key, int size) {
+		articleDao.addRedisArticleCount(key,size);
+	}
+
+	@Override
+	public void descArticleCount(String key, int size) {
+		articleDao.decRedisArticleCount(key,size);
 	}
 }

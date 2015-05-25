@@ -689,6 +689,7 @@ public class UserController {
 		boolean result = userManager.addFollow(rel);
 		if(result){
 			List<ArticleInfo> alist = articleManager.getAllArticleByUserId(followId);
+			articleManager.addArticleCount(RedisInfo.USERFOLLOWARTICLECOUNT+userId,alist.size());
 			//userManager.addFollowArticle(userId,alist);
 			for(ArticleInfo article:alist){
 				int articleId = article.getArticleId();
@@ -726,6 +727,7 @@ public class UserController {
 		boolean result = userManager.removeFollow(userId, followId);
 		if(result){
 			List<ArticleInfo> articles = articleManager.getAllArticleByUserId(followId);
+			articleManager.descArticleCount(RedisInfo.USERFOLLOWARTICLECOUNT+userId,articles.size());
 			for(ArticleInfo article:articles){
 				int articleId = article.getArticleId();
 				articleManager.removeSetArticleId(RedisInfo.USERFOLLOWARTICLEZSET+userId,articleId+"");
@@ -1156,6 +1158,7 @@ public class UserController {
 			if (follows != null && userFollows.getObjectId() != 0) {
 				map.put("result", "1");
 				int followId = userFollows.getObjectId();
+				List<ArticleInfo> alist = articleManager.getAllArticleByUserId(followId);
 				for (Iterator<Integer> iter = follows.iterator(); iter.hasNext();) {
 					Integer userId = iter.next();
 					RelUserFollow rel = new RelUserFollow();
@@ -1168,6 +1171,15 @@ public class UserController {
 					}
 					boolean result = userManager.addFollow(rel);
 					if (result) {
+						
+						
+						articleManager.addArticleCount(RedisInfo.USERFOLLOWARTICLECOUNT+userId,alist.size());
+						//userManager.addFollowArticle(userId,alist);
+						for(ArticleInfo article:alist){
+							int articleId = article.getArticleId();
+							articleManager.addSetArticleId(RedisInfo.USERFOLLOWARTICLEZSET+userId,articleId,articleId+"");
+						}
+						
 						NoticeInfo notice = new NoticeInfo();
 						notice.setUser(new UserInfo(followId));
 						notice.setSender(new UserInfo(userId));
