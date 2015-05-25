@@ -1498,17 +1498,21 @@ public class ArticleManager implements IArticleManager {
 	public Map<String, Object> getFollowArticleList(int userId, int page, int maxResults) {
 		List<ArticleInfo> articles = new ArrayList<ArticleInfo>();
 		String key = RedisInfo.USERFOLLOWARTICLEZSET+userId;
-		String countStr = articleDao.getRedisString(RedisInfo.USERFOLLOWARTICLECOUNT+userId);
+		String countKey = RedisInfo.USERFOLLOWARTICLECOUNT+userId;
+		String countStr = articleDao.getRedisString(countKey);
 		int count = 0;
 		if(countStr!=null){
 			count = Integer.parseInt(countStr);
 		}
 		else {
 			count = articleDao.getFollowArticleCount(userId);
+			articleDao.setRedisString(countKey, ""+count);
 		}
 		Set<String> ids = articleDao.getRedisFollowArticleIdSet(key, page, maxResults);
 		int size = idsToArticleList(ids,articles);
-		if(size==maxResults||page*maxResults+size<=count)
+		System.out.println(count);
+		System.out.println(page*maxResults+size);
+		if(size==maxResults||page*maxResults+size<=count||(size==0&&page*maxResults>count))
 			return articlesToMap(articles,userId);
 		List<ArticleInfo> alist = articleDao.getFollowArticle(userId, page*maxResults+size,maxResults-size);
 		//if(alist==null){

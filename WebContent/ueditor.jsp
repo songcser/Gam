@@ -10,7 +10,7 @@
 <script type="text/javascript">
 	var ue = UE.getEditor('container',{
 			    toolbars: [
-			        ['fullscreen', 'source', 'undo', 'redo','simpleupload','insertimage','insertvideo','music','insertmusic','attachment','bold', 'italic', 'underline', 
+			        ['fullscreen', 'source', 'undo', 'redo','simpleupload','insertimage','insertvideo','music','attachment','bold', 'italic', 'underline', 
 			         'fontborder','strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch', 
 			         'autotypeset', 'blockquote', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 
 			         'insertunorderedlist', 'selectall', 'cleardoc','snapscreen','link','scrawl']
