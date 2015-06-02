@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<div style="" class="margin-left">
+<div style="" class="">
 	<div class="margin-bottom" id="addPictureId">
 		<a class="btn bg-green btn-lg " style="" href="javascript:addPicture();" id="addArticlePicture">
 		<span class="glyphicon glyphicon-picture text-big"></span> </a>

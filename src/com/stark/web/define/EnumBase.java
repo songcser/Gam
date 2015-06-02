@@ -471,7 +471,8 @@ public class EnumBase {
 		Praise("赞", 2), 
 		System("系统", 3), 
 		At("@", 4),
-		Show("节目单",5);
+		Show("节目单",5),
+		See("看",6);
 
 		private String name;
 		private int index;
@@ -643,7 +644,8 @@ public class EnumBase {
 	}
 
 	public enum ArticleStatus {
-		Normal("正常", 0), Delete("删除", 1), Invisible("不可见", 2);
+		Normal("普通", 0),
+		Test("测试", 1);
 
 		private String name;
 		private int index;
@@ -767,6 +769,36 @@ public class EnumBase {
 			this.index = index;
 		}
 
+		public int getIndex() {
+			return index;
+		}
+
+		public void setIndex(int index) {
+			this.index = index;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}
+	}
+	
+	public enum ThirdSharing{
+		WeiXin("微信",0),
+		WeiBo("微博",1),
+		QQ("QQ",2);
+		
+		private String name;
+		private int index;
+		
+		private ThirdSharing(String name,int index){
+			this.name = name;
+			this.index = index;
+		}
+		
 		public int getIndex() {
 			return index;
 		}

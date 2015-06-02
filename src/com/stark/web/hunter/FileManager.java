@@ -760,4 +760,8 @@ public class FileManager {
 		pre.append("");
 		return pre.toString();
 	}
+
+	public static String getAgentShareUrl(int articleId) {
+		return "http://www.uha.so/StarkPet/user/userShareAgent.do?articleId=" + articleId;
+	}
 }

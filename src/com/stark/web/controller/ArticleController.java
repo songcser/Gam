@@ -1,10 +1,6 @@
 package com.stark.web.controller;
 
-import java.awt.image.BufferedImage;
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,15 +20,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.annotation.Resource;
-import javax.imageio.ImageIO;
-import javax.imageio.ImageReader;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.json.JSONObject;
+
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,6 +36,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import com.stark.web.define.EnumBase;
+import com.stark.web.define.EnumBase.Sex;
 import com.stark.web.define.RedisInfo;
 import com.stark.web.define.EnumBase.ActivityType;
 import com.stark.web.define.EnumBase.ArticleType;
@@ -49,6 +44,7 @@ import com.stark.web.define.EnumBase.ChartletStatus;
 import com.stark.web.define.EnumBase.ChartletType;
 import com.stark.web.define.EnumBase.NoticeStatus;
 import com.stark.web.define.EnumBase.NoticeType;
+import com.stark.web.define.EnumBase.ThirdSharing;
 import com.stark.web.entity.ActivityInfo;
 import com.stark.web.entity.ArticleInfo;
 import com.stark.web.entity.ArticlePublishTimeLine;
@@ -78,7 +74,7 @@ public class ArticleController {
 	private static Logger logger = Logger.getLogger(FileManager.class);
 	private static int maxResults = 10;
 	private static int maxResults2 = 20;
-	private static String ourShareUrl = "/article/outsideShare?articleId=";
+	//private static String ourShareUrl = "/article/outsideShare?articleId=";
 	private static int maxPictureResult = 15;
 	// private static final String HTTP_REG =
 	// "http://([w-]+.)+[w-]+(/[w- ./?%&=]*)?";
@@ -1030,6 +1026,10 @@ public class ArticleController {
 				content = filterContent(content);
 				article.setContent(content);
 				article.setDate(new Date());
+				String status = multiRequest.getParameter("status");
+				if(status!=null){
+					article.setStatus(Integer.parseInt(status));
+				}
 				article.setReference(multiRequest.getParameter("reference"));
 				article.setTitle(multiRequest.getParameter("title"));
 				String richText = multiRequest.getParameter("richText");
@@ -1841,7 +1841,7 @@ public class ArticleController {
 	}
 	
 	@RequestMapping("outShareByUser.do")
-	public String outShareByUser(int articleId,int userId, HttpServletRequest request) {
+	public String outShareByUser(int articleId,int userId, int shareFrom ,HttpServletRequest request) {
 		if (articleId == 0)
 			return "";
 		SimpleDateFormat sdf = WebManager.getDateFormat();
@@ -1901,4 +1901,83 @@ public class ArticleController {
 		articleManager.createArticleHtml();
 		return map;
 	}
+	
+	@RequestMapping("OAuthCallBack.do")
+	public String oAuthCallBack(int articleId,int userId,int shareFrom,String code){
+		
+		return null;
+	}
+	
+	@RequestMapping("outShareOAuth.do")
+	public String outShareOAuth(int articleId,Integer userId,Integer shareFrom,String code,HttpServletRequest request){
+		if(code!=null){
+			JSONObject jsonObject = WebManager.getAccessToken(code);
+			String access_token=jsonObject.getString("access_token");
+		    String openid=jsonObject.getString("openid");
+		     
+		    JSONObject userInfoJO = WebManager.getOauthUserInfo(openid, access_token);
+		     
+		    if(userId==null&&shareFrom==null){
+		    	return outShare(articleId,request);
+		    }
+		    //UserInfo fromUser = userManager.getUser(userId);
+		    if(shareFrom==ThirdSharing.WeiXin.getIndex()){
+		    	UserInfo toUser = userManager.isExistSinaOpenId(openid);
+		    	if(toUser==null){
+		    		toUser = getUserFromJSON(userInfoJO);
+		    		
+		    		int touserId = userManager.addUser(toUser);
+					if(userId<=0){
+					}
+					toUser.setUserId(touserId);
+					//System.out.println(user.getHeadPic());
+					if(!toUser.getHeadPic().equals("")){
+						userManager.getUserHeadPic(userId,toUser.getHeadPic());
+					}
+					
+					//String redirectUrl = WebManager.getSecondUrl(userId,articleId,shareFrom,fromUser.getWeChatOpenId(),openid);
+					
+					return outShareByUser(articleId,userId,shareFrom,request);
+		    	}
+		    }
+		    else{
+		    	String redirectUri = WebManager.getRedirectUri(userId,articleId,shareFrom);
+				String oauth_url = WebManager.getCodeRequest(redirectUri);
+				return "redirect:"+oauth_url;
+		    }
+		}
+		
+	    
+	    return null;
+	}
+	
+	private UserInfo getUserFromJSON(JSONObject userInfoJO){
+		UserInfo user = new UserInfo();
+		//String user_openid=userInfoJO.getString("openid");
+	    String user_nickname=userInfoJO.getString("nickname");
+	    user.setName(user_nickname);
+	    System.out.println(user_nickname);
+	    String user_sex=userInfoJO.getString("sex");
+	    if(user_sex!=null){
+	    	
+	    }
+	    else {
+	    	user.setSex(Sex.unKnow.getIndex());
+	    }
+	    
+	    System.out.println(user_sex);
+	    String user_province=userInfoJO.getString("province");
+	    System.out.println(user_province);
+	    String user_city=userInfoJO.getString("city");
+	    System.out.println(user_city);
+	    user.setHomeTown(user_province+"-"+user_city);
+	    String user_country=userInfoJO.getString("country");
+	    System.out.println(user_country);
+	    String user_headimgurl=userInfoJO.getString("headimgurl");
+	    user.setHeadPic(user_headimgurl);
+	    System.out.println(user_headimgurl);
+	    
+	    return user;
+	}
+	
 }

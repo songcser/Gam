@@ -1509,4 +1509,15 @@ public class UserController {
 		userManager.uploadQQHeadPic();
 		return map;
 	}
+	
+	@RequestMapping("userShareAgent.do")
+	public void userAgent(int userId,int articleId,int shareFrom,HttpServletResponse response){
+		String redirectUri = WebManager.getRedirectUri(userId,articleId,shareFrom);
+		String oauth_url = WebManager.getCodeRequest(redirectUri);
+		try {
+			response.sendRedirect(oauth_url);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} 
+	}
 }

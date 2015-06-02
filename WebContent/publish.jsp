@@ -78,7 +78,15 @@ body {
 						</div>
 
 						<div id="richTextDiv" class="form-group collapse">
-							<label for="content">富文本</label>
+						    <div class="btn-group" data-toggle="buttons">
+                                <label class="btn btn-primary active">
+                                    <input type="radio" name="status" id="statusNormal" autocomplete="off"  value="0" checked> 普通
+                                </label>
+                                <label class="btn btn-primary">
+							         <input type="radio" name="status" id="statusTest" autocomplete="off" value="1"> 测试
+							     </label>
+							</div>
+							<div class="margin-top">
 							<!-- 
 							<div class="input-group margin-bottom">
                                 <input type="text" class="form-control" id="checkUrlId" placeholder="请输入url地址">
@@ -88,6 +96,7 @@ body {
                             </div>
                              -->
 							<%@ include file="ueditor.jsp"%>
+							</div>
 						</div>
 
 						<div style="width: 100%; clear: both">
@@ -106,13 +115,22 @@ body {
 	<script type="text/javascript" src="../js/main.js"></script>
 	<script type="text/javascript">
 		var isClick = false;
+	    var statusValue = 0;
 		function selectCommonMode() {
+			//$('#statusNormal').attr('checked', 'checked');
+			statusValue = $("input[name='status']:checked").val();
+			document.getElementById("statusNormal").checked=true;
+			
 			$('input[type="radio"]').parent('label').removeClass('active');
 			$('input[type="radio"]:checked').parent('label').addClass('active');
 			$('.collapse').collapse('hide');
+			
 		}
 
 		function selectRecommendMode() {
+			if(statusValue=="1"){
+				document.getElementById("statusTest").checked=true;
+			}
 			$('input[type="radio"]').parent('label').removeClass('active');
 			$('input[type="radio"]:checked').parent('label').addClass('active');
 
@@ -124,16 +142,22 @@ body {
 		}
 
 		function selectShowMode() {
-			$('input[type="radio"]').parent('label').removeClass('active');
-			$('input[type="radio"]:checked').parent('label').addClass('active');
+			
 			$('#showDiv').collapse('show');
 			var title = $("#showSelect").find('option:selected').attr("title");
 			if(title=="3"){
                 $('#richTextDiv').collapse('hide');
+                $('#statusNormal').attr('checked', 'checked');
+                $('#statusTest').attr('checked', '');
             }
             else if(title=="2"){
+            	if(statusValue=="1"){
+                    document.getElementById("statusTest").checked=true;
+                }
                 $('#richTextDiv').collapse('show');
             }
+			$('input[type="radio"]').parent('label').removeClass('active');
+            $('input[type="radio"]:checked').parent('label').addClass('active');
 			isClick = true;
 		}
 		function selectUser() {

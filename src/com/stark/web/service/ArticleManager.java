@@ -27,6 +27,7 @@ import org.springframework.stereotype.Component;
 
 import com.stark.web.dao.IArticleDAO;
 import com.stark.web.dao.IUserDAO;
+import com.stark.web.define.EnumBase.ArticleStatus;
 import com.stark.web.define.EnumBase.ChartletType;
 import com.stark.web.define.EnumBase.NoticeType;
 import com.stark.web.define.EnumBase.UserRole;
@@ -1417,8 +1418,14 @@ public class ArticleManager implements IArticleManager {
 		}
 		aMap.put("url", FileManager.getHtmlUrl(articleId));
 		//aMap.put("htmlUrl", FileManager.getHtmlUrl2(articleId));
-		aMap.put("shareUrl", FileManager.getShareUrl(articleId));
-		//aMap.put("articles", aMap);
+		int status = article.getStatus();
+		//System.out.println("Status: "+status);
+		if(status==ArticleStatus.Normal.getIndex()){
+			aMap.put("shareUrl", FileManager.getShareUrl(articleId));
+		}
+		else if(status==ArticleStatus.Test.getIndex()){
+			aMap.put("shareUrl", FileManager.getAgentShareUrl(articleId));
+		}
 		return aMap;
 	}
 	

@@ -30,6 +30,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
 
 import com.stark.web.define.EnumBase.NoticeType;
+import com.stark.web.hunter.FileManager;
 
 import cn.jpush.api.JPushClient;
 import cn.jpush.api.common.APIConnectionException;
@@ -53,7 +54,7 @@ public class WebManager {
 	
 	private final static String weiboAppId = "wx6e066355567b7f61";
 	private final static String weiboAppSecret = "2d8266c90d9e085c83c324528aabd4a9";
-	private final static String REDIRECT_URI = "http://www.uha.so/StrakPet/article/outShare.do?articleId=123";
+	//private final static String REDIRECT_URI = "http://www.uha.so/StrakPet/article/outShare.do?articleId=123";
 	private final static String SCOPE = "snsapi_userinfo";
 	
 	
@@ -402,6 +403,29 @@ public class WebManager {
 	     String user_headimgurl=userInfoJO.getString("headimgurl");
 	     System.out.println(user_headimgurl);
 	}
+	
+	public static JSONObject getAccessToken(String code){
+		 get_access_token_url=get_access_token_url.replace("APPID", weiboAppId);
+	     get_access_token_url=get_access_token_url.replace("SECRET", weiboAppSecret);
+	     get_access_token_url=get_access_token_url.replace("CODE", code);
+	     
+	     String json=getUrl(get_access_token_url);
+	     
+	     JSONObject jsonObject=JSONObject.fromObject(json);
+	     
+	     return jsonObject;
+	}
+	
+	public static JSONObject getOauthUserInfo(String openid,String access_token){
+		get_userinfo=get_userinfo.replace("ACCESS_TOKEN", access_token);
+	     get_userinfo=get_userinfo.replace("OPENID", openid);
+	        
+	     String userInfoJson=getUrl(get_userinfo);
+	        
+	     JSONObject userInfoJO=JSONObject.fromObject(userInfoJson);
+	     
+	     return userInfoJO;
+	}
 
 	public static String getUrl(String url){
         String result = null;
@@ -409,7 +433,8 @@ public class WebManager {
             // 根据地址获取请求
             HttpGet request = new HttpGet(url);
             // 获取当前客户端对象
-            HttpClient httpClient = new DefaultHttpClient();
+            @SuppressWarnings({ "resource", "deprecation" })
+			HttpClient httpClient = new DefaultHttpClient();
             // 通过请求对象获取响应对象
             HttpResponse response = httpClient.execute(request);
             
@@ -424,13 +449,14 @@ public class WebManager {
         return result;
     }
 	
-	public static String getCodeRequest(){ 
+	public static String getCodeRequest(String redirectUri){ 
         String result = null; 
         
         getCodeRequest  = getCodeRequest.replace("APPID", urlEnodeUTF8(weiboAppId)); 
-        getCodeRequest  = getCodeRequest.replace("REDIRECT_URI",urlEnodeUTF8(REDIRECT_URI)); 
+        getCodeRequest  = getCodeRequest.replace("REDIRECT_URI",urlEnodeUTF8(redirectUri)); 
         getCodeRequest = getCodeRequest.replace("SCOPE", SCOPE); 
-        getCodeRequest = getCodeRequest.replace("STATUS", SCOPE); 
+        String state = FileManager.toGUID();
+        getCodeRequest = getCodeRequest.replace("STATUS", state); 
 
         result = getCodeRequest; 
         return result; 
@@ -446,5 +472,13 @@ public class WebManager {
         } 
 
         return result; 
-    } 
+    }
+
+	public static String getRedirectUri(int userId, int articleId, int shareFrom) {
+		return  "http://www.uha.so/StrakPet/article/outShareOAuth.do?articleId="+articleId+"&userId="+userId+"&shareFrom="+shareFrom;
+	}
+
+	public static String getSecondUrl(int userId,int articleId,int shareFrom,String fromOpenId,String toOpenId) {
+		return "/article/outShareOAuth.do?articleId="+articleId+"&userId="+userId+"&shareFrom="+shareFrom+"&fromOpenId="+fromOpenId+"&toOpenId="+toOpenId;
+	} 
 }
