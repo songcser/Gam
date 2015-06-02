@@ -55,7 +55,7 @@ public class WebManager {
 	private final static String weiboAppId = "wx6e066355567b7f61";
 	private final static String weiboAppSecret = "2d8266c90d9e085c83c324528aabd4a9";
 	//private final static String REDIRECT_URI = "http://www.uha.so/StrakPet/article/outShare.do?articleId=123";
-	private final static String SCOPE = "snsapi_userinfo";
+	private final static String SCOPE = "snsapi_login";
 	
 	
 	public static String  getCodeRequest = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=APPID&redirect_uri=REDIRECT_URI&response_type=code&scope=SCOPE&state=STATE#wechat_redirect";
@@ -456,7 +456,7 @@ public class WebManager {
         getCodeRequest  = getCodeRequest.replace("REDIRECT_URI",urlEnodeUTF8(redirectUri)); 
         getCodeRequest = getCodeRequest.replace("SCOPE", SCOPE); 
         String state = FileManager.toGUID();
-        getCodeRequest = getCodeRequest.replace("STATUS", state); 
+        getCodeRequest = getCodeRequest.replace("STATE", state); 
 
         result = getCodeRequest; 
         return result; 

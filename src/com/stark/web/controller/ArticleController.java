@@ -1909,7 +1909,7 @@ public class ArticleController {
 	}
 	
 	@RequestMapping("outShareOAuth.do")
-	public String outShareOAuth(int articleId,Integer userId,Integer shareFrom,String code,HttpServletRequest request){
+	public String outShareOAuth(int articleId,Integer userId,Integer shareFrom,String code,String state, HttpServletRequest request){
 		if(code!=null){
 			JSONObject jsonObject = WebManager.getAccessToken(code);
 			String access_token=jsonObject.getString("access_token");

@@ -54,16 +54,16 @@ public class FileManager {
 	private static Logger logger = Logger.getLogger(FileManager.class);
 	private static OSSClient ossClient;
 	
-	private final static String bucketName = "starktest";
-	//private final static String bucketName = "starkpet";
+	//private final static String bucketName = "starktest";
+	private final static String bucketName = "starkpet";
 	
 	//private final static String shareUrl = "http://www.uha.so/";
 	// private static String url = "http://192.168.10.107/";
-	private final static String url = "http://" + bucketName + ".oss-cn-hangzhou.aliyuncs.com/";
-	//private final static String url = "http://image.uha.so/";
+	//private final static String url = "http://" + bucketName + ".oss-cn-hangzhou.aliyuncs.com/";
+	private final static String url = "http://image.uha.so/";
 	
-	private final static String shareUrl = "http://192.168.1.125:8080/StarkPet";
-	//private final static String shareUrl = "http://www.uha.so/StarkPet";
+	//private final static String shareUrl = "http://192.168.1.125:8080/StarkPet";
+	private final static String shareUrl = "http://www.uha.so/StarkPet";
 	
 	private final static String localPath = "/home/stark/FileStore/";
 	private final static String webIcon = "http://www.uha.so/icon/uha.ico";
