@@ -21,6 +21,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 import javax.imageio.ImageIO;
 
@@ -54,16 +55,17 @@ public class FileManager {
 	private static Logger logger = Logger.getLogger(FileManager.class);
 	private static OSSClient ossClient;
 	
-	//private final static String bucketName = "starktest";
-	private final static String bucketName = "starkpet";
+	private final static String bucketName = "starktest";
+	//private final static String bucketName = "starkpet";
 	
 	//private final static String shareUrl = "http://www.uha.so/";
 	// private static String url = "http://192.168.10.107/";
-	//private final static String url = "http://" + bucketName + ".oss-cn-hangzhou.aliyuncs.com/";
-	private final static String url = "http://image.uha.so/";
+	private final static String url = "http://" + bucketName + ".oss-cn-hangzhou.aliyuncs.com/";
+	//private final static String url = "http://image.uha.so/";
 	
+	private final static String shareUrl = "http://stark.tunnel.mobi/StarkPet";
 	//private final static String shareUrl = "http://192.168.1.125:8080/StarkPet";
-	private final static String shareUrl = "http://www.uha.so/StarkPet";
+	//private final static String shareUrl = "http://www.uha.so/StarkPet";
 	
 	private final static String localPath = "/home/stark/FileStore/";
 	private final static String webIcon = "http://www.uha.so/icon/uha.ico";
@@ -762,6 +764,11 @@ public class FileManager {
 	}
 
 	public static String getAgentShareUrl(int articleId) {
-		return "http://www.uha.so/StarkPet/user/userShareAgent.do?articleId=" + articleId;
+		return "http://stark.tunnel.mobi/StarkPet/user/userShareAgent.do?articleId=" + articleId;
 	}
+	
+	public static boolean isInteger(String str) {    
+	    Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");    
+	    return pattern.matcher(str).matches();    
+	  }  
 }

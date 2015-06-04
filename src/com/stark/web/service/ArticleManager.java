@@ -1424,7 +1424,9 @@ public class ArticleManager implements IArticleManager {
 			aMap.put("shareUrl", FileManager.getShareUrl(articleId));
 		}
 		else if(status==ArticleStatus.Test.getIndex()){
-			aMap.put("shareUrl", FileManager.getAgentShareUrl(articleId));
+			String shareUrl = WebManager.getAgentShareUrl(articleId);
+			//aMap.put("shareUrl", FileManager.getAgentShareUrl(articleId));
+			aMap.put("shareUrl", shareUrl);
 		}
 		return aMap;
 	}

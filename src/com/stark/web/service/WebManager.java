@@ -30,6 +30,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
 
 import com.stark.web.define.EnumBase.NoticeType;
+import com.stark.web.define.EnumBase.ThirdSharing;
 import com.stark.web.hunter.FileManager;
 
 import cn.jpush.api.JPushClient;
@@ -52,10 +53,10 @@ public class WebManager {
 	private final static String appKey = "408183a3a7fd461efc860cda";
 	private final static String ALERT = "hello world";
 	
-	private final static String weiboAppId = "wx6e066355567b7f61";
-	private final static String weiboAppSecret = "2d8266c90d9e085c83c324528aabd4a9";
+	private final static String weChatAppId = "wx4b4d99253b8e39fc";
+	private final static String weChatAppSecret = "1aa4c17e61d10b6690d3ccbafff9f974";
 	//private final static String REDIRECT_URI = "http://www.uha.so/StrakPet/article/outShare.do?articleId=123";
-	private final static String SCOPE = "snsapi_login";
+	private final static String SCOPE = "snsapi_userinfo";
 	
 	
 	public static String  getCodeRequest = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=APPID&redirect_uri=REDIRECT_URI&response_type=code&scope=SCOPE&state=STATE#wechat_redirect";
@@ -371,8 +372,8 @@ public class WebManager {
 	}
 
 	public static void Oauth2WeiXin(String code){
-		 get_access_token_url=get_access_token_url.replace("APPID", weiboAppId);
-	     get_access_token_url=get_access_token_url.replace("SECRET", weiboAppSecret);
+		 get_access_token_url=get_access_token_url.replace("APPID", weChatAppId);
+	     get_access_token_url=get_access_token_url.replace("SECRET", weChatAppSecret);
 	     get_access_token_url=get_access_token_url.replace("CODE", code);
 	     
 	     String json=getUrl(get_access_token_url);
@@ -405,12 +406,12 @@ public class WebManager {
 	}
 	
 	public static JSONObject getAccessToken(String code){
-		 get_access_token_url=get_access_token_url.replace("APPID", weiboAppId);
-	     get_access_token_url=get_access_token_url.replace("SECRET", weiboAppSecret);
+		 get_access_token_url=get_access_token_url.replace("APPID", weChatAppId);
+	     get_access_token_url=get_access_token_url.replace("SECRET", weChatAppSecret);
 	     get_access_token_url=get_access_token_url.replace("CODE", code);
 	     
 	     String json=getUrl(get_access_token_url);
-	     
+	     System.out.println(json);
 	     JSONObject jsonObject=JSONObject.fromObject(json);
 	     
 	     return jsonObject;
@@ -440,10 +441,9 @@ public class WebManager {
             
             // 判断网络连接状态码是否正常(0--200都数正常)
             if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-                result= EntityUtils.toString(response.getEntity());
+                result= EntityUtils.toString(response.getEntity(),"utf-8");
             } 
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return result;
@@ -452,7 +452,7 @@ public class WebManager {
 	public static String getCodeRequest(String redirectUri){ 
         String result = null; 
         
-        getCodeRequest  = getCodeRequest.replace("APPID", urlEnodeUTF8(weiboAppId)); 
+        getCodeRequest  = getCodeRequest.replace("APPID", urlEnodeUTF8(weChatAppId)); 
         getCodeRequest  = getCodeRequest.replace("REDIRECT_URI",urlEnodeUTF8(redirectUri)); 
         getCodeRequest = getCodeRequest.replace("SCOPE", SCOPE); 
         String state = FileManager.toGUID();
@@ -475,10 +475,21 @@ public class WebManager {
     }
 
 	public static String getRedirectUri(int userId, int articleId, int shareFrom) {
-		return  "http://www.uha.so/StrakPet/article/outShareOAuth.do?articleId="+articleId+"&userId="+userId+"&shareFrom="+shareFrom;
+		return  "http://stark.tunnel.mobi/StarkPet/article/outShareOAuth.do?articleId="+articleId+"&userId="+userId+"&shareFrom="+shareFrom;
 	}
 
 	public static String getSecondUrl(int userId,int articleId,int shareFrom,String fromOpenId,String toOpenId) {
 		return "/article/outShareOAuth.do?articleId="+articleId+"&userId="+userId+"&shareFrom="+shareFrom+"&fromOpenId="+fromOpenId+"&toOpenId="+toOpenId;
+	}
+
+	public static String getAgentShareUrl(int articleId) {
+		
+		String redirectUri = WebManager.getRedirectUri(articleId);
+		String oauth_url = WebManager.getCodeRequest(redirectUri);
+		return oauth_url;
+	}
+
+	private static String getRedirectUri(int articleId) {
+		return  "http://stark.tunnel.mobi/StarkPet/article/outShareOAuth.do?articleId="+articleId+"&userId=USERID&shareFrom=SHAREFROM";
 	} 
 }

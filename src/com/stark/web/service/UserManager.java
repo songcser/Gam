@@ -653,6 +653,7 @@ public class UserManager implements IUserManager{
 	public UserInfo isExistWeChatOpenId(String weChatOpenId) {
 		String key = RedisInfo.USERWECHATOPENID+weChatOpenId;
 		String id = userDao.getRedisOpenId(key);
+		System.out.println(id);
 		UserInfo user = null;
 		if(id==null){
 			user = userDao.isExistWeChatOpenId(weChatOpenId);

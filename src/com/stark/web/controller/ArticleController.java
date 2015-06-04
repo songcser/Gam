@@ -45,6 +45,8 @@ import com.stark.web.define.EnumBase.ChartletType;
 import com.stark.web.define.EnumBase.NoticeStatus;
 import com.stark.web.define.EnumBase.NoticeType;
 import com.stark.web.define.EnumBase.ThirdSharing;
+import com.stark.web.define.EnumBase.UserRole;
+import com.stark.web.define.EnumBase.UserStatus;
 import com.stark.web.entity.ActivityInfo;
 import com.stark.web.entity.ArticleInfo;
 import com.stark.web.entity.ArticlePublishTimeLine;
@@ -1840,7 +1842,6 @@ public class ArticleController {
 		return "newShare";
 	}
 	
-	@RequestMapping("outShareByUser.do")
 	public String outShareByUser(int articleId,int userId, int shareFrom ,HttpServletRequest request) {
 		if (articleId == 0)
 			return "";
@@ -1909,36 +1910,45 @@ public class ArticleController {
 	}
 	
 	@RequestMapping("outShareOAuth.do")
-	public String outShareOAuth(int articleId,Integer userId,Integer shareFrom,String code,String state, HttpServletRequest request){
+	public String outShareOAuth(int articleId,String userIdStr,String shareFromStr,String code,String state, HttpServletRequest request){
 		if(code!=null){
+			//System.out.println("code: "+code);
 			JSONObject jsonObject = WebManager.getAccessToken(code);
+			//System.out.println(jsonObject);
 			String access_token=jsonObject.getString("access_token");
+			
 		    String openid=jsonObject.getString("openid");
 		     
 		    JSONObject userInfoJO = WebManager.getOauthUserInfo(openid, access_token);
-		     
-		    if(userId==null&&shareFrom==null){
+		    if(access_token==null||userIdStr==null&&shareFromStr==null){
 		    	return outShare(articleId,request);
 		    }
-		    //UserInfo fromUser = userManager.getUser(userId);
+		    if(FileManager.isInteger(userIdStr)&&FileManager.isInteger(shareFromStr)){
+		    	//return outShare(articleId,request);
+		    }
+		    int userId = Integer.parseInt(userIdStr);
+		    int shareFrom = Integer.parseInt(shareFromStr);
+		    
 		    if(shareFrom==ThirdSharing.WeiXin.getIndex()){
-		    	UserInfo toUser = userManager.isExistSinaOpenId(openid);
+		    	UserInfo toUser = userManager.isExistWeChatOpenId(openid);
 		    	if(toUser==null){
+		    		
 		    		toUser = getUserFromJSON(userInfoJO);
+		    		toUser.setQqOpenId("");
+		    		toUser.setSinaOpenId("");
+		    		toUser.setWeChatOpenId(openid);
 		    		
 		    		int touserId = userManager.addUser(toUser);
-					if(userId<=0){
-					}
 					toUser.setUserId(touserId);
-					//System.out.println(user.getHeadPic());
 					if(!toUser.getHeadPic().equals("")){
-						userManager.getUserHeadPic(userId,toUser.getHeadPic());
+						System.out.println(toUser.getHeadPic());
+						userManager.getUserHeadPic(touserId,toUser.getHeadPic());
 					}
-					
-					//String redirectUrl = WebManager.getSecondUrl(userId,articleId,shareFrom,fromUser.getWeChatOpenId(),openid);
-					
-					return outShareByUser(articleId,userId,shareFrom,request);
 		    	}
+		    	else{
+		    		//System.out.println(toUser.getName());
+		    	}
+		    	return weChatShare(articleId,userId,shareFrom,request);
 		    }
 		    else{
 		    	String redirectUri = WebManager.getRedirectUri(userId,articleId,shareFrom);
@@ -1946,23 +1956,29 @@ public class ArticleController {
 				return "redirect:"+oauth_url;
 		    }
 		}
-		
 	    
 	    return null;
 	}
 	
+	private String weChatShare(int articleId, int userId, int shareFrom, HttpServletRequest request) {
+		thirdShare(articleId,userId,shareFrom,request);
+		return "weChatShare";
+	}
 	private UserInfo getUserFromJSON(JSONObject userInfoJO){
 		UserInfo user = new UserInfo();
 		//String user_openid=userInfoJO.getString("openid");
 	    String user_nickname=userInfoJO.getString("nickname");
 	    user.setName(user_nickname);
 	    System.out.println(user_nickname);
-	    String user_sex=userInfoJO.getString("sex");
-	    if(user_sex!=null){
-	    	
-	    }
-	    else {
+	    int user_sex=userInfoJO.getInt("sex");
+	    if(user_sex==0){
 	    	user.setSex(Sex.unKnow.getIndex());
+	    }
+	    else if(user_sex==1){
+	    	user.setSex(Sex.male.getIndex());
+	    }
+	    else if(user_sex==2){
+	    	user.setSex(Sex.female.getIndex());
 	    }
 	    
 	    System.out.println(user_sex);
@@ -1977,7 +1993,61 @@ public class ArticleController {
 	    user.setHeadPic(user_headimgurl);
 	    System.out.println(user_headimgurl);
 	    
+	    user.setPassword("");
+	    user.setEmail("");
+	    user.setStatus(UserStatus.OffLine.getIndex());
+	    user.setLastLogonDate(new Date());
+	    user.setRole(UserRole.Normal.getIndex());
 	    return user;
 	}
-	
+	private void thirdShare(int articleId, int userId, int shareFrom, HttpServletRequest request) {
+		if (articleId == 0)
+			return ;
+		SimpleDateFormat sdf = WebManager.getDateFormat();
+		ArticleInfo article = articleManager.getArticle(articleId);
+		
+		UserInfo user = userManager.getUser(article.getUser().getUserId());
+		
+		int articleType = 0;
+		
+		int type = article.getType();
+		if(type==ArticleType.DayExquisite.getIndex()||type==ArticleType.ExquisiteMagazine.getIndex()||type==ArticleType.ExquisiteNoAuditing.getIndex()
+				||type==ArticleType.ExquisiteMagazineReport.getIndex()||type==ArticleType.DayExquisiteReport.getIndex()){
+			articleType = 1;
+		}
+		if(type==ArticleType.Activity.getIndex()||type==ArticleType.ActivityExquisite.getIndex()){
+			ActivityInfo activity = activityManager.getActivity(article.getActivity().getActivityId());
+			if(activity.getType()==ActivityType.NoJoin.getIndex()){
+				articleType = 1;
+			}
+		}
+		if(articleType==0){
+			List<String> picList = articleManager.getPicListById(article.getArticleId());
+			request.setAttribute("pictures", picList);
+		}
+		else {
+			String richText = article.getRichText();
+			String path = FileManager.getArticleHtmlPath(articleId, richText);
+			String content = FileManager.getContent( path);
+			if(content!=null&&!content.equals("")){
+				if(richText.endsWith(".html")){
+					//System.out.println("####"+content);
+					content = WebManager.getHtmlArticle(content);
+				}
+				//System.out.println("$$$$"+content);
+				request.setAttribute("content", content);
+			}
+		}
+		String title = article.getTitle();
+		if(title==null||title.equals("")){
+			title = "UHA 这个世界我哈过";
+		}
+		
+		request.setAttribute("title", title);
+		request.setAttribute("article", article);
+		request.setAttribute("user", user);
+		request.setAttribute("date", sdf.format(article.getDate()));
+		request.setAttribute("type", articleType);
+		//System.out.println(pics.size());
+	}
 }
