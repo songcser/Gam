@@ -491,5 +491,13 @@ public class WebManager {
 
 	private static String getRedirectUri(int articleId) {
 		return  "http://stark.tunnel.mobi/StarkPet/article/outShareOAuth.do?articleId="+articleId+"&userId=USERID&shareFrom=SHAREFROM";
+	}
+
+	public static String getWeChatAppId() {
+		return weChatAppId;
+	}
+
+	public static String getWeChatAppSecret() {
+		return weChatAppSecret;
 	} 
 }

@@ -35,6 +35,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
+import com.github.sd4324530.fastweixin.api.JsAPI;
+import com.github.sd4324530.fastweixin.api.config.ApiConfig;
+import com.github.sd4324530.fastweixin.api.response.GetSignatureResponse;
 import com.stark.web.define.EnumBase;
 import com.stark.web.define.EnumBase.Sex;
 import com.stark.web.define.RedisInfo;
@@ -68,6 +71,8 @@ import com.stark.web.service.ITagManager;
 import com.stark.web.service.IUserManager;
 import com.stark.web.service.WebManager;
 import com.stark.web.service.WordFilter;
+import com.stark.web.wechat.TestConfigChangeHandle;
+import com.stark.web.wechat.WeChatSign;
 
 @Controller
 @RequestMapping("/article")
@@ -1910,26 +1915,40 @@ public class ArticleController {
 	}
 	
 	@RequestMapping("outShareOAuth.do")
-	public String outShareOAuth(int articleId,String userIdStr,String shareFromStr,String code,String state, HttpServletRequest request){
+	public String outShareOAuth(int articleId,String userId,String shareFrom,String code,String state, HttpServletRequest request){
+		StringBuffer url = request.getRequestURL();
+		url.append("?articleId=").append(articleId);
+		url.append("&userId=").append(userId);
+		url.append("&shareFrom=").append(shareFrom);
+		url.append("&code=").append(code);
+		url.append("&state=").append(state);
 		if(code!=null){
 			//System.out.println("code: "+code);
 			JSONObject jsonObject = WebManager.getAccessToken(code);
 			//System.out.println(jsonObject);
-			String access_token=jsonObject.getString("access_token");
+			String access_token =null;
+			try {
+				access_token = jsonObject.getString("access_token");
+			} catch (Exception e) {
+				return weChatShare(articleId,1,0,url.toString(),request);
+				//e.printStackTrace();
+			}
 			
 		    String openid=jsonObject.getString("openid");
 		     
 		    JSONObject userInfoJO = WebManager.getOauthUserInfo(openid, access_token);
-		    if(access_token==null||userIdStr==null&&shareFromStr==null){
-		    	return outShare(articleId,request);
+		    if(access_token==null||userId==null&&shareFrom==null){
+		    	return weChatShare(articleId,1,0,url.toString(),request);
 		    }
-		    if(FileManager.isInteger(userIdStr)&&FileManager.isInteger(shareFromStr)){
+		    int uId = 0;
+		    int shFrom = 0;
+		    if(FileManager.isInteger(userId)&&FileManager.isInteger(shareFrom)){
 		    	//return outShare(articleId,request);
+		    	uId = Integer.parseInt(userId);
+			    shFrom = Integer.parseInt(shareFrom);
 		    }
-		    int userId = Integer.parseInt(userIdStr);
-		    int shareFrom = Integer.parseInt(shareFromStr);
 		    
-		    if(shareFrom==ThirdSharing.WeiXin.getIndex()){
+		    if(shFrom==ThirdSharing.WeiXin.getIndex()){
 		    	UserInfo toUser = userManager.isExistWeChatOpenId(openid);
 		    	if(toUser==null){
 		    		
@@ -1939,6 +1958,7 @@ public class ArticleController {
 		    		toUser.setWeChatOpenId(openid);
 		    		
 		    		int touserId = userManager.addUser(toUser);
+		    		uId = touserId;
 					toUser.setUserId(touserId);
 					if(!toUser.getHeadPic().equals("")){
 						System.out.println(toUser.getHeadPic());
@@ -1946,12 +1966,13 @@ public class ArticleController {
 					}
 		    	}
 		    	else{
+		    		uId = toUser.getUserId();
 		    		//System.out.println(toUser.getName());
 		    	}
-		    	return weChatShare(articleId,userId,shareFrom,request);
+		    	return weChatShare(articleId,uId,shFrom,url.toString(),request);
 		    }
 		    else{
-		    	String redirectUri = WebManager.getRedirectUri(userId,articleId,shareFrom);
+		    	String redirectUri = WebManager.getRedirectUri(uId,articleId,shFrom);
 				String oauth_url = WebManager.getCodeRequest(redirectUri);
 				return "redirect:"+oauth_url;
 		    }
@@ -1960,9 +1981,47 @@ public class ArticleController {
 	    return null;
 	}
 	
-	private String weChatShare(int articleId, int userId, int shareFrom, HttpServletRequest request) {
+	private String weChatShare(int articleId, int userId, int shareFrom, String url,HttpServletRequest request) {
 		thirdShare(articleId,userId,shareFrom,request);
+		
+		//String url = request.getRequestURL().toString();
+		System.out.println(url);
+		String appid = WebManager.getWeChatAppId();
+	    String secret = WebManager.getWeChatAppSecret();
+	   
+		ApiConfig  config = new ApiConfig(appid, secret,true);
+		TestConfigChangeHandle configChangeHandle = new TestConfigChangeHandle();
+		config.addHandle(configChangeHandle);
+		JsAPI jsAPI = new JsAPI(config);
+		GetSignatureResponse response = jsAPI.getSignature(url);
+		//Map<String,String> map = WeChatSign.getSign(url);
+		//String appid = map.get("appId");
+		//String timestamp = map.get("timestamp");
+		//String nonceStr = map.get("nonceStr");
+		//String signature = map.get("signature");
+		String sign = config.getJsApiTicket();
+		String token = config.getAccessToken();
+		System.out.println("ApiTicket: "+sign);
+		System.out.println("token: "+token);
+		long timestamp = response.getTimestamp();
+		String nonceStr = response.getNoncestr();
+		String signature = response.getSignature();
+		String shareUrl = changeShareUrl(url,userId,shareFrom);
+		System.out.println(shareUrl);
+		request.setAttribute("urlStr", url);
+		request.setAttribute("appId",appid);
+		request.setAttribute("timestamp", timestamp);
+		request.setAttribute("nonceStr", nonceStr);
+		request.setAttribute("signature", signature);
 		return "weChatShare";
+	}
+	private String changeShareUrl(String url, int userId, int shareFrom) {
+		StringBuffer shareUrl = new StringBuffer("");
+		int index = url.indexOf("&userId=");
+		shareUrl.append(url.substring(0,index+8)).append(userId).append("&shareFrom=").append(shareFrom);
+		index = url.indexOf("&code=", index);
+		shareUrl.append(url.substring(index));
+		return shareUrl.toString();
 	}
 	private UserInfo getUserFromJSON(JSONObject userInfoJO){
 		UserInfo user = new UserInfo();
