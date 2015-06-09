@@ -1514,10 +1514,10 @@ public class UserController {
 	public void userAgent(int articleId,Integer userId,Integer shareFrom,HttpServletResponse response){
 		String redirectUri = null;
 		if(userId==null&&shareFrom==null){
-			redirectUri = WebManager.getRedirectUri(1,articleId,ThirdSharing.WeiXin.getIndex());
+			redirectUri = FileManager.getRedirectUri(1,articleId,ThirdSharing.WeiXin.getIndex());
 		}
 		else {
-			redirectUri = WebManager.getRedirectUri(userId,articleId,shareFrom);
+			redirectUri = FileManager.getRedirectUri(userId,articleId,shareFrom);
 		}
 		String oauth_url = WebManager.getCodeRequest(redirectUri);
 		try {

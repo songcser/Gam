@@ -218,10 +218,14 @@ function isWeiXin() {
 function downloadApp() {
     window.location.href="http://a.app.qq.com/o/simple.jsp?pkgname=com.starkpet.pa";
 }
-alert(location.href.split('#')[0]=='${urlStr}');
-alert(location.href.split('#')[0]);
+//alert(location.href.split('#')[0]=='${urlStr}');
+//alert(location.href.split('#')[0]);
+var titleShare = '${title}';
+var descShare = '${article.content}';
+var linkShare = '${shareUrl}';
+var imgUrlShare = '${imgUrl}'
 wx.config({
-    debug: true,
+    debug: false,
     appId: '${appId}',
     timestamp: '${timestamp}',
     nonceStr: '${nonceStr}',
@@ -236,20 +240,20 @@ wx.config({
     });
     wx.ready(function () {
         var shareData = {
-            title: '这是活动的介绍页',
-            desc: '这里是发送给好友的时候的简介',
-            link: 'http://mp.weixin.qq.com/wiki/7/aaa137b55fb2e0456bf8dd9148dd613f.html',
-            imgUrl: 'http://demo.open.weixin.qq.com/jssdk/images/p2166127561.jpg',
+            title: titleShare,
+            desc: descShare,
+            link: linkShare,
+            imgUrl: imgUrlShare,
         };
          //wx.onMenuShareAppMessage(shareData);
          wx.onMenuShareAppMessage({
-              title: '互联网之子',
-              desc: '在长大的过程中，我才慢慢发现，我身边的所有事，别人跟我说的所有事，那些所谓本来如此，注定如此的事，它们其实没有非得如此，事情是可以改变的。更重要的是，有些事既然错了，那就该做出改变。',
-              link: 'http://movie.douban.com/subject/25785114/',
-              imgUrl: 'http://demo.open.weixin.qq.com/jssdk/images/p2166127561.jpg',
+              title: titleShare,
+              desc: descShare,
+              link: linkShare,
+              imgUrl: imgUrlShare,
               trigger: function (res) {
                 // 不要尝试在trigger中使用ajax异步请求修改本次分享的内容，因为客户端分享操作是一个同步操作，这时候使用ajax的回包会还没有返回
-                alert('用户点击发送给朋友');
+                //alert('用户点击发送给朋友');
               },
               success: function (res) {
                 alert('已分享');
@@ -262,6 +266,8 @@ wx.config({
               }
             });
         wx.onMenuShareTimeline(shareData);
+        wx.onMenuShareWeibo(shareData);
+        wx.onMenuShareQQ(shareData);
         // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
         /*wx.hideMenuItems({
             menuList: [

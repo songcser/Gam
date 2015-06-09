@@ -49,6 +49,7 @@ import com.stark.web.define.EnumBase;
 import com.stark.web.define.MIMEType;
 import com.stark.web.define.MultiState;
 import com.stark.web.define.State;
+import com.stark.web.service.WebManager;
 
 public class FileManager {
 
@@ -195,7 +196,7 @@ public class FileManager {
 	}
 
 	public static String getShareUrl(int articleId) {
-		return "http://www.uha.so/StarkPet/article/outShare.do?articleId=" + articleId;
+		return shareUrl + "/article/outShare.do?articleId=" + articleId+"&userId=USERID&shareFrom=SHAREFROM";
 	}
 
 	public static String getChartletPicturePath(int chartletId, String fileName) {
@@ -763,12 +764,27 @@ public class FileManager {
 		return pre.toString();
 	}
 
-	public static String getAgentShareUrl(int articleId) {
-		return "http://stark.tunnel.mobi/StarkPet/user/userShareAgent.do?articleId=" + articleId;
-	}
+	//public static String getAgentShareUrl(int articleId) {
+		//return shareUrl + "/user/userShareAgent.do?articleId=" + articleId;
+	//}
 	
 	public static boolean isInteger(String str) {    
 	    Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");    
 	    return pattern.matcher(str).matches();    
 	  }  
+	
+	public static String getRedirectUri(int userId, int articleId, int shareFrom) {
+		return  shareUrl +  "/article/outShareOAuth.do?articleId="+articleId+"&userId="+userId+"&shareFrom="+shareFrom;
+	}
+
+	public static String getAgentShareUrl(int articleId) {
+		
+		String redirectUri = getRedirectUri(articleId);
+		String oauth_url = WebManager.getCodeRequest(redirectUri);
+		return oauth_url;
+	}
+
+	private static String getRedirectUri(int articleId) {
+		return  shareUrl + "/article/outShareOAuth.do?articleId="+articleId+"&userId=USERID&shareFrom=SHAREFROM";
+	}
 }

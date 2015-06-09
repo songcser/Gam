@@ -154,7 +154,9 @@ function createMediaDiv(art){
 	 }
 	
 	mediaOper.append('<div class="btn-group" role="button"><a href="javascript:changeArticleType('+art.articleId+','+art.type+')" class="btn btn-default" id="articleType'+art.articleId+'">'+typeStr+' </a></div>');
+	mediaOper.append('<div class="btn-group" role="button"><a href="javascript:shieldArticle('+art.articleId+')" class="btn btn-default">屏蔽 </a></div>');
 	mediaOper.append('<div class="btn-group" role="button"><a href="javascript:deleteArticle('+art.articleId+')" class="btn btn-default">删除 </a></div>');
+	
 	mediaDiv.append(mediaOper);
 	
 	return mediaDiv;
@@ -450,6 +452,9 @@ function showUser(userId){
 }
 
 function deleteArticle(articleId){
+	if(confirm("确定删除?") != true){     //如果用户单击了确定按钮 
+		return;
+	} 
 	currentArticle.Id = articleId;
 	var url = "/StarkPet/article/changeArticleType.do?articleId="+articleId+"&type="+11;
 	ajaxRequest(url,deleteResponse);
@@ -488,4 +493,33 @@ function jsonAjax(url,data,handle){
         dataType : "json",
         contentType : "application/json",
     });
+}
+
+function shieldArticle(articleId){
+	var url = window.location.href;
+	var page = 0;
+	currentArticle.Id = articleId;
+	if(url.indexOf("operatorManage.do")>0||url.indexOf("showUser.do")>0){
+		return;
+	}
+	else if(url.indexOf("recommend.do")>0){
+		page=0;
+    }
+	else if(url.indexOf("showManage.do")>0){
+		page=1;
+    }
+	else if(url.indexOf("moment.do")>0){
+		page=2;
+    }
+	var url = "/StarkPet/article/shield.do?articleId="+articleId+"&from="+page;
+	ajaxRequest(url,shieldResponse);
+}
+
+function shieldResponse(response){
+	if(response.result==1){
+		$("#mediaMainId"+currentArticle.Id).remove();
+	}
+	else{
+		alert("失败了!!!");
+	}
 }

@@ -169,6 +169,9 @@ public class WebManager {
                         		.addExtras(extra)
                         		.build())
                         .build())
+                 .setOptions(Options.newBuilder()
+                         .setApnsProduction(true)
+                         .build())
                  .build();
 	}
 
@@ -182,7 +185,7 @@ public class WebManager {
 	public void pushToUser(int userId, int type) {
 		JPushClient jpushClient = getPushClient();
 		Map<String,String> map = new HashMap<String,String>();
-		map.put("type", type+"");
+		
 		String content = "有通知";
 		if(type==NoticeType.Comment.getIndex()){
 			content="有人评论了你";
@@ -193,6 +196,11 @@ public class WebManager {
 		else if(type==NoticeType.Follow.getIndex()){
 			content="有人关注了你";
 		}
+		else if(type==NoticeType.See.getIndex()){
+			content="有人看了你";
+			type=NoticeType.Follow.getIndex();
+		}
+		map.put("type", type+"");
 		PushPayload payload = pushUserExtra(userId,content,map);
 		toPush(jpushClient,payload);
 	}
@@ -229,6 +237,9 @@ public class WebManager {
                         		.addExtras(extra)
                         		.build())
                         .build())
+                 .setOptions(Options.newBuilder()
+                         .setApnsProduction(true)
+                         .build())
                  .build();
 	}
 
@@ -473,25 +484,6 @@ public class WebManager {
 
         return result; 
     }
-
-	public static String getRedirectUri(int userId, int articleId, int shareFrom) {
-		return  "http://stark.tunnel.mobi/StarkPet/article/outShareOAuth.do?articleId="+articleId+"&userId="+userId+"&shareFrom="+shareFrom;
-	}
-
-	public static String getSecondUrl(int userId,int articleId,int shareFrom,String fromOpenId,String toOpenId) {
-		return "/article/outShareOAuth.do?articleId="+articleId+"&userId="+userId+"&shareFrom="+shareFrom+"&fromOpenId="+fromOpenId+"&toOpenId="+toOpenId;
-	}
-
-	public static String getAgentShareUrl(int articleId) {
-		
-		String redirectUri = WebManager.getRedirectUri(articleId);
-		String oauth_url = WebManager.getCodeRequest(redirectUri);
-		return oauth_url;
-	}
-
-	private static String getRedirectUri(int articleId) {
-		return  "http://stark.tunnel.mobi/StarkPet/article/outShareOAuth.do?articleId="+articleId+"&userId=USERID&shareFrom=SHAREFROM";
-	}
 
 	public static String getWeChatAppId() {
 		return weChatAppId;

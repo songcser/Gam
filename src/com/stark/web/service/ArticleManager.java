@@ -88,24 +88,34 @@ public class ArticleManager implements IArticleManager {
 			if(aInfo.getActivity()!=null){
 				articleDao.addActivityArticleId(aInfo.getActivity().getActivityId(),id);
 			}
+			//UserInfo user = userManager.getUser(aInfo.getUser().getUserId());
 			UserInfo user = aInfo.getUser();
+			int userId = aInfo.getUser().getUserId();
 			articleDao.addRedisArticle(aInfo);
-			articleDao.addRedisUserArticleList(user.getUserId(),aInfo.getArticleId());
+			articleDao.addRedisUserArticleList(userId,aInfo.getArticleId());
 			articleDao.addRedisUpdateList(id);
-			articleDao.addRedisUserArticleCount(user.getUserId());
+			articleDao.addRedisUserArticleCount(userId);
 			SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
 			articleDao.addRedisArticleId(RedisInfo.ARTICLEDATELIST+sdf.format(aInfo.getDate()), id);
-			addSetArticleId(RedisInfo.USERFOLLOWARTICLEZSET+user.getUserId(),id,id+"");
-			articleDao.addRedisArticleCount(RedisInfo.USERFOLLOWARTICLECOUNT+user.getUserId());
+			addSetArticleId(RedisInfo.USERFOLLOWARTICLEZSET+userId,id,id+"");
+			articleDao.addRedisArticleCount(RedisInfo.USERFOLLOWARTICLECOUNT+userId);
 			//int userId = aInfo.getUser().getUserId();
 			//if(user.getRole()!=UserRole.Normal.getIndex()&&user.getRole()!=UserRole.Mark.getIndex()){
 			//}
+			if(user.getRole()==UserRole.Normal.getIndex()){
+				String key = RedisInfo.ARTICLECOMMONLIST;
+				articleDao.addRedisArticleId(key, id);
+			}
+			else {
+				String key = RedisInfo.ARTICLEOPERTORLIST;
+				articleDao.addRedisArticleId(key, id);
+				
+			}
 			int type = aInfo.getType();
 			if(type==ArticleType.Publish.getIndex()){
 				articleDao.addRedisArticleCount(RedisInfo.ARTICLEPUBLISHCOUNT);
 				articleDao.addRedisArticleId(RedisInfo.ARTICLEMOMENTLIST, id);
-				String key = RedisInfo.ARTICLEOPERTORLIST;
-				articleDao.addRedisArticleId(key, id);
+				
 			}
 			else if(type==ArticleType.Forward.getIndex()){
 				
@@ -163,8 +173,15 @@ public class ArticleManager implements IArticleManager {
 			}
 			else if(type== ArticleType.CommonNoAuditing.getIndex()){
 				articleDao.addRedisArticleId(RedisInfo.ARTICLENOAUDITINGMOMENTLIST, id);
-				String key = RedisInfo.ARTICLECOMMONLIST;
-				articleDao.addRedisArticleId(key, id);
+				
+			}
+			else if(type==ArticleType.CommonActivity.getIndex()){
+				articleDao.addRedisArticleCount(RedisInfo.ARTICLEPUBLISHCOUNT);
+				articleDao.addRedisArticleId(RedisInfo.ARTICLEMOMENTLIST, id);
+				
+				articleDao.addRedisArticleCount(RedisInfo.ARTICLEACTIVITYCOUNT);
+				articleDao.addRedisActivityAllList(aInfo.getActivity().getActivityId(),id);
+				articleDao.addRedisActivityAuditingList(aInfo.getActivity().getActivityId(),id);
 			}
 		}
 
@@ -1424,7 +1441,7 @@ public class ArticleManager implements IArticleManager {
 			aMap.put("shareUrl", FileManager.getShareUrl(articleId));
 		}
 		else if(status==ArticleStatus.Test.getIndex()){
-			String shareUrl = WebManager.getAgentShareUrl(articleId);
+			String shareUrl = FileManager.getAgentShareUrl(articleId);
 			//aMap.put("shareUrl", FileManager.getAgentShareUrl(articleId));
 			aMap.put("shareUrl", shareUrl);
 		}
@@ -1986,5 +2003,27 @@ public class ArticleManager implements IArticleManager {
 	@Override
 	public void descArticleCount(String key, int size) {
 		articleDao.decRedisArticleCount(key,size);
+	}
+
+	@Override
+	public void shieldRecommend(int articleId) {
+		String key = RedisInfo.ARTICLERECOMMENDLIST;
+		articleDao.removeRedisArticleList(key, articleId);
+	}
+
+	@Override
+	public void shieldMoment(int articleId) {
+		String key = RedisInfo.ARTICLEMOMENTLIST;
+		articleDao.removeRedisArticleList(key, articleId);
+	}
+
+	@Override
+	public void shieldShow(int articleId) {
+		ArticleInfo article = getArticle(articleId);
+		String key = RedisInfo.ARTICLEMOMENTLIST;
+		articleDao.removeRedisArticleList(key, articleId);
+		
+		key = RedisInfo.ACTIVITYARTICLEAUDITINGLIST+article.getActivity().getActivityId();
+		articleDao.removeRedisArticleList(key, articleId);
 	}
 }

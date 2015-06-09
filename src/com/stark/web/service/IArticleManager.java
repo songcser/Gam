@@ -199,4 +199,10 @@ public interface IArticleManager {
 
 	public void descArticleCount(String string, int size);
 
+	public void shieldRecommend(int articleId);
+
+	public void shieldMoment(int articleId);
+
+	public void shieldShow(int articleId);
+
 }

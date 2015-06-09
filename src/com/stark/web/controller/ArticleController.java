@@ -144,10 +144,10 @@ public class ArticleController {
 			article.setRichText("");
 			if(activityId!=null){
 				article.setActivity(new ActivityInfo(Integer.parseInt(activityId)));
-				article.setType(ArticleType.NoAuditingActivity.getIndex());
+				article.setType(ArticleType.CommonActivity.getIndex());
 			}
 			else {
-				article.setType(EnumBase.ArticleType.CommonNoAuditing.getIndex());
+				article.setType(EnumBase.ArticleType.Publish.getIndex());
 			}
 			
 			int articleId = articleManager.addArticle(article);
@@ -1794,7 +1794,7 @@ public class ArticleController {
 	}
 	
 	@RequestMapping("outShare.do")
-	public String outShare(int articleId, HttpServletRequest request) {
+	public String outShare(int articleId,String userId,String shareFrom, HttpServletRequest request) {
 		if (articleId == 0)
 			return "";
 		SimpleDateFormat sdf = WebManager.getDateFormat();
@@ -1835,7 +1835,7 @@ public class ArticleController {
 		}
 		String title = article.getTitle();
 		if(title==null||title.equals("")){
-			title = "UHA 这个世界我哈过";
+			title = "UHA 熟人游乐场";
 		}
 		
 		request.setAttribute("title", title);
@@ -1916,22 +1916,22 @@ public class ArticleController {
 	
 	@RequestMapping("outShareOAuth.do")
 	public String outShareOAuth(int articleId,String userId,String shareFrom,String code,String state, HttpServletRequest request){
+		System.out.println("Code: "+code);
 		StringBuffer url = request.getRequestURL();
 		url.append("?articleId=").append(articleId);
 		url.append("&userId=").append(userId);
 		url.append("&shareFrom=").append(shareFrom);
 		url.append("&code=").append(code);
 		url.append("&state=").append(state);
+		System.out.println("Url: "+url);
 		if(code!=null){
-			//System.out.println("code: "+code);
 			JSONObject jsonObject = WebManager.getAccessToken(code);
-			//System.out.println(jsonObject);
 			String access_token =null;
 			try {
 				access_token = jsonObject.getString("access_token");
 			} catch (Exception e) {
+				logger.error("获取access_token失败", e.fillInStackTrace());
 				return weChatShare(articleId,1,0,url.toString(),request);
-				//e.printStackTrace();
 			}
 			
 		    String openid=jsonObject.getString("openid");
@@ -1940,7 +1940,7 @@ public class ArticleController {
 		    if(access_token==null||userId==null&&shareFrom==null){
 		    	return weChatShare(articleId,1,0,url.toString(),request);
 		    }
-		    int uId = 0;
+		    int uId = 1;
 		    int shFrom = 0;
 		    if(FileManager.isInteger(userId)&&FileManager.isInteger(shareFrom)){
 		    	//return outShare(articleId,request);
@@ -1948,6 +1948,7 @@ public class ArticleController {
 			    shFrom = Integer.parseInt(shareFrom);
 		    }
 		    
+		    int toUserId = 1;
 		    if(shFrom==ThirdSharing.WeiXin.getIndex()){
 		    	UserInfo toUser = userManager.isExistWeChatOpenId(openid);
 		    	if(toUser==null){
@@ -1957,24 +1958,25 @@ public class ArticleController {
 		    		toUser.setSinaOpenId("");
 		    		toUser.setWeChatOpenId(openid);
 		    		
-		    		int touserId = userManager.addUser(toUser);
-		    		uId = touserId;
-					toUser.setUserId(touserId);
+		    		toUserId = userManager.addUser(toUser);
+					toUser.setUserId(toUserId);
 					if(!toUser.getHeadPic().equals("")){
-						System.out.println(toUser.getHeadPic());
-						userManager.getUserHeadPic(touserId,toUser.getHeadPic());
+						//System.out.println(toUser.getHeadPic());
+						userManager.getUserHeadPic(toUserId,toUser.getHeadPic());
 					}
 		    	}
 		    	else{
-		    		uId = toUser.getUserId();
+		    		toUserId = toUser.getUserId();
 		    		//System.out.println(toUser.getName());
 		    	}
-		    	return weChatShare(articleId,uId,shFrom,url.toString(),request);
+		    	noticeManager.addSeeNotice(uId,toUserId);
+		    	return weChatShare(articleId,toUserId,shFrom,url.toString(),request);
 		    }
 		    else{
-		    	String redirectUri = WebManager.getRedirectUri(uId,articleId,shFrom);
-				String oauth_url = WebManager.getCodeRequest(redirectUri);
-				return "redirect:"+oauth_url;
+		    	//String redirectUri = WebManager.getRedirectUri(uId,articleId,shFrom);
+				//String oauth_url = WebManager.getCodeRequest(redirectUri);
+				//return "redirect:"+oauth_url;
+		    	return weChatShare(articleId,toUserId,shFrom,url.toString(),request);
 		    }
 		}
 	    
@@ -1985,7 +1987,7 @@ public class ArticleController {
 		thirdShare(articleId,userId,shareFrom,request);
 		
 		//String url = request.getRequestURL().toString();
-		System.out.println(url);
+		//System.out.println(url);
 		String appid = WebManager.getWeChatAppId();
 	    String secret = WebManager.getWeChatAppSecret();
 	   
@@ -1999,15 +2001,18 @@ public class ArticleController {
 		//String timestamp = map.get("timestamp");
 		//String nonceStr = map.get("nonceStr");
 		//String signature = map.get("signature");
-		String sign = config.getJsApiTicket();
-		String token = config.getAccessToken();
-		System.out.println("ApiTicket: "+sign);
-		System.out.println("token: "+token);
+		//String sign = config.getJsApiTicket();
+		//String token = config.getAccessToken();
+		//System.out.println("ApiTicket: "+sign);
+		//System.out.println("token: "+token);
 		long timestamp = response.getTimestamp();
 		String nonceStr = response.getNoncestr();
 		String signature = response.getSignature();
-		String shareUrl = changeShareUrl(url,userId,shareFrom);
+		//String shareUrl = changeShareUrl(url,userId,shareFrom);
+		String redirectUri = FileManager.getRedirectUri(userId,articleId,shareFrom);
+		String shareUrl = WebManager.getCodeRequest(redirectUri);
 		System.out.println(shareUrl);
+		request.setAttribute("shareUrl", shareUrl);
 		request.setAttribute("urlStr", url);
 		request.setAttribute("appId",appid);
 		request.setAttribute("timestamp", timestamp);
@@ -2015,6 +2020,7 @@ public class ArticleController {
 		request.setAttribute("signature", signature);
 		return "weChatShare";
 	}
+	/*
 	private String changeShareUrl(String url, int userId, int shareFrom) {
 		StringBuffer shareUrl = new StringBuffer("");
 		int index = url.indexOf("&userId=");
@@ -2022,13 +2028,13 @@ public class ArticleController {
 		index = url.indexOf("&code=", index);
 		shareUrl.append(url.substring(index));
 		return shareUrl.toString();
-	}
+	}*/
 	private UserInfo getUserFromJSON(JSONObject userInfoJO){
 		UserInfo user = new UserInfo();
 		//String user_openid=userInfoJO.getString("openid");
 	    String user_nickname=userInfoJO.getString("nickname");
 	    user.setName(user_nickname);
-	    System.out.println(user_nickname);
+	    //System.out.println(user_nickname);
 	    int user_sex=userInfoJO.getInt("sex");
 	    if(user_sex==0){
 	    	user.setSex(Sex.unKnow.getIndex());
@@ -2040,14 +2046,14 @@ public class ArticleController {
 	    	user.setSex(Sex.female.getIndex());
 	    }
 	    
-	    System.out.println(user_sex);
+	    //System.out.println(user_sex);
 	    String user_province=userInfoJO.getString("province");
-	    System.out.println(user_province);
+	   // System.out.println(user_province);
 	    String user_city=userInfoJO.getString("city");
-	    System.out.println(user_city);
+	    //System.out.println(user_city);
 	    user.setHomeTown(user_province+"-"+user_city);
-	    String user_country=userInfoJO.getString("country");
-	    System.out.println(user_country);
+	    //String user_country=userInfoJO.getString("country");
+	    //System.out.println(user_country);
 	    String user_headimgurl=userInfoJO.getString("headimgurl");
 	    user.setHeadPic(user_headimgurl);
 	    System.out.println(user_headimgurl);
@@ -2080,8 +2086,9 @@ public class ArticleController {
 				articleType = 1;
 			}
 		}
+		List<String> picList = articleManager.getPicListById(article.getArticleId());
 		if(articleType==0){
-			List<String> picList = articleManager.getPicListById(article.getArticleId());
+			
 			request.setAttribute("pictures", picList);
 		}
 		else {
@@ -2102,11 +2109,32 @@ public class ArticleController {
 			title = "UHA 这个世界我哈过";
 		}
 		
+		request.setAttribute("imgUrl", picList.get(0));
 		request.setAttribute("title", title);
 		request.setAttribute("article", article);
 		request.setAttribute("user", user);
 		request.setAttribute("date", sdf.format(article.getDate()));
 		request.setAttribute("type", articleType);
+		//request.setAttribute("desc", article.);
 		//System.out.println(pics.size());
+	}
+	
+	@RequestMapping("shield.do")
+	@ResponseBody
+	public Map<String,Object> shield(int articleId,int from){
+		if(from==0){
+			articleManager.shieldRecommend(articleId);
+		}
+		else if(from==1){
+			articleManager.shieldShow(articleId);
+		}
+		else if(from==2){
+			articleManager.shieldMoment(articleId);
+		}
+		
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("result", 1);
+		
+		return map;
 	}
 }

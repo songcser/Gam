@@ -1,7 +1,10 @@
 package com.stark.web.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import javax.annotation.Resource;
 
 import com.stark.web.dao.INoticeDAO;
 import com.stark.web.define.EnumBase.NoticeType;
@@ -9,6 +12,7 @@ import com.stark.web.define.EnumBase.UserRole;
 import com.stark.web.define.RedisInfo;
 import com.stark.web.define.EnumBase.NoticeStatus;
 import com.stark.web.entity.NoticeInfo;
+import com.stark.web.entity.UserInfo;
 
 public class NoticeManager implements INoticeManager{
 
@@ -17,6 +21,9 @@ public class NoticeManager implements INoticeManager{
 	public void setNoticeDao(INoticeDAO noticeDao){
 		this.noticeDao = noticeDao;
 	}
+	
+	@Resource
+	private WebManager webManager;
 	
 	@Override
 	public int addNotice(NoticeInfo nInfo) {
@@ -121,6 +128,21 @@ public class NoticeManager implements INoticeManager{
 	@Override
 	public void setUserNoticeStatus(int userId, int i) {
 		noticeDao.setRedisUserNoticeStatus(userId, i);
+	}
+
+	@Override
+	public void addSeeNotice(int uId, int senderId) {
+		NoticeInfo notice = new NoticeInfo();
+		notice.setUser(new UserInfo(uId));
+		notice.setSender(new UserInfo(senderId));
+		//notice.setArticle(null);
+		notice.setContent("看了你");
+		notice.setDate(new Date());
+		notice.setType(NoticeType.See.getIndex());
+		notice.setStatus(NoticeStatus.NoRead.getIndex());
+		//System.out.println(userId);
+		addNotice(notice);
+		webManager.pushToUser(uId,NoticeType.See.getIndex());		
 	}
 
 }

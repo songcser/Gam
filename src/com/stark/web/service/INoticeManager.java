@@ -23,5 +23,7 @@ public interface INoticeManager {
 
 	public int getUserNoticeStatus(int userId);
 
-	public void setUserNoticeStatus(int userId, int i); 
+	public void setUserNoticeStatus(int userId, int i);
+
+	public void addSeeNotice(int uId, int toUserId); 
 }
