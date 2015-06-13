@@ -488,6 +488,15 @@ public class UserController {
 		map.put("pictureUrl", list);
 		return map;
 	}
+	
+	@RequestMapping("getUserCount.do")
+	@ResponseBody
+	public Map<String,Object> getUserCount(){
+		int norCount = userManager.getNormalCount();
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("count", norCount);
+		return map;
+	}
 
 	@RequestMapping("/getOperationInfo.do")
 	@ResponseBody
@@ -1526,4 +1535,5 @@ public class UserController {
 			e.printStackTrace();
 		} 
 	}
+	
 }
