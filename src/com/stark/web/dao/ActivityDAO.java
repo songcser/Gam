@@ -155,6 +155,7 @@ public class ActivityDAO implements IActivityDAO{
 		map.put(ActivityInfo.OFFDATE, sdf.format(activity.getOffDate()));
 		map.put(ActivityInfo.TYPE,activity.getType()+"");
 		map.put(ActivityInfo.ORDER, activity.getOrder()+"");
+		map.put(ActivityInfo.STATUS, activity.getStatus()+"");
 		
 		redisDao.hmset(activity.getKey(), map);
 	}
@@ -189,6 +190,11 @@ public class ActivityDAO implements IActivityDAO{
 		if(order!=null&&!order.equals("")){
 			ac.setOrder(Integer.parseInt(order));
 		}
+		String status = acMap.get(ActivityInfo.STATUS);
+		if(status!=null&&!status.equals("")){
+			ac.setStatus(Integer.parseInt(status));
+		}
+		else ac.setStatus(0);
 		
 		SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMddHHmmss");
 		try {
@@ -232,6 +238,11 @@ public class ActivityDAO implements IActivityDAO{
 				if(order!=null&&!order.equals("")){
 					ac.setOrder(Integer.parseInt(order));
 				}
+				String status = acMap.get(ActivityInfo.STATUS);
+				if(status!=null&&!status.equals("")){
+					ac.setStatus(Integer.parseInt(status));
+				}
+				else ac.setStatus(0);
 				try {
 					Date date =sdf.parse(acMap.get(ActivityInfo.OFFDATE));
 					
@@ -359,6 +370,26 @@ public class ActivityDAO implements IActivityDAO{
 		query.setInteger(0, articleId);
 		query.setInteger(1, showId);
 		return query.executeUpdate()>0;
+	}
+
+	@Override
+	public List<ActivityInfo> getOnlineActivityByType(List<Integer> types) {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < types.size(); i++) {
+			if (i == types.size() - 1) {
+				sb.append("a.type = ? ");
+			} else
+				sb.append("a.type = ? or ");
+
+		}
+		String hql = "from ActivityInfo as a where ( "+sb+" ) and a.status =:status  order by a.order";
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		for (int i = 0; i < types.size(); i++) {
+			int type = types.get(i);
+			query.setInteger(i, type);
+		}
+		query.setInteger("status", ActivityStatus.OnLine.getIndex());
+		return query.list();
 	}
 
 }

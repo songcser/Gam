@@ -10,23 +10,27 @@
 					</a>
 				</div>
 				<div class="media-body padding-top">
-					<button style="width: 170px; height: 30px; margin-left: -15px; display: block" class=" bg-green radius-rounded margin-bottom ">标题: ${o.subject }</button>
+					<button style="width: 170px; height: 30px; margin-left: -15px; display: block" class=" bg-green radius-rounded margin-small-bottom ">标题: ${o.subject }</button>
 					<c:if test="${o.type==3 }">
-						<button style="width: 140px; height: 30px; margin-left: -15px; display: block" class="bg-green radius-rounded margin-bottom ">是否: 可参加</button>
+						<button style="width: 140px; height: 30px; margin-left: -15px; display: block" class="bg-green radius-rounded margin-small-bottom ">是否: 可参加</button>
 					</c:if>
 					<c:if test="${o.type==2 }">
-						<button style="width: 140px; height: 30px; margin-left: -15px; display: block" class="bg-green radius-rounded margin-bottom ">是否:不可参加</button>
+						<button style="width: 140px; height: 30px; margin-left: -15px; display: block" class="bg-green radius-rounded margin-small-bottom ">是否:不可参加</button>
 					</c:if>
-					<input value="序号: ${o.order }" type="button" style="width: 110px; height: 30px; margin-left: -15px; display: block" class="bg-green radius-rounded margin-bottom"
+					<input value="序号: ${o.order }" type="button" style="width: 120px; height: 30px; margin-left: -15px; display: block" class="bg-green radius-rounded margin-small-bottom"
 						onclick="orderSort(this,${o.activityId })">
-					<button style="width: 80px; height: 30px; margin-left: -15px; display: block" class="bg-green radius-rounded margin-bottom" onclick="uploadBannerPic(${o.activityId })">
+					<button style="width: 100px; height: 30px; margin-left: -15px; display: block" value="${o.status }" class="bg-green radius-rounded margin-small-bottom" onclick="setShowStatus(this,${o.activityId })">
+                        <c:if test="${o.status==0 }">上线</c:if>
+                        <c:if test="${o.status==1 }">下线 </c:if>
+                    </button>
+					<button style="width: 80px; height: 30px; margin-left: -15px; display: block" class="bg-green radius-rounded margin-small-bottom" onclick="uploadBannerPic(${o.activityId })">
 						<span class="padding-small-left glyphicon glyphicon-picture"></span>
 					</button>
-					<button style="width: 60px; height: 30px; margin-left: -15px; display: block" class="bg-green radius-rounded margin-bottom"
+					<button style="width: 60px; height: 30px; margin-left: -15px; display: block" class="bg-green radius-rounded margin-small-bottom"
 						onclick="getNoAutitingShowArticles(${o.activityId})">
 						<span class="padding-small-left glyphicon glyphicon-eye-close"></span>
 					</button>
-					<button style="width: 50px; height: 30px; margin-left: -15px; display: block" class="bg-green radius-rounded margin-bottom" onclick="deleteActivity(${o.activityId})">
+					<button style="width: 50px; height: 30px; margin-left: -15px; display: block" class="bg-green radius-rounded margin-small-bottom" onclick="deleteActivity(${o.activityId})">
 						<span class="padding-small-left glyphicon glyphicon-trash"></span>
 					</button>
 				</div>

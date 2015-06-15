@@ -35,5 +35,7 @@ public interface IActivityManager {
 
 	public boolean moveToShow(int showId, int articleId, int type);
 
+	public List<ActivityInfo> getOnlineShowList();
+
 
 }

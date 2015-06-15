@@ -19,6 +19,7 @@ public class ActivityInfo {
 	public static String OFFDATE = "OffDate";
 	public static String TYPE = "Type";
 	public static String ORDER = "Order";
+	public static String STATUS = "Status";
 	
 	
 	private int activityId;

@@ -187,7 +187,7 @@ public class ActivityController {
 	@ResponseBody
 	public Map<String,Object> getShowList2(){
 		Map<String,Object> map = new HashMap<String,Object>();
-		List<ActivityInfo> list = activityManager.getAllShowList();
+		List<ActivityInfo> list = activityManager.getOnlineShowList();
 		if(list==null){
 			map.put("result", 0);
 			return map;
@@ -199,6 +199,7 @@ public class ActivityController {
 			am.put("showTitle", act.getSubject());
 			am.put("showPic", act.getBannerPicUrl());
 			am.put("showType", act.getType());
+			am.put("showStatus", act.getStatus());
 			lm.add(am);
 		}
 		map.put("result", 1);
@@ -282,6 +283,15 @@ public class ActivityController {
 		
 		map.put("result", result?1:0);
 		//map.put("type", "活动推文");
+		return map;
+	}
+	
+	@RequestMapping("setStatus.do")
+	@ResponseBody
+	public Map<String,Object> setStatus(int activityId,int status){
+		Map<String,Object> map = new HashMap<String,Object>();
+		boolean result = activityManager.setActivityStatus(activityId,status);
+		map.put("result", result?1:0);
 		return map;
 	}
 }

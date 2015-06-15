@@ -174,6 +174,22 @@ body {
 	    	
 	    }
 	    
+	    function setShowStatus(obj,id){
+	    	var status = 0;
+	    	if(obj.value=="0"){
+	    		status = 1;
+	    		obj.value="1";
+	    		obj.innerHTML="下线";
+	    	}
+	    	else if(obj.value=="1"){
+	    		status = 0;
+	    		obj.value="0";
+	    		obj.innerHTML="上线";
+	    	}
+	    	var url = "/StarkPet/activity/setStatus.do?activityId="+id+"&status="+status;
+	    	ajaxRequest(url,orderResponse);
+	    }
+	    
 	    function getNoAutitingShowArticles(activityId){
 	    	selectActivityId = activityId;
             $("#createShowId").css({

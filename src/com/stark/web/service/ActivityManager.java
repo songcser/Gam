@@ -130,11 +130,19 @@ public class ActivityManager implements IActivityManager{
 	public boolean setActivityStatus(int activityId, int status) {
 		boolean result = activityDao.setActivityStatus(activityId,status);
 		if(result){
+			ActivityInfo ac = getActivity(activityId);
+			activityDao.setRedisActivity(ActivityInfo.getKey(activityId), ActivityInfo.STATUS, status+"");
 			if(status==ActivityStatus.Delete.getIndex()){
 				activityDao.removeRedisAllActivity(activityId);
 				activityDao.removeRedisBannerList(activityId);
 				activityDao.removeRedisTopList(activityId);
 				activityDao.removeRedisActivityZSet(RedisInfo.ACTIVITYORDERZSET,activityId);
+			}
+			else if(status==ActivityStatus.OnLine.getIndex()){
+				activityDao.addRedisActivityZSet(RedisInfo.ACTIVITYONLINEZSET,ac.getOrder(),ac.getActivityId());
+			}
+			else if(status==ActivityStatus.OffLine.getIndex()){
+				activityDao.removeRedisActivityZSet(RedisInfo.ACTIVITYONLINEZSET, activityId);
 			}
 		}
 		return result;
@@ -212,6 +220,31 @@ public class ActivityManager implements IActivityManager{
 			articleDao.setRedisArticleInfo(ArticleInfo.getKey(articleId), ArticleInfo.ACTIVITYID, showId+"");
 		}
 		return result;
+	}
+
+	@Override
+	public List<ActivityInfo> getOnlineShowList() {
+		String key = RedisInfo.ACTIVITYONLINEZSET;
+		Set<String> acIds = activityDao.getRedisActivityZSet(key);
+		List<ActivityInfo> acList = new ArrayList<ActivityInfo>();
+		if(acIds!=null&&!acIds.isEmpty()){
+			for(String id:acIds){
+				ActivityInfo ac = getActivity(Integer.parseInt(id));
+				acList.add(ac);
+			}
+			return acList;
+		}
+		
+		List<Integer> types = new ArrayList<Integer>();
+		types.add(ActivityType.Join.getIndex());
+		types.add(ActivityType.NoJoin.getIndex());
+		List<ActivityInfo> list = activityDao.getOnlineActivityByType(types);
+		if(list!=null){
+			for(ActivityInfo ac:list){
+				activityDao.addRedisActivityZSet(key,ac.getOrder(),ac.getActivityId());
+			}
+		}
+		return list;
 	}
 	
 }

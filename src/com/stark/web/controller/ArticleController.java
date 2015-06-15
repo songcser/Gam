@@ -2106,7 +2106,7 @@ public class ArticleController {
 		}
 		String title = article.getTitle();
 		if(title==null||title.equals("")){
-			title = "UHA 这个世界我哈过";
+			title = "UHA-玩图玩朋友";
 		}
 		
 		request.setAttribute("imgUrl", picList.get(0));

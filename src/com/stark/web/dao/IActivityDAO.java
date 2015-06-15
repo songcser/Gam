@@ -67,4 +67,6 @@ public interface IActivityDAO {
 	public void removeRedisActivityZSet(String key, int activityId);
 
 	public boolean addArticleToShow(int showId, int articleId);
+
+	public List<ActivityInfo> getOnlineActivityByType(List<Integer> types);
 }
