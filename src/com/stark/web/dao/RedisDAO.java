@@ -480,4 +480,9 @@ public class RedisDAO implements IRedisDAO {
 			}
 		});
 	}
+	@Override
+	public Set<String> keys(String pattern) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

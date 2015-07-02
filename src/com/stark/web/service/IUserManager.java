@@ -80,6 +80,8 @@ public interface IUserManager {
 	
 	public Map<String, Object> userToMap(UserInfo user);
 	
+	public Map<String, Object> test(String key, String field);
+	
 	public int getArticleCount(int userId);
 
 	public UserInfo isOperatior(String name, String password);

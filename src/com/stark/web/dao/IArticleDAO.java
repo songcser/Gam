@@ -223,6 +223,8 @@ public interface IArticleDAO {
 	public List<ArticleInfo> getArticleByUserId(int userId, List<Integer> list);
 
 	public void deleteRedisKey(String key);
+	
+	public Set<String> keys(String test);
 
 	public boolean setBrowseCount(int articleId, int count);
 
@@ -275,5 +277,7 @@ public interface IArticleDAO {
 	public void addRedisArticleCount(String key, int size);
 
 	public void decRedisArticleCount(String key, int size);
+
+	
 
 }

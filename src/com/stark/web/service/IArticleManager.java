@@ -128,6 +128,8 @@ public interface IArticleManager {
 	RelChartletPicture getRelChartletPicture(int relId);
 
 	public boolean deleteChartlet(int chartletId);
+	
+	public Map<String, Object> test(String test);
 
 	public Map<String, Object> getRecommendList(int userId, int page,int maxResults);
 
@@ -204,5 +206,7 @@ public interface IArticleManager {
 	public void shieldMoment(int articleId);
 
 	public void shieldShow(int articleId);
+
+	
 
 }

@@ -1118,6 +1118,12 @@ public class UserDAO implements IUserDAO{
 		return query.list();
 	}
 
+	@Override
+	public String getRedisUserValue(String key, String field) {
+		Object value = redisDao.hget(key, field);
+		return value+"";
+	}
+
 
 	
 }

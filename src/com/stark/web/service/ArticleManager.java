@@ -1877,6 +1877,19 @@ public class ArticleManager implements IArticleManager {
 		}
 		return id;
 	}
+	
+	@Override
+	public Map<String, Object> test(String test) {
+		Map<String,Object> map = new HashMap<String,Object>();
+		Set<String> set = articleDao.keys(test);
+		int i = 0;
+		for(String str : set){
+			map.put("key"+i, str);
+			i++;
+		}
+		//map.put("password", user.getPassword());
+		return map;
+	}
 
 	@Override
 	public List<DialogueInfo> getDialogueListByChartletId(int chartletId) {
@@ -2026,4 +2039,6 @@ public class ArticleManager implements IArticleManager {
 		key = RedisInfo.ACTIVITYARTICLEAUDITINGLIST+article.getActivity().getActivityId();
 		articleDao.removeRedisArticleList(key, articleId);
 	}
+
+	
 }

@@ -3238,4 +3238,10 @@ public class ShareRedisDAO implements IRedisDAO{
 	        }
 	        return result;
 	}
+
+	@Override
+	public Set<String> keys(String pattern) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

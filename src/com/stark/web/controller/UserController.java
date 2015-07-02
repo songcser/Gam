@@ -92,10 +92,13 @@ public class UserController {
 	}
 
 	@RequestMapping("/test.do")
-	public String test() {
+	@ResponseBody
+	public Map<String,Object> test(String key,String field) {
 		// IRedisManager redisManager = new RedisManager();
 		// redisManager.save();
-		return "result";
+		Map<String, Object> map = new HashMap<String, Object>();
+		map = userManager.test(key,field);
+		return map;
 	}
 
 	@RequestMapping("/getVerificationCode.do")

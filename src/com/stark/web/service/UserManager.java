@@ -105,6 +105,14 @@ public class UserManager implements IUserManager{
 	}
 
 	@Override
+	public Map<String, Object> test(String key, String field) {
+		String value = userDao.getRedisUserValue(key,field);
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("value", value);
+		return map;
+	}
+	
+	@Override
 	public List<UserInfo> getUserById(String id) {
 		return null;
 	}

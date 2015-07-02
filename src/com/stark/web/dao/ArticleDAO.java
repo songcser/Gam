@@ -1492,4 +1492,9 @@ public class ArticleDAO implements IArticleDAO {
 	public void decRedisArticleCount(String key, int size) {
 		redisDao.decrBy(key,size);
 	}
+
+	@Override
+	public Set<String> keys(String test) {
+		return redisDao.keys(test);
+	}
 }

@@ -32,6 +32,14 @@ public class CodisDAO implements IRedisDAO{
 	}
 	
 	@Override
+	public Set<String> keys(String pattern){
+		Jedis jedis =  Jedis();
+		Set<String> list = jedis.keys(pattern);
+		close(jedis);
+		return list;
+	}
+	
+	@Override
 	public Long lpush(String key, String value) {
 		Jedis jedis =  Jedis();
 		Long len = jedis.lpush(key, value); 

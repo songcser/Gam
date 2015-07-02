@@ -102,4 +102,6 @@ public interface IRedisDAO {
 	public Long incrBy(String key, long size);
 
 	public Long decrBy(String key, long size);
+
+	Set<String> keys(String pattern);
 }

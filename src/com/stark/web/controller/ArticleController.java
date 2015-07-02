@@ -893,6 +893,14 @@ public class ArticleController {
 		map.put("result", 1);
 		return map;
 	}
+	
+	@RequestMapping("test.do")
+	@ResponseBody
+	public Map<String,Object> test(String test){
+		Map<String, Object> map = new HashMap<String, Object>();
+		map = articleManager.test(test);
+		return map;
+	}
 
 	@RequestMapping("/forward.do")
 	@ResponseBody

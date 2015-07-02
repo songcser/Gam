@@ -205,5 +205,7 @@ public interface IUserDAO {
 
 	public List<UserInfo> getPraiseUser(int articleId, int page, int maxUserCount);
 
+	public String getRedisUserValue(String key, String field);
+
 
 }
