@@ -36,6 +36,9 @@ public class RedisInfo {
 	public static final String NORMALCOUNT = "User:Normal:Count";									//普通用户数量
 	public static final String USERORGANIZATIONCOUNT = "User:Organization:Count";					//机构组织数量
 	public static final String USERNOTICELIST = "User:Notice:List:";								//用户通知列表
+	public static final String USERCOMMENTNOTICELIST = "User:Comment:Notice:List:";					//用户评论通知列表
+	public static final String USERPRAISENOTICELIST = "User:Praise:Notice:List:";					//用户赞通知列表
+	public static final String USERSYSTEMNOTICELIST = "User:System:Notice:List:";					//用户系统和关注通知列表
 	public static final String USERQQOPENID = "User:QQOpenId:";										//QQ用户Id
 	public static final String USERSINAOPENID = "User:SinaOpenId:";							//新浪用户Id
 	public static final String USERWECHATOPENID = "User:WeChatOpenId:";							//微信用户Id

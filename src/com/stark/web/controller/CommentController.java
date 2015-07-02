@@ -69,7 +69,7 @@ public class CommentController {
 				notice.setUser(new UserInfo(articleUserId));
 				notice.setSender(new UserInfo(commentUserId));
 				notice.setArticle(new ArticleInfo(comment.getArticle().getArticleId()));
-				notice.setContent("评论了你");
+				notice.setContent("回复了你");
 				notice.setDate(new Date());
 				notice.setType(NoticeType.Comment.getIndex());
 				notice.setStatus(NoticeStatus.NoRead.getIndex());

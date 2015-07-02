@@ -313,10 +313,76 @@ public class NoticeController {
 			mainMap.put("result", 0);
 			return mainMap;
 		}
-		UserInfo user = userManager.getUser(userId);
-		int role = user.getRole();
+		
 		//int status = noticeManager.getUserNoticeStatus(userId);
 		//mainMap.put("status", status);
+		noticeToList(nList,userId);
+		
+		mainMap.put("result", 1);
+		mainMap.put("notices", list);
+		return mainMap;
+	}
+	
+	@RequestMapping("getCommentNoticeList2.0.do")
+	@ResponseBody
+	public Map<String,Object> getCommentNoticeList2(int userId){
+		Map<String, Object> mainMap = new HashMap<String, Object>();
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		List<NoticeInfo> nList = noticeManager.getCommentNotice(userId);
+		if(nList==null){
+			mainMap.put("result", 0);
+			return mainMap;
+		}
+		
+		noticeToList(nList,userId);
+		
+		mainMap.put("result", 1);
+		mainMap.put("notices", list);
+		return mainMap;
+	}
+	
+	@RequestMapping("getPraiseNoticeList2.0.do")
+	@ResponseBody
+	public Map<String,Object> getPraiseNoticeList2(int userId){
+		Map<String, Object> mainMap = new HashMap<String, Object>();
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		List<NoticeInfo> nList = noticeManager.getPraiseNotice(userId);
+		if(nList==null){
+			mainMap.put("result", 0);
+			return mainMap;
+		}
+		
+		noticeToList(nList,userId);
+		
+		mainMap.put("result", 1);
+		mainMap.put("notices", list);
+		return mainMap;
+	}
+	
+	@RequestMapping("getNoticeList2.0.do")
+	@ResponseBody
+	public Map<String,Object> getNoticeList2(int userId){
+		Map<String, Object> mainMap = new HashMap<String, Object>();
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		List<NoticeInfo> nList = noticeManager.getNoticeList(userId);
+		if(nList==null){
+			mainMap.put("result", 0);
+			return mainMap;
+		}
+		
+		noticeToList(nList,userId);
+		
+		mainMap.put("result", 1);
+		mainMap.put("notices", list);
+		return mainMap;
+	}
+	
+	
+
+	private List<Map<String,Object>> noticeToList(List<NoticeInfo> nList,int userId){
+		UserInfo user = userManager.getUser(userId);
+		int role = user.getRole();
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		DateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
 		for (Iterator<NoticeInfo> iterator = nList.iterator(); iterator.hasNext();) {
 			Map<String, Object> map = new HashMap<String, Object>();
@@ -354,13 +420,12 @@ public class NoticeController {
 				noticeManager.updateStatus(notice.getNoticeId(),NoticeStatus.Readed.getIndex());
 			}
 			list.add(map);
+			
 		}
 		if(role!=UserRole.Normal.getIndex()&&role!=UserRole.Mark.getIndex()){
 			//noticeManager.updateStatus(notice.getNoticeId(),NoticeStatus.Readed.getIndex());
 			noticeManager.setUserNoticeStatus(userId,0);
 		}
-		mainMap.put("result", 1);
-		mainMap.put("notices", list);
-		return mainMap;
+		return list;
 	}
 }

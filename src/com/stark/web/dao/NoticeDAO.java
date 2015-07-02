@@ -196,4 +196,30 @@ public class NoticeDAO implements INoticeDAO{
 		redisDao.hset(key, field, value);
 	}
 
+	@Override
+	public List<NoticeInfo> getNoticeByUser(int userId, int type) {
+		String hql = "from NoticeInfo as n where n.user.userId = ? and n.status = 0 and n.type=?";
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		query.setInteger(0, userId);
+		query.setInteger(1, type);
+		return query.list();
+	}
+
+	@Override
+	public void addRedisUserList(String key, int noticeId) {
+		if(redisDao==null)
+			return ;
+		redisDao.lpush(key, noticeId+"");
+	}
+
+	@Override
+	public List<NoticeInfo> getNoticeByUser(int userId, int type1, int type2) {
+		String hql = "from NoticeInfo as n where n.user.userId = ? and n.status = 0 and (n.type=? or n.type=?)";
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		query.setInteger(0, userId);
+		query.setInteger(1, type1);
+		query.setInteger(2, type2);
+		return query.list();
+	}
+
 }

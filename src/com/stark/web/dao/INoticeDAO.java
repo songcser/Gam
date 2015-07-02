@@ -35,4 +35,10 @@ public interface INoticeDAO {
 	public void removeRedisUserList(int userId, int noticeId);
 
 	public void updateRedisNotice(String key, String field, String value);
+
+	public List<NoticeInfo> getNoticeByUser(int userId, int type);
+
+	public void addRedisUserList(String key, int noticeId);
+
+	public List<NoticeInfo> getNoticeByUser(int userId, int type1, int type2);
 }

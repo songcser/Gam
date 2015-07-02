@@ -145,4 +145,85 @@ public class NoticeManager implements INoticeManager{
 		webManager.pushToUser(uId,NoticeType.See.getIndex());		
 	}
 
+	@Override
+	public List<NoticeInfo> getCommentNotice(int userId) {
+		String key = RedisInfo.USERCOMMENTNOTICELIST+userId;
+		List<String> ids = noticeDao.getRedisNoticeIds(key);
+		List<NoticeInfo> list = new ArrayList<NoticeInfo>();
+		
+		if(ids!=null&&!ids.isEmpty()){
+			for(String id:ids){
+				NoticeInfo notice = getNotice(Integer.parseInt(id));
+				if(notice!=null){
+					list.add(notice);
+				}
+			}
+			return list;
+		}
+		list = noticeDao.getNoticeByUser(userId,NoticeType.Comment.getIndex());
+		if(list!=null){
+			int size = list.size();
+			for(int i=size-1;i>=0;i--){
+				NoticeInfo notice = list.get(i);
+				noticeDao.addRedisNotice(notice);
+				noticeDao.addRedisUserList(key, notice.getNoticeId());
+			}
+		}
+		return list;
+	}
+
+	@Override
+	public List<NoticeInfo> getPraiseNotice(int userId) {
+		String key = RedisInfo.USERPRAISENOTICELIST+userId;
+		List<String> ids = noticeDao.getRedisNoticeIds(key);
+		List<NoticeInfo> list = new ArrayList<NoticeInfo>();
+		
+		if(ids!=null&&!ids.isEmpty()){
+			for(String id:ids){
+				NoticeInfo notice = getNotice(Integer.parseInt(id));
+				if(notice!=null){
+					list.add(notice);
+				}
+			}
+			return list;
+		}
+		list = noticeDao.getNoticeByUser(userId,NoticeType.Praise.getIndex());
+		if(list!=null){
+			int size = list.size();
+			for(int i=size-1;i>=0;i--){
+				NoticeInfo notice = list.get(i);
+				noticeDao.addRedisNotice(notice);
+				noticeDao.addRedisUserList(key, notice.getNoticeId());
+			}
+		}
+		return list;
+	}
+
+	@Override
+	public List<NoticeInfo> getNoticeList(int userId) {
+		String key = RedisInfo.USERSYSTEMNOTICELIST+userId;
+		List<String> ids = noticeDao.getRedisNoticeIds(key);
+		List<NoticeInfo> list = new ArrayList<NoticeInfo>();
+		
+		if(ids!=null&&!ids.isEmpty()){
+			for(String id:ids){
+				NoticeInfo notice = getNotice(Integer.parseInt(id));
+				if(notice!=null){
+					list.add(notice);
+				}
+			}
+			return list;
+		}
+		list = noticeDao.getNoticeByUser(userId,NoticeType.System.getIndex(),NoticeType.Follow.getIndex());
+		if(list!=null){
+			int size = list.size();
+			for(int i=size-1;i>=0;i--){
+				NoticeInfo notice = list.get(i);
+				noticeDao.addRedisNotice(notice);
+				noticeDao.addRedisUserList(key, notice.getNoticeId());
+			}
+		}
+		return list;
+	}
+
 }
